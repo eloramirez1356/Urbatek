@@ -1,0 +1,58 @@
+App\Entity\User:
+  type: entity
+  table: user
+  repositoryClass: App\Repository\UserRepository
+  id:
+    id:
+      type: integer
+      id: true
+      generator:
+        strategy: AUTO
+  fields:
+    phone:
+      type: string
+      length: 40
+      unique: false
+      nullable: true
+    username:
+      type: string
+      length: 100
+      unique: true
+      nullable: true
+    password:
+      type: string
+      length: 40
+      nullable: true
+    salt:
+      type: string
+      length: 40
+      nullable: true
+    last_login:
+      type: datetime_immutable
+      nullable: true
+    n_incorrect_login:
+      type: integer
+      nullable: true
+    blocked:
+      type: boolean
+      nullable: true
+    reset_token:
+      type: string
+      length: 64
+      nullable: true
+    reset_token_expires_at:
+      type: datetime_immutable
+      nullable: true
+    blocked_until:
+      type: datetime_immutable
+      nullable: true
+    last_incorrect_login:
+      type: datetime_immutable
+      nullable: true
+    created_at:
+      type: datetime_immutable
+    preferences:
+      type: array
+    password_changed_at:
+      type: datetime_immutable
+      nullable: true

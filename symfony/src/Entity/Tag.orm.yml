@@ -1,0 +1,16 @@
+App\Entity\Tag:
+  type: entity
+  table: user
+  repositoryClass: App\Repository\UserRepository
+  id:
+    id:
+      type: integer
+      id: true
+      generator:
+        strategy: AUTO
+  fields:
+      name:
+        type: string
+        length: 40
+        unique: false
+        nullable: true
