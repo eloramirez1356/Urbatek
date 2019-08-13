@@ -15,6 +15,7 @@ use App\Entity\Comment;
 use App\Entity\Post;
 use App\Events\CommentCreatedEvent;
 use App\Form\CommentType;
+use App\Form\TicketType;
 use App\Repository\PostRepository;
 use App\Repository\TagRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
@@ -29,7 +30,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Controller used to manage blog contents in the public part of the site.
  *
- * @Route("/blog")
+ * @Route("/ticket")
  *
  * @author Ryan Weaver <weaverryan@gmail.com>
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
@@ -46,19 +47,11 @@ class BlogController extends AbstractController
      * Content-Type header for the response.
      * See https://symfony.com/doc/current/quick_tour/the_controller.html#using-formats
      */
-    public function index(Request $request, int $page, string $_format, PostRepository $posts, TagRepository $tags): Response
+    public function index(Request $request): Response
     {
-        $tag = null;
-        if ($request->query->has('tag')) {
-            $tag = $tags->findOneBy(['name' => $request->query->get('tag')]);
-        }
-        $latestPosts = $posts->findLatest($page, $tag);
-
-        // Every template name also has two extensions that specify the format and
-        // engine for that template.
-        // See https://symfony.com/doc/current/templating.html#template-suffix
-        return $this->render('blog/index.'.$_format.'.twig', [
-            'paginator' => $latestPosts,
+        $form = $this->createForm(TicketType::class);
+        return $this->render('ticket/add_ticket.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 

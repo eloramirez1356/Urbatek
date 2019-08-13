@@ -1,7 +1,7 @@
 App\Entity\Post:
   type: entity
   table: user
-  repositoryClass: App\Repository\UserRepository
+  repositoryClass: App\Repository\PostRepository
   id:
     id:
       type: integer

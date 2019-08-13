@@ -1,7 +1,7 @@
 App\Entity\Tag:
   type: entity
   table: user
-  repositoryClass: App\Repository\UserRepository
+  repositoryClass: App\Repository\TagRepository
   id:
     id:
       type: integer
