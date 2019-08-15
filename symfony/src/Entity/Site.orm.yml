@@ -1,0 +1,19 @@
+App\Entity\Site:
+  type: entity
+  table: site
+  repositoryClass: App\Repository\SiteRepository
+  id:
+    id:
+      type: integer
+      id: true
+      generator:
+        strategy: AUTO
+  fields:
+      name:
+        type: string
+        length: 40
+        unique: false
+        nullable: true
+      is_active:
+        type: boolean
+        nullable: false
