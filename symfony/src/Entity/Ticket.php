@@ -34,7 +34,7 @@ class Ticket
      */
     private $id;
 
-    
+    /** @var Site */
     private $site;
 
     /**
@@ -48,7 +48,7 @@ class Ticket
     /** @var int */
     private $num_travels;
 
-
+    /** @var Material */
     private $material;
 
     private $document;
@@ -69,20 +69,67 @@ class Ticket
         return $this->name;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function jsonSerialize(): string
-    {
-        // This entity implements JsonSerializable (http://php.net/manual/en/class.jsonserializable.php)
-        // so this method is used to customize its JSON representation when json_encode()
-        // is called, for example in tags|json_encode (app/Resources/views/form/fields.html.twig)
 
-        return $this->name;
+    public function setDate(\DateTime $date): void
+    {
+        $this->date = $date;
+    }
+    public function getDate(): \DateTime
+    {
+        return $this->date;
     }
 
-    public function __toString(): string
+    public function setSite(Site $site): void
     {
-        return $this->name;
+        $this->site = $site;
+    }
+
+    public function getSite(): Site
+    {
+        return $this->site;
+    }
+
+    public function setMaterial(Material $material): void
+    {
+        $this->material = $material;
+    }
+    public function getMaterial(): Material
+    {
+        return $this->material;
+    }
+
+    public function setHours(int $hours): void
+    {
+        $this->hours = $hours;
+    }
+
+    public function getHours(): int
+    {
+        return $this->hours;
+    }
+
+    public function setNumTravels(int $num_travels): void
+    {
+        $this->num_travels = $num_travels;
+    }
+
+    public function getNumTravels(): int
+    {
+        return $this->num_travels;
+    }
+
+    public function getDocument()
+    {
+        return $this->document;
+    }
+
+    public function setDocument($document): void
+    {
+        $this->document = $document;
+    }
+    
+    public function setId(int $id): void
+    {
+        $this->id = $id;
     }
 }
