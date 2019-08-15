@@ -12,6 +12,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Post;
+use App\Form\MachineType;
 use App\Form\PostType;
 use App\Repository\PostRepository;
 use App\Security\PostVoter;
@@ -32,8 +33,8 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * See http://knpbundles.com/keyword/admin
  *
- * @Route("/admin/post")
  * @IsGranted("ROLE_ADMIN")
+ * @Route("/admin")
  *
  * @author Ryan Weaver <weaverryan@gmail.com>
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
@@ -59,6 +60,19 @@ class BlogController extends AbstractController
         $authorPosts = $posts->findBy(['author' => $this->getUser()], ['publishedAt' => 'DESC']);
 
         return $this->render('admin/blog/index.html.twig', ['posts' => $authorPosts]);
+    }
+
+    /**
+     * Add a mahcine
+     *
+     * @Route("/machines", methods={"GET"}, name="admin_add_machine")
+     * @Route("/machines", methods={"POST"}, name="admin_add_machine")
+     */
+    public function editMachinesAction(Request $request): Response
+    {
+        $form = $this->createForm(MachineType::class);
+
+        return $this->render('admin/blog/add_machine.html.twig', ['machine_form' => $form->createView()]);
     }
 
     /**
