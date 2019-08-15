@@ -75,11 +75,10 @@ class TicketType extends AbstractType
 
                 return $repository->createQueryBuilder('s')->setMaxResults(10);
             },
-//            'choice_label' => function (Site $site) {
-//                return $site->getName();
-//            },
-            'choice_value' => 'getId',
-            'placeholder' => 'Obra',
+            'choice_label' => function (Site $site) {
+                return $site->getName();
+            },
+            'choice_value' => 'getId'
         ];
     }
 }
