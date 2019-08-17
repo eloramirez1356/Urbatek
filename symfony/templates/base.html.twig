@@ -9,7 +9,6 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <title>Urbatek</title>
-        <link rel="alternate" type="application/rss+xml" title="{{ 'rss.title'|trans }}" href="{{ path('blog_rss') }}">
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
         {% endblock %}
@@ -42,7 +41,7 @@
 
                                 {% block header_navigation_links %}
                                     <li>
-                                        <a href="{{ path('blog_index') }}">
+                                        <a href="{{ path('add_ticket') }}">
                                             <i class="fa fa-home" aria-hidden="true"></i> {{ 'menu.homepage'|trans }}
                                         </a>
                                     </li>
@@ -71,7 +70,7 @@
                                             </li>
                                             <li class="divider"></li>
                                             <li>
-                                                <a href="{{ path('security_logout') }}">
+                                                <a href="{{ path('app_logout') }}">
                                                     <i class="fa fa-sign-out" aria-hidden="true"></i> {{ 'menu.logout'|trans }}
                                                 </a>
                                             </li>

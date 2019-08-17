@@ -17,8 +17,6 @@ use App\Events\CommentCreatedEvent;
 use App\Form\CommentType;
 use App\Form\TicketType;
 use App\Repository\PostRepository;
-use App\Repository\TagRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -38,10 +36,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class BlogController extends AbstractController
 {
     /**
-     * @Route("/", defaults={"page": "1", "_format"="html"}, methods={"GET"}, name="blog_index")
-     * @Route("/rss.xml", defaults={"page": "1", "_format"="xml"}, methods={"GET"}, name="blog_rss")
-     * @Route("/page/{page<[1-9]\d*>}", defaults={"_format"="html"}, methods={"GET"}, name="blog_index_paginated")
-     * @Cache(smaxage="10")
+     * @Route("/", defaults={"page": "1", "_format"="html"}, methods={"GET"}, name="add_ticket")
      *
      * NOTE: For standard formats, Symfony will also automatically choose the best
      * Content-Type header for the response.
