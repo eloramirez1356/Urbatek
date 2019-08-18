@@ -3,16 +3,24 @@ CREATE TABLE employee
     id int NOT NULL,
     name varchar(50) NOT NULL,
     surname varchar(50),
-  CONSTRAINT employee_pk PRIMARY KEY (id)
+    user_id int,
+    CONSTRAINT employee_pk PRIMARY KEY (id),
+    CONSTRAINT fk_employee_user FOREIGN KEY (user_id) REFERENCES user(id)
 );
+
+
+
 
 CREATE TABLE machine
 (
     id int NOT NULL,
-    name varchar(100) NOT NULL,
-    surname varchar(50),
+    name varchar(180) NOT NULL,
+    brand varchar(180),
+    kms int,
     CONSTRAINT machine_pk PRIMARY KEY (id)
 );
+
+alter table machine add brand varchar(180);
 
 CREATE TABLE employee_rel_machine
 (
@@ -26,20 +34,10 @@ create table user
 (
     id                     int auto_increment primary key,
     username                  varchar(100) not null,
-    phone                  varchar(40)  null,
-    password               varchar(40)  null,
+    email                  varchar(100) not null,
+    password               varchar(200)  null,
     salt                   varchar(40)  null,
-    last_login             datetime     null comment '(DC2Type:datetime_immutable)',
-    n_incorrect_login      int          null,
-    blocked                tinyint(1)   null,
-    notify_legal           smallint(6)  null,
-    is_activated           tinyint(1)   not null,
-    created_at             datetime     not null comment '(DC2Type:datetime_immutable)',
-    blocked_until          datetime     null comment '(DC2Type:datetime_immutable)',
-    last_incorrect_login   datetime     null comment '(DC2Type:datetime_immutable)',
-    reset_token            varchar(64)  null,
-    reset_token_expires_at datetime     null comment '(DC2Type:datetime_immutable)',
-    password_changed_at    datetime     null comment '(DC2Type:datetime_immutable)',
+    roles                   longtext null,
     constraint UNIQ_8D93D649F85E0677
         unique (username)
 );
@@ -62,4 +60,7 @@ CREATE TABLE employee_rel_site
 );
 
 
+alter table user add roles longtext;
+alter table user add password varchar(200);
 
+drop table user;
