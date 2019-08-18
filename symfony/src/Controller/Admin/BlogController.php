@@ -11,10 +11,12 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Machine;
 use App\Entity\Post;
 use App\Form\MachineType;
 use App\Form\MaterialType;
 use App\Form\PostType;
+use App\Repository\MachineRepository;
 use App\Repository\PostRepository;
 use App\Security\PostVoter;
 use App\Utils\Slugger;
@@ -73,7 +75,14 @@ class BlogController extends AbstractController
     {
         $form = $this->createForm(MachineType::class);
 
-        return $this->render('admin/blog/add_machine.html.twig', ['machine_form' => $form->createView()]);
+        $machine_repo = $this->getDoctrine()->getRepository(Machine::class);
+
+        $all_machines = $machine_repo->findAll();
+
+        return $this->render('admin/blog/add_machine.html.twig', [
+            'machines' => $all_machines,
+            'machine_form' => $form->createView()
+        ]);
     }
 
     public function editMaterialAction(Request $request): Response

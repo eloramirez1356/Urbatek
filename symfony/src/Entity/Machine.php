@@ -15,7 +15,7 @@ class Machine
     private $kms;
 
     /** @var string */
-    private $brand;
+    protected $brand;
 
 
 
@@ -53,13 +53,13 @@ class Machine
     }
 
 
-    public function getBrand(): \SplString
+    public function getBrand(): string
     {
         return $this->brand;
     }
 
 
-    public function setBrand(\SplString $brand): void
+    public function setBrand(string $brand): void
     {
         $this->brand = $brand;
     }
