@@ -2,7 +2,9 @@
 
 namespace App\Form;
 
+use Doctrine\DBAL\Types\FloatType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -13,7 +15,7 @@ use Symfony\Component\Form\FormBuilderInterface;
  *
  * @author Romain Monteil <monteil.romain@gmail.com>
  */
-class MachineType extends AbstractType
+class EmployeeType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -25,10 +27,9 @@ class MachineType extends AbstractType
                 'label' => 'Nombre'
             ])
 
-            ->add('kms', NumberType::class, [
-                'label' => 'kilometros',
+            ->add('name', NumberType::class, [
+                'label' => 'Identificador',
             ])
-
             ->add('submit', SubmitType::class, [
                 'label' => 'Guardar'
             ])

@@ -13,10 +13,12 @@ namespace App\Controller\Admin;
 
 use App\Entity\Post;
 use App\Form\MachineType;
+use App\Form\MaterialType;
 use App\Form\PostType;
 use App\Repository\PostRepository;
 use App\Security\PostVoter;
 use App\Utils\Slugger;
+use Doctrine\DBAL\Types\DateType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -65,7 +67,7 @@ class BlogController extends AbstractController
      * Add a mahcine
      *
      * @Route("/machines", methods={"GET"}, name="admin_add_machine")
-     * @Route("/machines", methods={"POST"}, name="admin_add_machine")
+     *
      */
     public function editMachinesAction(Request $request): Response
     {
@@ -73,6 +75,37 @@ class BlogController extends AbstractController
 
         return $this->render('admin/blog/add_machine.html.twig', ['machine_form' => $form->createView()]);
     }
+
+    public function editMaterialAction(Request $request): Response
+    {
+        $form = $this->createForm(MaterialType::class);
+
+        return $this->render('admin/blog/add_material.html.twig', ['material_form' => $form->createView()]);
+    }
+
+    public function editEmployeeAction(Request $request): Response
+    {
+        $form = $this->createForm(MaterialType::class);
+
+
+        return $this->render('admin/blog/add_employee.html.twig', ['employee_form' => $form->createView()]);
+    }
+
+    public function editTicketAction(Request $request): Response
+    {
+        $form = $this->createForm(DateType::class);
+
+        return $this->render('admin/blog/add_ticket.html.twig', ['ticket_form' => $form->createView()]);
+    }
+
+    public function editSiteAction(Request $request): Response
+    {
+        $form = $this->createForm(MaterialType::class);
+
+        return $this->render('admin/blog/add_site.html.twig', ['site_form' => $form->createView()]);
+    }
+
+
 
     /**
      * Creates a new Post entity.
