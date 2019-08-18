@@ -11,11 +11,14 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Employee;
 use App\Entity\Machine;
 use App\Entity\Post;
+use App\Form\EmployeeType;
 use App\Form\MachineType;
 use App\Form\MaterialType;
 use App\Form\PostType;
+use App\Form\SiteType;
 use App\Repository\MachineRepository;
 use App\Repository\PostRepository;
 use App\Security\PostVoter;
@@ -92,12 +95,23 @@ class BlogController extends AbstractController
         return $this->render('admin/blog/add_material.html.twig', ['material_form' => $form->createView()]);
     }
 
+    /**
+     * Add a employee
+     *
+     * @Route("/employees", methods={"GET"}, name="admin_add_employee")
+     *
+     */
     public function editEmployeeAction(Request $request): Response
     {
-        $form = $this->createForm(MaterialType::class);
+        $form = $this->createForm(EmployeeType::class);
+        $employee_repo = $this->getDoctrine()->getRepository(Employee::class);
 
+        $all_employees= $employee_repo->findAll();
 
-        return $this->render('admin/blog/add_employee.html.twig', ['employee_form' => $form->createView()]);
+        return $this->render('admin/blog/add_employee.html.twig', [
+            'employee_form' => $form->createView(),
+            'employees' => $all_employees
+        ]);
     }
 
     public function editTicketAction(Request $request): Response
@@ -109,7 +123,7 @@ class BlogController extends AbstractController
 
     public function editSiteAction(Request $request): Response
     {
-        $form = $this->createForm(MaterialType::class);
+        $form = $this->createForm(SiteType::class);
 
         return $this->render('admin/blog/add_site.html.twig', ['site_form' => $form->createView()]);
     }
