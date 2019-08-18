@@ -2,14 +2,14 @@
 
 namespace App\Form;
 
+use App\Entity\Machine;
 use App\Entity\Site;
-use App\Repository\SiteRepository;
+use App\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -27,19 +27,18 @@ class TicketType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        /** @var User $user */
+        $user = $options['user'];
+
         $builder
             ->add('date', DateType::class, [
                 'label' => 'Fecha',
                 'data' => new \DateTime(),
             ])
 
-            ->add('obra', EntityType::class, $this->buildSiteOptions())
-            ->add('machine', ChoiceType::class, [
-                'label' => 'Máquina',
-                'choices' => ['Mixta' => 'mixta', 'Retro' => 'retro']
-
-            ])
-            ->add('travels', NumberType::class, [
+            ->add('site', EntityType::class, $this->buildSiteOptions($user))
+            ->add('machine', EntityType::class, $this->buildMachineOptions($user))
+            ->add('num_travels', NumberType::class, [
                 'label' => 'Nº de viajes',
             ])
 
@@ -52,7 +51,7 @@ class TicketType extends AbstractType
                 'choices' => ['Zahorra' => 'zahorra', 'Grava' => 'grava']
             ])
 
-            ->add('file', FileType::class, ['label' => 'Subir albarán'])
+//            ->add('file', FileType::class, ['label' => 'Subir albarán'])
 
             ->add('submit', SubmitType::class, [
                 'label' => 'Guardar'
@@ -65,20 +64,30 @@ class TicketType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver): void
     {
+        $resolver->setDefault('user', null);
     }
 
-    private function buildSiteOptions()
+    private function buildSiteOptions(User $user)
     {
         return [
             'class' => Site::class,
-            'query_builder' => function (EntityRepository $repository) {
-
-                return $repository->createQueryBuilder('s')->setMaxResults(10);
-            },
+            'choices' => $user->getEmployee()->getSites(),
+            'choice_value' => 'getId',
             'choice_label' => function (Site $site) {
                 return $site->getName();
-            },
-            'choice_value' => 'getId'
+            }
+        ];
+    }
+
+    private function buildMachineOptions(User $user)
+    {
+        return [
+            'class' => Machine::class,
+            'choices' => $user->getEmployee()->getMachines(),
+            'choice_value' => 'getId',
+            'choice_label' => function (Machine $machine) {
+                return $machine->getName();
+            }
         ];
     }
 }

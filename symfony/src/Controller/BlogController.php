@@ -44,7 +44,7 @@ class BlogController extends AbstractController
      */
     public function index(Request $request): Response
     {
-        $form = $this->createForm(TicketType::class);
+        $form = $this->createForm(TicketType::class, null, ['user' => $this->getUser()]);
         return $this->render('ticket/add_ticket.html.twig', [
             'form' => $form->createView(),
         ]);

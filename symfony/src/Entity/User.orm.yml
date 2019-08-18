@@ -21,3 +21,8 @@ App\Entity\User:
         type: json
       password:
         type: string
+  oneToOne:
+    employee:
+      targetEntity: App\Entity\Employee
+      mappedBy: user
+      cascade: ["persist", "merge"]

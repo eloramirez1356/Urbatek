@@ -1,0 +1,46 @@
+App\Entity\Employee:
+  type: entity
+  table: employee
+  repositoryClass: App\Repository\EmployeeRepository
+  id:
+    id:
+      type: integer
+      id: true
+      generator:
+        strategy: AUTO
+  fields:
+      name:
+        type: string
+        length: 180
+        unique: true
+  oneToOne:
+    user:
+      targetEntity: App\Entity\User
+      inversedBy: employee
+      joinColumn:
+        name: user_id
+        referencedColumnName: id
+      cascade: ["persist", "merge"]
+  manyToMany:
+    machines:
+      targetEntity: App\Entity\Machine
+      joinTable:
+        name: employee_rel_machine
+        joinColumns:
+          employee_id:
+            referencedColumnName: id
+        inverseJoinColumns:
+          machine_id:
+            referencedColumnName: id
+      cascade: ["persist", "merge"]
+    sites:
+      targetEntity: App\Entity\Site
+      joinTable:
+        name: employee_rel_site
+        joinColumns:
+          employee_id:
+            referencedColumnName: id
+        inverseJoinColumns:
+          site_id:
+            referencedColumnName: id
+      cascade: ["persist", "merge"]

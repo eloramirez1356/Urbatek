@@ -1,0 +1,20 @@
+App\Entity\Machine:
+  type: entity
+  table: machine
+  repositoryClass: App\Repository\MachineRepository
+  id:
+    id:
+      type: integer
+      id: true
+      generator:
+        strategy: AUTO
+  fields:
+      name:
+        type: string
+        length: 180
+        unique: true
+      brand:
+        type: string
+        length: 180
+      kms:
+        type: integer

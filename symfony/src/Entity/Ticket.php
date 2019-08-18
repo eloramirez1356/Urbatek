@@ -51,6 +51,7 @@ class Ticket
     /** @var Material */
     private $material;
 
+    /** @var string */
     private $document;
 
 

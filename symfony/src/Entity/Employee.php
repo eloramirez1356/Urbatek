@@ -41,11 +41,15 @@ class Employee
      */
     private $name;
 
+    /** @var User */
+    private $user;
+
     /** @var Site[] */
     private $sites;
 
-    /** @var MachineSite.php[] */
-    private $machine;
+    /** @var Machine[] */
+    private $machines;
+
 
     public function setId(int $id): void
     {
@@ -65,6 +69,30 @@ class Employee
     public function getName(): ?string
     {
         return $this->name;
+    }
+
+    /**
+     * @return Machine[]
+     */
+    public function getMachines()
+    {
+        return $this->machines;
+    }
+
+    /**
+     * @return Site[]
+     */
+    public function getSites()
+    {
+        return $this->sites;
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser(): User
+    {
+        return $this->user;
     }
 
 

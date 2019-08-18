@@ -38,6 +38,9 @@ class User implements UserInterface
      */
     private $password;
 
+    /** @var Employee */
+    private $employee;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -135,6 +138,14 @@ class User implements UserInterface
     public function getFullName()
     {
         return $this->getEmail();
+    }
+
+    /**
+     * @return Employee
+     */
+    public function getEmployee(): Employee
+    {
+        return $this->employee;
     }
 
 }
