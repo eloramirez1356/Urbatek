@@ -20,7 +20,6 @@ CREATE TABLE machine
     CONSTRAINT machine_pk PRIMARY KEY (id)
 );
 
-alter table machine add brand varchar(180);
 
 CREATE TABLE employee_rel_machine
 (
@@ -58,9 +57,3 @@ CREATE TABLE employee_rel_site
     CONSTRAINT fk_employee_site_e FOREIGN KEY (employee_id) REFERENCES employee(id),
     CONSTRAINT fk_employee_site_s FOREIGN KEY (site_id) REFERENCES site(id)
 );
-
-
-alter table user add roles longtext;
-alter table user add password varchar(200);
-
-drop table user;
