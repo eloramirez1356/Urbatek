@@ -4,7 +4,26 @@
 
 {% block main %}
     <h1>Editar empleados</h1>
+    <style>
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+            width: 100%;
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 16px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2
+        }
+    </style>
+
     <table style="width:100%">
+
         <tr>
             <th>Nombre</th>
             <th>Obras activas</th>
@@ -26,13 +45,13 @@
                <td>
                    {% for machine in employee.machines %}
                        {{ machine.name }} ({{ machine.brand }})
-                       
+
                    {% endfor %}
                </td>
             </tr>
         {% endfor %}
     </table>
-    <div class="col-sm-5  col-md-offset-3">
+    <div class="col-sm-3  col-md-offset-21">
         {{ form_start(employee_form) }}
         {{ form_end(employee_form) }}
     </div>

@@ -13,12 +13,16 @@ namespace App\Controller\Admin;
 
 use App\Entity\Employee;
 use App\Entity\Machine;
+use App\Entity\Material;
 use App\Entity\Post;
+use App\Entity\Site;
+use App\Entity\Ticket;
 use App\Form\EmployeeType;
 use App\Form\MachineType;
 use App\Form\MaterialType;
 use App\Form\PostType;
 use App\Form\SiteType;
+use App\Form\TicketType;
 use App\Repository\MachineRepository;
 use App\Repository\PostRepository;
 use App\Security\PostVoter;
@@ -69,7 +73,7 @@ class BlogController extends AbstractController
     }
 
     /**
-     * Add a mahcine
+     * Add a machine
      *
      * @Route("/machines", methods={"GET"}, name="admin_add_machine")
      *
@@ -88,11 +92,25 @@ class BlogController extends AbstractController
         ]);
     }
 
+    /**
+     * Add a material
+     *
+     * @Route("/materials", methods={"GET"}, name="admin_add_material")
+     *
+     */
+
     public function editMaterialAction(Request $request): Response
     {
         $form = $this->createForm(MaterialType::class);
 
-        return $this->render('admin/blog/add_material.html.twig', ['material_form' => $form->createView()]);
+        $material_repo = $this->getDoctrine()->getRepository(Material::class);
+
+        $all_materials = $material_repo->findAll();
+
+        return $this->render('admin/blog/add_material.html.twig', [
+            'materials' => $all_materials,
+            'material_form' => $form->createView()
+        ]);
     }
 
     /**
@@ -114,18 +132,45 @@ class BlogController extends AbstractController
         ]);
     }
 
+    /**
+     * Add a ticket
+     *
+     * @Route("/tickets", methods={"GET"}, name="admin_add_ticket")
+     *
+     */
+
     public function editTicketAction(Request $request): Response
     {
-        $form = $this->createForm(DateType::class);
+        $form = $this->createForm(TicketType::class);
 
-        return $this->render('admin/blog/add_ticket.html.twig', ['ticket_form' => $form->createView()]);
+        $ticket_repo = $this->getDoctrine()->getRepository(Ticket::class);
+
+        $all_tickets= $ticket_repo->findAll();
+
+        return $this->render('admin/blog/add_ticket.html.twig', [
+            'ticket_form' => $form->createView(),
+            'tickets' => $all_tickets
+        ]);
+
     }
 
+    /**
+     * Add a site
+     *
+     * @Route("/sites", methods={"GET"}, name="admin_add_site")
+     *
+     */
     public function editSiteAction(Request $request): Response
     {
         $form = $this->createForm(SiteType::class);
 
-        return $this->render('admin/blog/add_site.html.twig', ['site_form' => $form->createView()]);
+        $site_repo = $this->getDoctrine()->getRepository(Site::class);
+
+        $all_sites = $site_repo->findAll();
+        return $this->render('admin/blog/add_site.html.twig', [
+            'site_form' => $form->createView(),
+            'sites'=> $all_sites
+        ]);
     }
 
 

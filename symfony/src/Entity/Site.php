@@ -11,6 +11,8 @@
 
 namespace App\Entity;
 
+use DateTime;
+use Doctrine\DBAL\Types\DateType;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -48,6 +50,15 @@ class Site
      */
     private $is_active;
 
+    /**
+     * @var DateType
+     *
+     */
+    private $created_at;
+
+
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -72,6 +83,22 @@ class Site
     {
         $this->is_active = true;
     }
+
+
+
+    public function getCreatedAt(): ?DateType
+    {
+        return $this->created_at;
+    }
+
+
+    public function setCreatedAt(DateType $created_at): void
+
+    {
+        $this->created_at = $created_at;
+    }
+
+
 
     public function finish()
     {
