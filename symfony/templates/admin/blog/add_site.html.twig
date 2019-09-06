@@ -4,10 +4,45 @@
 
 {% block main %}
     <h1>Editar obras</h1>
+
+    <style>
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+            width: 100%;
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 16px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2
+        }
+    </style>
+
+    <table style="width:100%">
+        <tr>
+            <th>Obra</th>
+            <th>Estado</th>
+            <th>Created_at</th>
+
+        </tr>
+
+        {% for site in sites %}
+            <tr>
+                <td>{{ site.name }}</td>
+                <td>{{ site.active }}</td>
+                <td>{{ site.createdAt }}</td>
+            </tr>
+        {% endfor %}
+    </table>
     
-    <div class="col-sm-5  col-md-offset-3">
-        {{ form_start(machine_form) }}
-        {{ form_end(machine_form) }}
+    <div class="col-sm-2  col-md-offset-18">
+        {{ form_start(site_form) }}
+        {{ form_end(site_form) }}
     </div>
 
 {% endblock %}

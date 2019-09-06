@@ -53,7 +53,7 @@ class Material
         $this->name = $name;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }

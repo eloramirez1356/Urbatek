@@ -4,6 +4,26 @@
 
 {% block main %}
     <h1>Editar ticket</h1>
+    <table style="width:100%">
+
+        <tr>
+            <th>Obra</th>
+            <th>Fecha</th>
+            <th>Horas</th>
+            <th>Numero_Viajes</th>
+            <th>Material</th>
+
+        </tr>
+
+        {% for ticket in tickets %}
+            <tr>
+                <td>{{ ticket.}}</td>
+
+
+
+            </tr>
+        {% endfor %}
+    </table>
     
     <div class="col-sm-5  col-md-offset-3">
         {{ form_start(machine_form) }}
