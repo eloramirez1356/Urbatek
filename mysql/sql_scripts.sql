@@ -46,6 +46,13 @@ create table site
 (
     id                     int auto_increment primary key,
     name                  varchar(100) not null,
+    brand                  varchar(100) not null
+);
+
+create table material
+(
+    id                     int auto_increment primary key,
+    name                  varchar(100) not null,
     is_active             tinyint(1)   not null,
     created_at             datetime     not null comment '(DC2Type:datetime_immutable)'
 );
