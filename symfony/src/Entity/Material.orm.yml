@@ -1,0 +1,17 @@
+App\Entity\Material:
+  type: entity
+  table: material
+  repositoryClass: App\Repository\MaterialRepository
+  id:
+    id:
+      type: integer
+      id: true
+      generator:
+        strategy: AUTO
+  fields:
+      name:
+        type: string
+        length: 180
+        unique: true
+      price:
+        type: float

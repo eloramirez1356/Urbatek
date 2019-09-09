@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Machine;
+use App\Entity\Material;
 use App\Entity\Site;
 use App\Entity\User;
 use Doctrine\ORM\EntityRepository;
@@ -46,9 +47,12 @@ class TicketType extends AbstractType
                 'label' => 'Horas',
             ])
 
-            ->add('material', ChoiceType::class, [
-                'label' => 'Material',
-                'choices' => ['Zahorra' => 'zahorra', 'Grava' => 'grava']
+            ->add('material', EntityType::class, [
+                'class' => Material::class,
+                'choice_label' => 'name',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('m');
+                },
             ])
 
 //            ->add('file', FileType::class, ['label' => 'Subir albarán'])
@@ -83,6 +87,18 @@ class TicketType extends AbstractType
     {
         return [
             'class' => Machine::class,
+            'choices' => $user->getEmployee()->getMachines(),
+            'choice_value' => 'getId',
+            'choice_label' => function (Machine $machine) {
+                return $machine->getName();
+            }
+        ];
+    }
+
+    private function buildMaterialOptions(User $user)
+    {
+        return [
+            'class' => Material::class,
             'choices' => $user->getEmployee()->getMachines(),
             'choice_value' => 'getId',
             'choice_label' => function (Machine $machine) {

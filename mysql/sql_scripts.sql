@@ -1,6 +1,6 @@
 CREATE TABLE employee
 (
-    id int NOT NULL,
+    id int auto_increment primary key,
     name varchar(50) NOT NULL,
     surname varchar(50),
     user_id int,
@@ -13,11 +13,10 @@ CREATE TABLE employee
 
 CREATE TABLE machine
 (
-    id int NOT NULL,
+    id int auto_increment primary key,
     name varchar(180) NOT NULL,
     brand varchar(180),
-    kms int,
-    CONSTRAINT machine_pk PRIMARY KEY (id)
+    kms int
 );
 
 
@@ -53,8 +52,7 @@ create table material
 (
     id                     int auto_increment primary key,
     name                  varchar(100) not null,
-    is_active             tinyint(1)   not null,
-    created_at             datetime     not null comment '(DC2Type:datetime_immutable)'
+    price                   double not null
 );
 
 CREATE TABLE employee_rel_site
@@ -63,4 +61,22 @@ CREATE TABLE employee_rel_site
     site_id int NOT NULL,
     CONSTRAINT fk_employee_site_e FOREIGN KEY (employee_id) REFERENCES employee(id),
     CONSTRAINT fk_employee_site_s FOREIGN KEY (site_id) REFERENCES site(id)
+);
+
+create table ticket
+(
+    id                      int auto_increment primary key,
+    employee_id             int not null,
+    machine_id              int not null,
+    site_id                 int not null,
+    material_id                 int not null,
+    hours                   int not null,
+    num_travels             float not null,
+    date                    date null,
+    constraint UNIQ_8D93D649F85E0677
+        unique (employee_id,machine_id,site_id,date),
+    CONSTRAINT fk_ticket_employee FOREIGN KEY (employee_id) REFERENCES employee(id),
+    CONSTRAINT fk_ticket_machine FOREIGN KEY (machine_id) REFERENCES machine(id),
+    CONSTRAINT fk_ticket_site FOREIGN KEY (site_id) REFERENCES site(id),
+    CONSTRAINT fk_ticket_material FOREIGN KEY (material_id) REFERENCES material(id)
 );

@@ -37,9 +37,13 @@ class Ticket
     /** @var Site */
     private $site;
 
-    /**
-     * @var \DateTime
-     */
+    /** @var Employee */
+    private $employee;
+
+    /** @var Machine */
+    private $machine;
+
+    /** @var \DateTime */
     private $date;
 
     /** @var int */
@@ -54,20 +58,14 @@ class Ticket
     /** @var string */
     private $document;
 
+    public function __construct()
+    {
+        $this->date = new \DateTime();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function setName(string $name): void
-    {
-        $this->name = $name;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
     }
 
 
@@ -132,5 +130,25 @@ class Ticket
     public function setId(int $id): void
     {
         $this->id = $id;
+    }
+
+    public function getEmployee(): Employee
+    {
+        return $this->employee;
+    }
+
+    public function getMachine(): Machine
+    {
+        return $this->machine;
+    }
+
+    public function setEmployee(Employee $employee): void
+    {
+        $this->employee = $employee;
+    }
+
+    public function setMachine(Machine $machine): void
+    {
+        $this->machine = $machine;
     }
 }

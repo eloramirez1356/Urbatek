@@ -1,0 +1,39 @@
+App\Entity\Ticket:
+  type: entity
+  table: ticket
+  repositoryClass: App\Repository\TicketRepository
+  id:
+    id:
+      type: integer
+      id: true
+      generator:
+        strategy: AUTO
+  fields:
+      date:
+        type: date
+        nullable: false
+      hours:
+        type: float
+      num_travels:
+        type: integer
+  manyToOne:
+    site:
+      targetEntity: App\Entity\Site
+      joinColumn:
+        name: site_id
+        referencedColumnName: id
+    machine:
+      targetEntity: App\Entity\Machine
+      joinColumn:
+        name: machine_id
+        referencedColumnName: id
+    material:
+      targetEntity: App\Entity\Material
+      joinColumn:
+        name: material_id
+        referencedColumnName: id
+    employee:
+      targetEntity: App\Entity\Employee
+      joinColumn:
+        name: employee_id
+        referencedColumnName: id

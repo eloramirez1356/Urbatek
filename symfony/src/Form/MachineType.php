@@ -25,6 +25,10 @@ class MachineType extends AbstractType
                 'label' => 'Nombre'
             ])
 
+            ->add('brand', TextType::class, [
+                'label' => 'Marca',
+            ])
+
             ->add('kms', NumberType::class, [
                 'label' => 'kilometros',
             ])

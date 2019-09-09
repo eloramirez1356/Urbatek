@@ -13,6 +13,8 @@ namespace App\Controller;
 
 use App\Entity\Comment;
 use App\Entity\Post;
+use App\Entity\Ticket;
+use App\Entity\User;
 use App\Events\CommentCreatedEvent;
 use App\Form\CommentType;
 use App\Form\TicketType;
@@ -33,10 +35,10 @@ use Symfony\Component\Routing\Annotation\Route;
  * @author Ryan Weaver <weaverryan@gmail.com>
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  */
-class BlogController extends AbstractController
+class TicketController extends AbstractController
 {
     /**
-     * @Route("/", defaults={"page": "1", "_format"="html"}, methods={"GET"}, name="add_ticket")
+     * @Route("/", defaults={"page": "1", "_format"="html"}, methods={"GET", "POST"}, name="add_ticket")
      *
      * NOTE: For standard formats, Symfony will also automatically choose the best
      * Content-Type header for the response.
@@ -44,7 +46,26 @@ class BlogController extends AbstractController
      */
     public function index(Request $request): Response
     {
-        $form = $this->createForm(TicketType::class, null, ['user' => $this->getUser()]);
+        /** @var User $user */
+        $user = $this->getUser();
+        $form = $this->createForm(TicketType::class, null, ['user' => $user]);
+
+        if ($request->isMethod(Request::METHOD_POST)
+            && $form->submit($request->request->get('ticket'))->isValid()) {
+            $data = $form->getData();
+            $ticket = new Ticket();
+            $ticket->setSite($data['site']);
+            $ticket->setHours($data['hours']);
+            $ticket->setNumTravels($data['num_travels']);
+            $ticket->setEmployee($user->getEmployee());
+            $ticket->setMachine($data['machine']);
+            $ticket->setMaterial($data['material']);
+            $this->get('doctrine')->getEntityManager()->persist($ticket);
+            $this->get('doctrine')->getEntityManager()->flush();
+
+            $this->addFlash('success', 'Albarán subido correctamente');
+        }
+
         return $this->render('ticket/add_ticket.html.twig', [
             'form' => $form->createView(),
         ]);

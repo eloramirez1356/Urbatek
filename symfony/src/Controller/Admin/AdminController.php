@@ -22,12 +22,9 @@ use App\Form\MachineType;
 use App\Form\MaterialType;
 use App\Form\PostType;
 use App\Form\SiteType;
-use App\Form\TicketType;
-use App\Repository\MachineRepository;
 use App\Repository\PostRepository;
 use App\Security\PostVoter;
 use App\Utils\Slugger;
-use Doctrine\DBAL\Types\DateType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -49,7 +46,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @author Ryan Weaver <weaverryan@gmail.com>
  * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  */
-class BlogController extends AbstractController
+class AdminController extends AbstractController
 {
     /**
      * Lists all Post entities.
@@ -67,6 +64,7 @@ class BlogController extends AbstractController
      */
     public function index(PostRepository $posts): Response
     {
+        return $this->redirectToRoute('admin_add_site');
         $authorPosts = $posts->findBy(['author' => $this->getUser()], ['publishedAt' => 'DESC']);
 
         return $this->render('admin/blog/index.html.twig', ['posts' => $authorPosts]);
@@ -75,7 +73,7 @@ class BlogController extends AbstractController
     /**
      * Add a machine
      *
-     * @Route("/machines", methods={"GET"}, name="admin_add_machine")
+     * @Route("/machines", methods={"GET", "POST"}, name="admin_add_machine")
      *
      */
     public function editMachinesAction(Request $request): Response
@@ -83,6 +81,15 @@ class BlogController extends AbstractController
         $form = $this->createForm(MachineType::class);
 
         $machine_repo = $this->getDoctrine()->getRepository(Machine::class);
+
+        if ($request->isMethod('POST') && $form->submit($request->request->get('machine'))->isValid()) {
+            $machine = new Machine();
+            $machine->setName($form->getData()['name']);
+            $machine->setBrand($form->getData()['brand']);
+            $machine->setKms($form->getData()['kms']);
+            $this->get('doctrine')->getEntityManager()->persist($machine);
+            $this->get('doctrine')->getEntityManager()->flush();
+        }
 
         $all_machines = $machine_repo->findAll();
 
@@ -95,8 +102,11 @@ class BlogController extends AbstractController
     /**
      * Add a material
      *
-     * @Route("/materials", methods={"GET"}, name="admin_add_material")
-     *
+     * @Route("/materials", methods={"GET", "POST"}, name="admin_add_material")
+     * @param Request $request
+     * @return Response
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
 
     public function editMaterialAction(Request $request): Response
@@ -106,6 +116,15 @@ class BlogController extends AbstractController
         $material_repo = $this->getDoctrine()->getRepository(Material::class);
 
         $all_materials = $material_repo->findAll();
+
+        if ($request->isMethod('POST') && $form->submit($request->request->get('material'))->isValid()) {
+            $data = $request->request->get('material');
+            $material = new Material();
+            $material->setName($data['name']);
+            $material->setPrice($data['price']);
+            $this->get('doctrine')->getEntityManager()->persist($material);
+            $this->get('doctrine')->getEntityManager()->flush();
+        }
 
         return $this->render('admin/blog/add_material.html.twig', [
             'materials' => $all_materials,
@@ -141,14 +160,11 @@ class BlogController extends AbstractController
 
     public function editTicketAction(Request $request): Response
     {
-        $form = $this->createForm(TicketType::class);
-
         $ticket_repo = $this->getDoctrine()->getRepository(Ticket::class);
 
         $all_tickets= $ticket_repo->findAll();
 
         return $this->render('admin/blog/add_ticket.html.twig', [
-            'ticket_form' => $form->createView(),
             'tickets' => $all_tickets
         ]);
 
@@ -157,7 +173,7 @@ class BlogController extends AbstractController
     /**
      * Add a site
      *
-     * @Route("/sites", methods={"GET"}, name="admin_add_site")
+     * @Route("/sites", methods={"GET", "POST"}, name="admin_add_site")
      *
      */
     public function editSiteAction(Request $request): Response
