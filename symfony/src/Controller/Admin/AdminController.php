@@ -176,7 +176,7 @@ class AdminController extends AbstractController
      * @Route("/sites", methods={"GET", "POST"}, name="admin_add_site")
      *
      */
-    public function editSiteAction(Request $request): Response
+    public function sitesAction(Request $request): Response
     {
         $form = $this->createForm(SiteType::class);
 
@@ -188,6 +188,25 @@ class AdminController extends AbstractController
             'sites'=> $all_sites
         ]);
     }
+
+    /**
+     * Add a site
+     *
+     * @Route("/site/{site_id}", methods={"GET", "POST"}, name="edit_site")
+     * @param $site_id
+     * @param Request $request
+     * @return Response
+     */
+    public function editSiteAction($site_id ,Request $request): Response
+    {
+        $site_repo = $this->getDoctrine()->getRepository(Site::class);
+        $site = $site_repo->find($site_id);
+
+        return $this->render('admin/blog/add_site.html.twig', [
+            'site'=> $site
+        ]);
+    }
+
 
 
 
