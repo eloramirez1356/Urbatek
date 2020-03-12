@@ -13,5 +13,5 @@ RUN adduser -D -g '' -G www-data www-data
 
 CMD ["nginx"]
 
-EXPOSE 80
+EXPOSE 82
 EXPOSE 443

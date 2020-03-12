@@ -4,7 +4,6 @@ CREATE TABLE employee
     name varchar(50) NOT NULL,
     surname varchar(50),
     user_id int,
-    CONSTRAINT employee_pk PRIMARY KEY (id),
     CONSTRAINT fk_employee_user FOREIGN KEY (user_id) REFERENCES user(id)
 );
 

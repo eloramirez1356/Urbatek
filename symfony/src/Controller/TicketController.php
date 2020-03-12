@@ -12,6 +12,7 @@
 namespace App\Controller;
 
 use App\Entity\Comment;
+use App\Entity\Document;
 use App\Entity\Post;
 use App\Entity\Ticket;
 use App\Entity\User;
@@ -26,6 +27,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * Controller used to manage blog contents in the public part of the site.
@@ -60,6 +62,13 @@ class TicketController extends AbstractController
             $ticket->setEmployee($user->getEmployee());
             $ticket->setMachine($data['machine']);
             $ticket->setMaterial($data['material']);
+
+            $document_name = 'doc_' . $user->getId() . '_site_';
+            $document = new Document($document_name, $user->getId());
+            $document->setFile($data['file']);
+            $document->upload();
+
+            $this->get('doctrine')->getEntityManager()->persist($document);
             $this->get('doctrine')->getEntityManager()->persist($ticket);
             $this->get('doctrine')->getEntityManager()->flush();
 

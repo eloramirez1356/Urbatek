@@ -1,0 +1,19 @@
+App\Entity\Document:
+  type: entity
+  table: document
+  repositoryClass: App\Repository\DocumentRepository
+  id:
+    id:
+      type: integer
+      id: true
+      generator:
+        strategy: AUTO
+  fields:
+      name:
+        type: string
+        length: 180
+        unique: true
+      path:
+        type: string
+        length: 180
+        unique: false
