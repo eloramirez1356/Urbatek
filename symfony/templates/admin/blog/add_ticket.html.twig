@@ -3,7 +3,6 @@
 {% block body_id 'admin_post_index' %}
 
 {% block main %}
-    <h1>Editar ticket</h1>
     <style>
         table {
             border-collapse: collapse;
@@ -22,31 +21,34 @@
         }
     </style>
 
-    <table style="width:100%">
+    {% for site in sites %}
+        <h2>Albaranes de {{ site }}</h2>
+        <table style="width:100%">
 
-        <tr>
-            <th>Obra</th>
-            <th>Empleado</th>
-            <th>Fecha</th>
-            <th>Horas</th>
-            <th>Numero viajes</th>
-            <th>Material</th>
-            <th>Albarán</th>
-
-        </tr>
-
-        {% for ticket in tickets %}
             <tr>
-                <td>{{ ticket.site.name }}</td>
-                <td>{{ ticket.employee.name }}</td>
-                <td>{{ ticket.date | date('Y-m-d') }}</td>
-                <td>{{ ticket.hours }}</td>
-                <td>{{ ticket.numTravels }}</td>
-                <td>{{ ticket.material.name }}</td>
-                <td><a target="_blank" href="{{ path('admin_view_document', {'document_id': ticket.document.id}) }}">Ver</a></td>
+                <th>Obra</th>
+                <th>Empleado</th>
+                <th>Fecha</th>
+                <th>Horas</th>
+                <th>Numero viajes</th>
+                <th>Material</th>
+                <th>Albarán</th>
+
             </tr>
-        {% endfor %}
-    </table>
+
+            {% for ticket in  tickets[site] %}
+                <tr>
+                    <td>{{ ticket.site.name }}</td>
+                    <td>{{ ticket.employee.name }}</td>
+                    <td>{{ ticket.date | date('Y-m-d') }}</td>
+                    <td>{{ ticket.hours }}</td>
+                    <td>{{ ticket.numTravels }}</td>
+                    <td>{{ ticket.material.name }}</td>
+                    <td><a target="_blank" href="{{ path('admin_view_document', {'document_id': ticket.document.id}) }}">Ver</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endfor %}
 
 
 {% endblock %}
