@@ -51,9 +51,9 @@ class TicketController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
         $form = $this->createForm(TicketType::class, null, ['user' => $user]);
+        $form->handleRequest($request);
 
-        if ($request->isMethod(Request::METHOD_POST)
-            && $form->submit($request->request->get('ticket'))->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $ticket = new Ticket();
             $ticket->setSite($data['site']);
@@ -63,10 +63,13 @@ class TicketController extends AbstractController
             $ticket->setMachine($data['machine']);
             $ticket->setMaterial($data['material']);
 
-            $document_name = 'doc_' . $user->getId() . '_site_';
-            $document = new Document($document_name, $user->getId());
-            $document->setFile($data['file']);
-            $document->upload();
+            $document_name = $data['file']->getClientOriginalName();
+            $document_path = $this->getParameter('kernel.root_dir') . '/../uploads/documents/ticket/' . $user->getId();
+            $document = new Document($document_name, $document_path);
+            $document->setFile($form['file']->getData());
+            $document->upload($document_path);
+
+            $ticket->setDocument($document);
 
             $this->get('doctrine')->getEntityManager()->persist($document);
             $this->get('doctrine')->getEntityManager()->persist($ticket);

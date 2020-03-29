@@ -11,6 +11,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Document;
 use App\Entity\Employee;
 use App\Entity\Machine;
 use App\Entity\Material;
@@ -173,6 +174,36 @@ class AdminController extends AbstractController
     /**
      * Add a site
      *
+     * @Route("/view_document/{document_id}", methods={"GET"}, name="admin_view_document")
+     * @param int $document_id
+     * @return Response
+     */
+    public function viewDocumentAction(int $document_id)
+    {
+        /** @var Document $document */
+        $document = $this->getDoctrine()->getRepository(Document::class)->find($document_id);
+
+        if (!$document) {
+            throw $this->createNotFoundException('flash.not_authorized_document');
+        }
+
+        $response = new Response();
+
+
+        $content = file_get_contents($document->getWebPath());
+
+        if ($mime_type = $this->getCleanMimeType($document->getName())) {
+            $response->headers->set('Content-Type', $mime_type);
+        }
+
+        $response->headers->set('Content-Disposition', 'inline;filename="albaran"');
+        $response->setContent($content);
+        return $response;
+    }
+
+    /**
+     * Add a site
+     *
      * @Route("/sites", methods={"GET", "POST"}, name="admin_add_site")
      *
      */
@@ -326,5 +357,36 @@ class AdminController extends AbstractController
         $this->addFlash('success', 'post.deleted_successfully');
 
         return $this->redirectToRoute('admin_post_index');
+    }
+
+    protected function getCleanMimeType($filename)
+    {
+        $name = explode('.', $filename);
+        $ext = mb_strtolower(end($name));
+        switch ($ext) {
+            case 'pdf':
+                $mime_type = 'application/pdf';
+                break;
+            case 'jpg':
+            case 'jpeg':
+                $mime_type = 'image/jpeg';
+                break;
+            case 'png':
+                $mime_type = 'image/png';
+                break;
+            case 'bmp':
+                $mime_type = 'image/bmp';
+                break;
+            case 'doc':
+                $mime_type = 'application/msword';
+                break;
+            case 'docx':
+                $mime_type = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+                break;
+            default:
+                $mime_type = null;
+        }
+
+        return $mime_type;
     }
 }

@@ -16,6 +16,13 @@ App\Entity\Ticket:
         type: float
       num_travels:
         type: integer
+  oneToOne:
+    document:
+      targetEntity: App\Entity\Document
+      joinColumn:
+        name: document_id
+        referencedColumnName: id
+      cascade: ["persist", "merge"]
   manyToOne:
     site:
       targetEntity: App\Entity\Site

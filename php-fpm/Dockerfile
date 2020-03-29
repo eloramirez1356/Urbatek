@@ -31,6 +31,7 @@ RUN apk add --update --no-cache \
     php7-xdebug \
     php7-zip \
     php7-xmlwriter \
+    php-xdebug \
     make \
     curl
 

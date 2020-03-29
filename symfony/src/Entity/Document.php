@@ -50,7 +50,7 @@ class Document
     {
         return null === $this->path
             ? null
-            : $this->getUploadRootDir().'/'.$this->path;
+            : $this->path;
     }
 
     public function setFile(UploadedFile $file = null)
@@ -58,7 +58,7 @@ class Document
         $this->file = $file;
     }
 
-    public function upload()
+    public function upload($path)
     {
         // the file property can be empty if the field is not required
         if (null === $this->getFile()) {
@@ -71,7 +71,7 @@ class Document
         // move takes the target directory and then the
         // target filename to move to
         $this->getFile()->move(
-            $this->getUploadRootDir(),
+            $path,
             $this->getFile()->getClientOriginalName()
         );
 
@@ -97,7 +97,12 @@ class Document
     {
         return null === $this->path
             ? null
-            : $this->getUploadDir().'/'.$this->path;
+            : $this->getAbsolutePath().'/'.$this->name;
+    }
+
+    public function getName()
+    {
+        return $this->name;
     }
 
     protected function getUploadRootDir()

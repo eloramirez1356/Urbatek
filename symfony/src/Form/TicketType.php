@@ -9,7 +9,6 @@ use App\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -56,7 +55,7 @@ class TicketType extends AbstractType
                 },
             ])
 
-            ->add('file', FileType::class, ['label' => 'Subir albarán', 'required' => true])
+            ->add('file', FileType::class)
 
             ->add('submit', SubmitType::class, [
                 'label' => 'Guardar'
