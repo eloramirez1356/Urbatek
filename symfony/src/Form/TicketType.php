@@ -9,6 +9,7 @@ use App\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -41,6 +42,15 @@ class TicketType extends AbstractType
             ->add('machine', EntityType::class, $this->buildMachineOptions($user))
             ->add('num_travels', NumberType::class, [
                 'label' => 'Nº de viajes',
+            ])
+
+            ->add('tons', NumberType::class, ['label' => 'Toneladas'])
+            ->add('portages', ChoiceType::class, [
+                'choices' => [
+                    1 => 1,
+                    2 => 2
+                ],
+                'label' => 'Portes'
             ])
 
             ->add('hours', NumberType::class, [
@@ -77,6 +87,7 @@ class TicketType extends AbstractType
             'class' => Site::class,
             'choices' => $user->getEmployee()->getSites(),
             'choice_value' => 'getId',
+            'label' => 'Obra',
             'choice_label' => function (Site $site) {
                 return $site->getName();
             }
@@ -88,6 +99,7 @@ class TicketType extends AbstractType
         return [
             'class' => Machine::class,
             'choices' => $user->getEmployee()->getMachines(),
+            'label' => 'Máquina',
             'choice_value' => 'getId',
             'choice_label' => function (Machine $machine) {
                 return $machine->getName();

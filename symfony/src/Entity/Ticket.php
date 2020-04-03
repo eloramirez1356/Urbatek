@@ -58,9 +58,32 @@ class Ticket
     /** @var string */
     private $document;
 
-    public function __construct()
-    {
-        $this->date = new \DateTime();
+    /** @var int */
+    private $tons;
+
+    /** @var int */
+    private $portages;
+
+    public function __construct(
+        \DateTime $date,
+        Site $site,
+        Employee $employee,
+        Machine $machine,
+        int $hours,
+        int $num_travels,
+        Material $material,
+        int $tons,
+        int $portages
+    ) {
+        $this->date = $date;
+        $this->site = $site;
+        $this->employee = $employee;
+        $this->machine = $machine;
+        $this->hours = $hours;
+        $this->num_travels = $num_travels;
+        $this->material = $material;
+        $this->tons = $tons;
+        $this->portages = $portages;
     }
 
     public function getId(): ?int

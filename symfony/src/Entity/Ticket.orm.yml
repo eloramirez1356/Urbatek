@@ -16,6 +16,10 @@ App\Entity\Ticket:
         type: float
       num_travels:
         type: integer
+      tons:
+        type: integer
+      portages:
+        type: integer
   oneToOne:
     document:
       targetEntity: App\Entity\Document

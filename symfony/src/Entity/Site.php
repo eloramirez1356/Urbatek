@@ -56,8 +56,12 @@ class Site
      */
     private $created_at;
 
-
-
+    public function __construct($name, $is_active = true)
+    {
+        $this->name = $name;
+        $this->created_at = new DateTime();
+        $this->is_active = $is_active;
+    }
 
     public function getId(): ?int
     {
@@ -84,25 +88,13 @@ class Site
         $this->is_active = true;
     }
 
-
-
     public function getCreatedAt(): ?DateType
     {
         return $this->created_at;
     }
 
-
-    public function setCreatedAt(DateType $created_at): void
-
-    {
-        $this->created_at = $created_at;
-    }
-
-
-
     public function finish()
     {
         $this->is_active = false;
     }
-
 }
