@@ -102,9 +102,7 @@ class AdminController extends AbstractController
 
         if ($request->isMethod('POST') && $form->submit($request->request->get('material'))->isValid()) {
             $data = $request->request->get('material');
-            $material = new Material();
-            $material->setName($data['name']);
-            $material->setPrice($data['price']);
+            $material = new Material($data['name'], $data['price'], $data['type']);
             $this->get('doctrine')->getEntityManager()->persist($material);
             $this->get('doctrine')->getEntityManager()->flush();
         }

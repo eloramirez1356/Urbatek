@@ -1,53 +1,118 @@
 {
   "entrypoints": {
+    "integrity": {
+      "/build/runtime.js": [
+        "sha384-hQKsj4QnosLWUGewEvh5KeLgoer9lhQNpaLEV/Mx7Pi9PEA6wCiwswVuA1+0ejtD"
+      ],
+      "/build/vendors~admin~app~login~search~ticket.js": [
+        "sha384-w9vcCqnq1IkbOgN2ZREHwIcdO4OYlQiuQn9ZlquM8ZdEySM4dN+oNlcXzxYOHoE0"
+      ],
+      "/build/vendors~admin~app~search.js": [
+        "sha384-j3Fgih5TyA34+uT2QzP2JZdSS8AZmk46dKyVXBqWnqP86RicC5SBX5UZ+75WbwBX"
+      ],
+      "/build/vendors~app~search.js": [
+        "sha384-k3G411XlM/J13ZG/7Equoas1gV+VSBTBigG2bjSceDsJXvGPwd5hcFXKCflB00aq"
+      ],
+      "/build/vendors~app.js": [
+        "sha384-JKn7BV9BSbhFXdV7s6EjKY/wOMkJVc00t/944UNlKkmIA7/UnBbAudznq94bl2eP"
+      ],
+      "/build/app.js": [
+        "sha384-M/BkGrtNWE3N0qX+LYW6oqC7BcIyaUGxg/AzIPzWF6xfnzOzCCXm0YZRW3nC6iR0"
+      ],
+      "/build/vendors~app.css": [
+        "sha384-KNOelZn2+5meAbVQxopV3Zir2QRPdvNIVSrjJMca8qgmxiesXRGbcC0HJ04afG7b"
+      ],
+      "/build/app.css": [
+        "sha384-/Nt9U11TX39jFFgBe36/dcp0C43OQ7OinyoZXKeYtDTI0OMWV6sQsOO6C80iZuHu"
+      ],
+      "/build/login.js": [
+        "sha384-YWcw0/ZuZK1xCGoGhHWuURNzsCTWWBM5nWfIZoBMuh8X60JmbnsZp3nTORi5/xcw"
+      ],
+      "/build/vendors~admin.js": [
+        "sha384-QLosyyY8YiuiczOwsLO0D3QoW5gHub5Qsctc7chglDmAv6Jd4/ZBim9amSghUg6g"
+      ],
+      "/build/admin.js": [
+        "sha384-2Rz3OZGjShCd0MJWUhyG4HshfgAKmdzmhqNhzdICbv/kAZmcgWoLdg4DZ6NEuagk"
+      ],
+      "/build/admin.css": [
+        "sha384-ar8OvmiKgYJz/72hE/Emp3LC2jH3H6CLzbN19C+OVyAVBlUKjxU5rvmlLTcVvFPl"
+      ],
+      "/build/vendors~search.js": [
+        "sha384-eHzjMG+wY6yQqNlAflRuIBUtQQVivEBbkv7obaLHcehvR0MLtjjEj9Zxz4g8QLTV"
+      ],
+      "/build/search.js": [
+        "sha384-z0SO/7QwNC+Pt0GM+Yi5yM2IigroQleB5eQ38EN/cOj3iRDhFYkN6aaD6KYyaOU7"
+      ],
+      "/build/ticket.js": [
+        "sha384-3PxnyEG22q63UKI3KoLu/5MKQY6lsLDxdAoVkEaHQDSbJQ/AmTv0UEYBiMyi6YOI"
+      ]
+    },
     "app": {
       "js": [
-        "/build/runtime.26bd8744.js",
-        "/build/0.2375624d.js",
-        "/build/1.734a5257.js",
-        "/build/app.94e6145a.js"
+        "/build/runtime.js",
+        "/build/vendors~admin~app~login~search~ticket.js",
+        "/build/vendors~admin~app~search.js",
+        "/build/vendors~app~search.js",
+        "/build/vendors~app.js",
+        "/build/app.js"
       ],
       "css": [
-        "/build/app.9f402dd6.css"
+        "/build/vendors~app.css",
+        "/build/app.css"
       ]
     },
     "login": {
       "js": [
-        "/build/runtime.26bd8744.js",
-        "/build/0.2375624d.js",
-        "/build/login.897801f7.js"
+        "/build/runtime.js",
+        "/build/vendors~admin~app~login~search~ticket.js",
+        "/build/login.js"
       ]
     },
     "admin": {
       "js": [
-        "/build/runtime.26bd8744.js",
-        "/build/0.2375624d.js",
-        "/build/2.63838593.js",
-        "/build/admin.74750e33.js"
+        "/build/runtime.js",
+        "/build/vendors~admin~app~login~search~ticket.js",
+        "/build/vendors~admin~app~search.js",
+        "/build/vendors~admin.js",
+        "/build/admin.js"
       ],
       "css": [
-        "/build/admin.5cc2ebf1.css"
+        "/build/admin.css"
       ]
     },
     "search": {
       "js": [
-        "/build/runtime.26bd8744.js",
-        "/build/0.2375624d.js",
-        "/build/1.734a5257.js",
-        "/build/search.b34d41ab.js"
+        "/build/runtime.js",
+        "/build/vendors~admin~app~login~search~ticket.js",
+        "/build/vendors~admin~app~search.js",
+        "/build/vendors~app~search.js",
+        "/build/vendors~search.js",
+        "/build/search.js"
+      ]
+    },
+    "ticket": {
+      "js": [
+        "/build/runtime.js",
+        "/build/vendors~admin~app~login~search~ticket.js",
+        "/build/ticket.js"
       ]
     }
   },
   "integrity": {
-    "/build/runtime.26bd8744.js": "sha384-5WSgDNxkAY6j6/bzAcp3v//+PCXLgXCU3u5QgRXWiRfMnN4Ic/a/EF6HJnbRXik8",
-    "/build/0.2375624d.js": "sha384-jDIhKUnvFIslPqAgXgRKPtCGahSHPauPtdEjjHQ4sZRIXz01QgRddKg44c9tOVcQ",
-    "/build/1.734a5257.js": "sha384-218Po/nLHQljJlGMju/WIPaBbprLrYg6uyyARYbkybHLTUQGZDCCuGSB2wmRELEW",
-    "/build/app.94e6145a.js": "sha384-XhAG/I1VVL0admGT0ZEDTYdabB0STMzZsYPkZ6mrmQhDUCe66ldCHnwTTWX069rz",
-    "/build/app.9f402dd6.css": "sha384-mSGbxUu/Q9Hbd/Gu2rYyk0Y8uUFWfPa8N0zP1E1f0E7lvWbQ//00E6k3v84Mm0Hw",
-    "/build/login.897801f7.js": "sha384-AnahE1JksyOZbxe/Gdg1twmMPucW4F1llK9OftiRo/Ud2L1ShQPtBLuN4MoCLb0f",
-    "/build/2.63838593.js": "sha384-35yx4m4fx1SoFdyvzGO0FqsakDLnulOzdlePL4weeYAcN14ldjFk+csCLqGig08d",
-    "/build/admin.74750e33.js": "sha384-JmniyJIvI0RiH0zMq2m2D7Q/6gKy5d3UKXu62YetvnV5MdxfbJWhWeNBB2umxtwE",
-    "/build/admin.5cc2ebf1.css": "sha384-ilLLAgcQxfeIVl6jV3AsZ2jmrWwgECQptl9HYwqc2NpYuTl6FEW46DBpDk5Q76sp",
-    "/build/search.b34d41ab.js": "sha384-JszEQKXXaNJvTHGGLCrf1OLfn37YYH0LKq2SNZg3D97Qs1LRXd8YRqaNuEwjACqQ"
+    "/build/runtime.js": "sha384-hQKsj4QnosLWUGewEvh5KeLgoer9lhQNpaLEV/Mx7Pi9PEA6wCiwswVuA1+0ejtD",
+    "/build/vendors~admin~app~login~search~ticket.js": "sha384-w9vcCqnq1IkbOgN2ZREHwIcdO4OYlQiuQn9ZlquM8ZdEySM4dN+oNlcXzxYOHoE0",
+    "/build/vendors~admin~app~search.js": "sha384-j3Fgih5TyA34+uT2QzP2JZdSS8AZmk46dKyVXBqWnqP86RicC5SBX5UZ+75WbwBX",
+    "/build/vendors~app~search.js": "sha384-k3G411XlM/J13ZG/7Equoas1gV+VSBTBigG2bjSceDsJXvGPwd5hcFXKCflB00aq",
+    "/build/vendors~app.js": "sha384-JKn7BV9BSbhFXdV7s6EjKY/wOMkJVc00t/944UNlKkmIA7/UnBbAudznq94bl2eP",
+    "/build/app.js": "sha384-M/BkGrtNWE3N0qX+LYW6oqC7BcIyaUGxg/AzIPzWF6xfnzOzCCXm0YZRW3nC6iR0",
+    "/build/vendors~app.css": "sha384-KNOelZn2+5meAbVQxopV3Zir2QRPdvNIVSrjJMca8qgmxiesXRGbcC0HJ04afG7b",
+    "/build/app.css": "sha384-/Nt9U11TX39jFFgBe36/dcp0C43OQ7OinyoZXKeYtDTI0OMWV6sQsOO6C80iZuHu",
+    "/build/login.js": "sha384-YWcw0/ZuZK1xCGoGhHWuURNzsCTWWBM5nWfIZoBMuh8X60JmbnsZp3nTORi5/xcw",
+    "/build/vendors~admin.js": "sha384-QLosyyY8YiuiczOwsLO0D3QoW5gHub5Qsctc7chglDmAv6Jd4/ZBim9amSghUg6g",
+    "/build/admin.js": "sha384-2Rz3OZGjShCd0MJWUhyG4HshfgAKmdzmhqNhzdICbv/kAZmcgWoLdg4DZ6NEuagk",
+    "/build/admin.css": "sha384-ar8OvmiKgYJz/72hE/Emp3LC2jH3H6CLzbN19C+OVyAVBlUKjxU5rvmlLTcVvFPl",
+    "/build/vendors~search.js": "sha384-eHzjMG+wY6yQqNlAflRuIBUtQQVivEBbkv7obaLHcehvR0MLtjjEj9Zxz4g8QLTV",
+    "/build/search.js": "sha384-z0SO/7QwNC+Pt0GM+Yi5yM2IigroQleB5eQ38EN/cOj3iRDhFYkN6aaD6KYyaOU7",
+    "/build/ticket.js": "sha384-lzU2KybnWQejHvPGkpOwBYQrKszl8ca7G0caziqu6oGM9sf+aBAyoQCe882bDb0p"
   }
 }

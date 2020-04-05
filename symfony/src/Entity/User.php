@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -146,6 +147,17 @@ class User implements UserInterface
     public function getEmployee(): Employee
     {
         return $this->employee;
+    }
+
+    public function isAdmin()
+    {
+        foreach ($this->roles as $role) {
+            if ($role === 'ROLE_ADMIN') {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }

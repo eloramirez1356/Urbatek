@@ -15,3 +15,5 @@ App\Entity\Material:
         unique: true
       price:
         type: float
+      type:
+        type: string

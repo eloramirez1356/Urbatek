@@ -70,9 +70,9 @@ class Ticket
         Employee $employee,
         Machine $machine,
         int $hours,
-        int $num_travels,
+        int $num_travels = null,
         Material $material,
-        int $tons,
+        int $tons = null,
         int $portages
     ) {
         $this->date = $date;

@@ -2,10 +2,9 @@
 
 namespace App\Form;
 
-use Doctrine\DBAL\Types\FloatType;
-use PhpParser\Node\Expr\Cast\Double;
+use App\Entity\Material;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -31,6 +30,14 @@ class MaterialType extends AbstractType
 
             ->add('price', NumberType::class, [
                 'label' => 'Precio',
+            ])
+
+            ->add('type', ChoiceType::class, [
+                'label' => 'Tipo material',
+                'choices' => [
+                     'Suministro' => Material::TYPE_SUPPLY,
+                    'Retirada' => Material::TYPE_WITHDRAWAL,
+                ]
             ])
 
             ->add('submit', SubmitType::class, [

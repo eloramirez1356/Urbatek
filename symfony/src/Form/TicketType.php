@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Employee;
 use App\Entity\Machine;
 use App\Entity\Material;
 use App\Entity\Site;
@@ -40,11 +41,27 @@ class TicketType extends AbstractType
 
             ->add('site', EntityType::class, $this->buildSiteOptions($user))
             ->add('machine', EntityType::class, $this->buildMachineOptions($user))
-            ->add('num_travels', NumberType::class, [
-                'label' => 'Nº de viajes',
+            ->add('material', EntityType::class, [
+                'class' => Material::class,
+                'choice_label' => 'name',
+                'choice_attr' => function (Material $material) {
+                    return ['js-type' => $material->getType()];
+                },
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('m');
+                },
             ])
 
-            ->add('tons', NumberType::class, ['label' => 'Toneladas'])
+            ->add('num_travels', NumberType::class, [
+                'label' => 'Nº de viajes',
+                'required' => false
+            ])
+
+            ->add('tons', NumberType::class, [
+                'label' => 'Toneladas',
+                'required' => false
+            ])
+
             ->add('portages', ChoiceType::class, [
                 'choices' => [
                     1 => 1,
@@ -57,20 +74,27 @@ class TicketType extends AbstractType
                 'label' => 'Horas',
             ])
 
-            ->add('material', EntityType::class, [
-                'class' => Material::class,
-                'choice_label' => 'name',
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('m');
-                },
-            ])
-
             ->add('file', FileType::class)
 
-            ->add('submit', SubmitType::class, [
-                'label' => 'Guardar'
-            ])
         ;
+
+        if ($user->isAdmin()) {
+            $builder->add('employee', EntityType::class, [
+                'class' => Employee::class,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('e');
+                },
+                'label' => 'Empleado',
+                'choice_value' => 'getId',
+                'choice_label' => function (Employee $employee) {
+                    return $employee->getFullName();
+                }
+            ]);
+        }
+
+        $builder->add('submit', SubmitType::class, [
+            'label' => 'Guardar'
+        ]);
     }
 
     /**
@@ -79,6 +103,7 @@ class TicketType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('user', null);
+        $resolver->setDefault('all_employees', []);
     }
 
     private function buildSiteOptions(User $user)
@@ -100,18 +125,6 @@ class TicketType extends AbstractType
             'class' => Machine::class,
             'choices' => $user->getEmployee()->getMachines(),
             'label' => 'Máquina',
-            'choice_value' => 'getId',
-            'choice_label' => function (Machine $machine) {
-                return $machine->getName();
-            }
-        ];
-    }
-
-    private function buildMaterialOptions(User $user)
-    {
-        return [
-            'class' => Material::class,
-            'choices' => $user->getEmployee()->getMachines(),
             'choice_value' => 'getId',
             'choice_label' => function (Machine $machine) {
                 return $machine->getName();

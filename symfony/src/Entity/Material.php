@@ -1,52 +1,30 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
-/**
- * @ORM\Entity()
- * @ORM\Table(name="symfony_demo_tag")
- *
- * Defines the properties of the Tag entity to represent the post tags.
- *
- * See https://symfony.com/doc/current/book/doctrine.html#creating-an-entity-class
- *
- * @author Yonel Ceruto <yonelceruto@gmail.com>
- */
 class Material
 {
-    /**
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    const TYPE_SUPPLY = 'supply';
+    const TYPE_WITHDRAWAL = 'withdrawal';
+
+    /** @var int */
     private $id;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string", unique=true)
-     */
+    /** @var string */
     private $name;
 
-    /**
-     * @var float
-     *
-     * @ORM\Column(type="float")
-     */
+    /** @var float **/
     private $price;
+
+    /** @var string */
+    private $type;
+
+    public function __construct($name, $price, $type)
+    {
+        $this->name = $name;
+        $this->price = $price;
+        $this->type = $type;
+    }
 
     public function setName(string $name): void
     {
@@ -68,4 +46,23 @@ class Material
         $this->price = $price;
     }
 
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): void
+    {
+        $this->type = $type;
+    }
+
+    public function isSupply()
+    {
+        return $this->type == self::TYPE_SUPPLY;
+    }
+
+    public function isWithdrawal()
+    {
+        return $this->type == self::TYPE_WITHDRAWAL;
+    }
 }

@@ -188,9 +188,6 @@
             "ref": "e3868d2f4a5104f19f844fe551099a00c6562527"
         }
     },
-    "symfony/contracts": {
-        "version": "1.0-dev"
-    },
     "symfony/css-selector": {
         "version": "4.2-dev"
     },
@@ -316,9 +313,6 @@
     },
     "symfony/polyfill-intl-idn": {
         "version": "v1.10.0"
-    },
-    "symfony/polyfill-intl-messageformatter": {
-        "version": "v1.13.1"
     },
     "symfony/polyfill-mbstring": {
         "version": "1.9-dev"

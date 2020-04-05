@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Document;
+use App\Entity\Employee;
 use App\Entity\Ticket;
 use App\Entity\User;
 use App\Form\TicketType;
@@ -32,15 +33,19 @@ class TicketController extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
-        $form = $this->createForm(TicketType::class, null, ['user' => $user]);
+        $options = ['user' => $user];
+        $form = $this->createForm(TicketType::class, null, $options);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
+
+            $employee = $data['employee'] ?? $user->getEmployee();
+
             $ticket = new Ticket(
                 $data['date'],
                 $data['site'],
-                $user->getEmployee(),
+                $employee,
                 $data['machine'],
                 $data['hours'],
                 $data['num_travels'],
@@ -48,7 +53,6 @@ class TicketController extends AbstractController
                 $data['tons'],
                 $data['portages']
             );
-
 
             $document_name = $data['file']->getClientOriginalName();
             $document_path = $this->getParameter('kernel.root_dir') . '/../uploads/documents/ticket/' . $user->getId();

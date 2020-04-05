@@ -86,4 +86,9 @@ class Employee
     {
         return $this->surname;
     }
+
+    public function getFullName()
+    {
+        return $this->name . ' ' . $this->surname;
+    }
 }
