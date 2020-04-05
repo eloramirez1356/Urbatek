@@ -12,6 +12,7 @@ use App\Form\EmployeeType;
 use App\Form\MachineType;
 use App\Form\MaterialType;
 use App\Form\SiteType;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -68,7 +69,7 @@ class AdminController extends AbstractController
             $machine = new Machine();
             $machine->setName($form->getData()['name']);
             $machine->setBrand($form->getData()['brand']);
-            $machine->setKms($form->getData()['kms']);
+            $machine->setRegister($form->getData()['register']);
             $this->get('doctrine')->getEntityManager()->persist($machine);
             $this->get('doctrine')->getEntityManager()->flush();
         }
@@ -115,12 +116,12 @@ class AdminController extends AbstractController
     }
 
     /**
-     * Add a employee
+     * View employees
      *
      * @Route("/employees", methods={"GET"}, name="admin_add_employee")
      *
      */
-    public function editEmployeeAction(Request $request): Response
+    public function viewEmployeesAction(Request $request): Response
     {
         $form = $this->createForm(EmployeeType::class);
         $employee_repo = $this->getDoctrine()->getRepository(Employee::class);
@@ -131,6 +132,17 @@ class AdminController extends AbstractController
             'employee_form' => $form->createView(),
             'employees' => $all_employees
         ]);
+    }
+
+    /**
+     * Edit a employee
+     *
+     * @Route("/employees/{employee_id}", methods={"GET"}, name="admin_edit_employee")
+     *
+     */
+    public function editEmployeeAction($employee_id)
+    {
+
     }
 
     /**
@@ -210,6 +222,12 @@ class AdminController extends AbstractController
         if ($request->isMethod('POST') && $form->submit($request->request->get('site'))->isValid()) {
             $data = $request->request->get('site');
             $site = new Site($data['name']);
+            if(isset($data['employees'])) {
+                foreach ($data['employees'] as $employee_id) {
+                    $site->addEmployee($employee_repo->find($employee_id));
+                }
+            }
+
 
             $this->get('doctrine')->getEntityManager()->persist($site);
             $this->get('doctrine')->getEntityManager()->flush();
@@ -225,9 +243,9 @@ class AdminController extends AbstractController
     }
 
     /**
-     * Add a site
+     * Edit a site
      *
-     * @Route("/site/{site_id}", methods={"GET", "POST"}, name="edit_site")
+     * @Route("/sites/{site_id}", methods={"GET", "POST"}, name="admin_edit_site")
      * @param $site_id
      * @param Request $request
      * @return Response
@@ -237,8 +255,20 @@ class AdminController extends AbstractController
         $site_repo = $this->getDoctrine()->getRepository(Site::class);
         $site = $site_repo->find($site_id);
 
-        return $this->render('admin/blog/add_site.html.twig', [
-            'site'=> $site
+        $employees = $this->getDoctrine()->getRepository(Employee::class)->findAll();
+
+        $form = $this->createForm(SiteType::class, $site, ['employees' => $employees]);
+
+        if ($request->isMethod('POST') && $form->submit($request->request->get('site'))->isValid()) {
+            $this->get('doctrine')->getEntityManager()->persist($site);
+            $this->get('doctrine')->getEntityManager()->flush();
+
+            return $this->redirectToRoute('admin_add_site');
+        }
+
+        return $this->render('admin/blog/edit_site.html.twig', [
+            'site'=> $site,
+            'form' => $form->createView()
         ]);
     }
 

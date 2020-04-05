@@ -1,14 +1,5 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -25,21 +16,14 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Employee
 {
-    /**
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    /** @var int */
     private $id;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string", unique=true)
-     */
+    /** @var string */
     private $name;
+
+    /** @var string */
+    private $surname;
 
     /** @var User */
     private $user;
@@ -95,8 +79,11 @@ class Employee
         return $this->user;
     }
 
-
-
-
-
+    /**
+     * @return string
+     */
+    public function getSurname()
+    {
+        return $this->surname;
+    }
 }

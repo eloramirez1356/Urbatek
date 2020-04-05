@@ -27,18 +27,19 @@
         <tr>
             <th>Nombre</th>
             <th>Marca</th>
-            <th>Kilómetros</th>
+            <th>Matrícula</th>
         </tr>
 
         {% for machine in machines %}
             <tr>
                 <td>{{ machine.name }}</td>
                 <td>{{ machine.brand }}</td>
-                <td>{{ machine.kms }}</td>
+                <td>{{ machine.register }}</td>
             </tr>
         {% endfor %}
     </table>
 
+    <h3>Crear nueva máquina</h3>
     <div class="col-sm-3 col-md-offset-21">
         {{ form_start(machine_form) }}
         {{ form_end(machine_form) }}

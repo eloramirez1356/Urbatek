@@ -12,6 +12,7 @@
 namespace App\Entity;
 
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Types\DateType;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -50,17 +51,18 @@ class Site
      */
     private $is_active;
 
-    /**
-     * @var DateType
-     *
-     */
-    private $created_at;
+    /*** @var DateType **/
+    protected $created_at;
+
+    /** @var ArrayCollection */
+    private $employees;
 
     public function __construct($name, $is_active = true)
     {
         $this->name = $name;
-        $this->created_at = new DateTime();
+        $this->created_at = new \DateTimeImmutable();
         $this->is_active = $is_active;
+        $this->employees = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -96,5 +98,25 @@ class Site
     public function finish()
     {
         $this->is_active = false;
+    }
+
+    public function getEmployees()
+    {
+        return $this->employees->toArray();
+    }
+
+    public function addEmployee(Employee $employee)
+    {
+        $this->employees->add($employee);
+    }
+
+    public function setEmployees($employees)
+    {
+        $this->employees = $employees;
+    }
+
+    public function setIsActive($value)
+    {
+        $this->is_active = $value;
     }
 }

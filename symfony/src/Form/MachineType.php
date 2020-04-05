@@ -29,8 +29,8 @@ class MachineType extends AbstractType
                 'label' => 'Marca',
             ])
 
-            ->add('kms', NumberType::class, [
-                'label' => 'kilometros',
+            ->add('register', TextType::class, [
+                'label' => 'Matrícula',
             ])
 
             ->add('submit', SubmitType::class, [

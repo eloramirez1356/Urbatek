@@ -17,3 +17,17 @@ App\Entity\Site:
       is_active:
         type: boolean
         nullable: false
+      created_at:
+        type: datetime
+  manyToMany:
+    employees:
+      targetEntity: App\Entity\Employee
+      joinTable:
+        name: employee_rel_site
+        joinColumns:
+          site_id:
+            referencedColumnName: id
+        inverseJoinColumns:
+          employee_id:
+            referencedColumnName: id
+      cascade: ["persist", "merge"]

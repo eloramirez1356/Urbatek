@@ -16,5 +16,6 @@ App\Entity\Machine:
       brand:
         type: string
         length: 180
-      kms:
-        type: integer
+      register:
+        type: string
+        length: 30

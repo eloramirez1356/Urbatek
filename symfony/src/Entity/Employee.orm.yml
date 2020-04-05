@@ -11,8 +11,10 @@ App\Entity\Employee:
   fields:
       name:
         type: string
-        length: 180
-        unique: true
+        length: 50
+      surname:
+        type: string
+        length: 50
   oneToOne:
     user:
       targetEntity: App\Entity\User

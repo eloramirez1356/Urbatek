@@ -35,11 +35,18 @@ class SiteType extends AbstractType
                 'expanded'  => true,
                 'multiple'  => true,
                 'choice_label' => function(Employee $employee) {
-                    return $employee ? strtoupper($employee->getName()) : '';
+                    return $employee ? $employee->getName() . ' ' . $employee->getSurname() : '';
                 },
                 'choice_value' => function(Employee $employee) {
-                    return $employee ? strtoupper($employee->getId()) : '';
+                    return $employee ? $employee->getId() : '';
                 },
+            ])
+            ->add('is_active', ChoiceType::class, [
+                'label' => 'Estado',
+                'choices' => [
+                    'Activa' => 1,
+                    'Completada' => 0
+                ]
             ])
 
             ->add('submit', SubmitType::class, [

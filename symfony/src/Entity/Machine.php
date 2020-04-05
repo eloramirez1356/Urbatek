@@ -11,8 +11,8 @@ class Machine
     /** @var string */
     private $name;
 
-    /** @var float */
-    private $kms;
+    /** @var string */
+    private $register;
 
     /** @var string */
     protected $brand;
@@ -41,15 +41,15 @@ class Machine
     }
 
 
-    public function getKms(): float
+    public function getRegister(): string 
     {
-        return $this->kms;
+        return $this->register;
     }
 
 
-    public function setKms(float $kms): void
+    public function setRegister(string $register): void
     {
-        $this->kms = $kms;
+        $this->register = $register;
     }
 
 
