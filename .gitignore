@@ -1,4 +1,7 @@
 logs/
 .idea/
 symfony/.idea/
+symfony/public/build/
+symfony/uploads
+
 
