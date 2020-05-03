@@ -127,7 +127,10 @@ class TicketType extends AbstractType
     {
         return [
             'class' => Machine::class,
-            'choices' => $user->getEmployee()->getMachines(),
+            'query_builder' => function (EntityRepository $er) {
+                return $er->createQueryBuilder('m');
+            },
+//            'choices' => $user->getEmployee()->getMachines(),     Show only employee machines
             'label' => 'Máquina',
             'choice_value' => 'getId',
             'choice_label' => function (Machine $machine) {

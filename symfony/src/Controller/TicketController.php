@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Document;
-use App\Entity\Employee;
 use App\Entity\Ticket;
 use App\Entity\User;
 use App\Form\TicketType;
