@@ -5,6 +5,11 @@ import Bloodhound from "bloodhound-js";
 import 'bootstrap-tagsinput';
 
 $(function() {
+    $(".export_table").click(function(){
+        let table_id = $(this).attr('js_site')
+        $("#"+table_id).table2csv()
+    });
+
     // Datetime picker initialization.
     // See http://eonasdan.github.io/bootstrap-datetimepicker/
     $('[data-toggle="datetimepicker"]').datetimepicker({

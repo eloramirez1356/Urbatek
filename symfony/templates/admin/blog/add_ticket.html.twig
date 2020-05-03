@@ -23,15 +23,19 @@
 
     {% for site in sites %}
         <h2>Albaranes de {{ site }}</h2>
-        <table style="width:100%">
+        <table style="width:100%" id="{{ site ~'_table' }}">
 
             <tr>
                 <th>Obra</th>
                 <th>Empleado</th>
                 <th>Fecha</th>
-                <th>Horas</th>
-                <th>Numero viajes</th>
+                <th>Máquina</th>
                 <th>Material</th>
+                <th>Numero viajes</th>
+                <th>Toneladas</th>
+                <th>Portes</th>
+                <th>Horas</th>
+                <th>Horas martillo</th>
                 <th>Albarán</th>
 
             </tr>
@@ -41,13 +45,18 @@
                     <td>{{ ticket.site.name }}</td>
                     <td>{{ ticket.employee.name }}</td>
                     <td>{{ ticket.date | date('Y-m-d') }}</td>
-                    <td>{{ ticket.hours }}</td>
-                    <td>{{ ticket.numTravels }}</td>
+                    <td>{{ ticket.machine.name }}</td>
                     <td>{{ ticket.material.name }}</td>
+                    <td>{{ ticket.numTravels }}</td>
+                    <td>{{ ticket.tons }}</td>
+                    <td>{{ ticket.portages }}</td>
+                    <td>{{ ticket.hours }}</td>
+                    <td>{{ ticket.hammerHours }}</td>
                     <td><a target="_blank" href="{{ path('admin_view_document', {'document_id': ticket.document.id}) }}">Ver</a></td>
                 </tr>
             {% endfor %}
         </table>
+        <a class="export_table" js_site="{{ site ~'_table' }}">Exportar a CSV</a>
     {% endfor %}
 
 

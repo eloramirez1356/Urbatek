@@ -22,6 +22,7 @@ Encore
     .addEntry('admin', './assets/js/admin.js')
     .addEntry('search', './assets/js/search.js')
     .addEntry('ticket', './assets/js/ticket.js')
+    .addEntry('table2csv', './assets/js/vendor/table2csv.js')
     .splitEntryChunks()
     .enableSingleRuntimeChunk()
     .enableIntegrityHashes()

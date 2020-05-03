@@ -187,4 +187,24 @@ class Ticket
     {
         $this->hammer_hours = $hammer_hours;
     }
+
+    public function getTons(): int
+    {
+        return $this->tons;
+    }
+
+    public function setTons(int $tons): void
+    {
+        $this->tons = $tons;
+    }
+
+    public function getPortages(): int
+    {
+        return $this->portages;
+    }
+
+    public function setPortages(int $portages): void
+    {
+        $this->portages = $portages;
+    }
 }
