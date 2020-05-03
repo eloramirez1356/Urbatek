@@ -32,6 +32,10 @@ class TicketController extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+
         $options = ['user' => $user];
         $form = $this->createForm(TicketType::class, null, $options);
         $form->handleRequest($request);
