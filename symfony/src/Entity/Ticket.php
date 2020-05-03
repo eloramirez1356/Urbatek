@@ -128,7 +128,7 @@ class Ticket
         $this->hours = $hours;
     }
 
-    public function getHours(): int
+    public function getHours()
     {
         return $this->hours;
     }
@@ -188,7 +188,7 @@ class Ticket
         $this->hammer_hours = $hammer_hours;
     }
 
-    public function getTons(): int
+    public function getTons()
     {
         return $this->tons;
     }
@@ -198,7 +198,7 @@ class Ticket
         $this->tons = $tons;
     }
 
-    public function getPortages(): int
+    public function getPortages()
     {
         return $this->portages;
     }
