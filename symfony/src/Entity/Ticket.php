@@ -50,6 +50,9 @@ class Ticket
     private $hours;
 
     /** @var int */
+    private $hammer_hours;
+
+    /** @var int */
     private $num_travels;
 
     /** @var Material */
@@ -135,7 +138,7 @@ class Ticket
         $this->num_travels = $num_travels;
     }
 
-    public function getNumTravels(): int
+    public function getNumTravels()
     {
         return $this->num_travels;
     }
@@ -173,5 +176,15 @@ class Ticket
     public function setMachine(Machine $machine): void
     {
         $this->machine = $machine;
+    }
+
+    public function getHammerHours()
+    {
+        return $this->hammer_hours;
+    }
+
+    public function setHammerHours($hammer_hours): void
+    {
+        $this->hammer_hours = $hammer_hours;
     }
 }

@@ -74,6 +74,10 @@ class TicketType extends AbstractType
                 'label' => 'Horas',
             ])
 
+            ->add('hammer_hours', NumberType::class, [
+                'label' => 'Horas martillo',
+            ])
+
             ->add('file', FileType::class)
 
         ;

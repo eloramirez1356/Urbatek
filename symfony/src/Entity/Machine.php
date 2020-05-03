@@ -5,6 +5,9 @@ namespace App\Entity;
 
 class Machine
 {
+    const TYPE_TRUCK = 'truck';
+    const TYPE_MACHINE = 'machine';
+
     /** @var int */
     private $id;
 
@@ -17,7 +20,8 @@ class Machine
     /** @var string */
     protected $brand;
 
-
+    /** @var string */
+    protected $type;
 
     public function setId(int $id): void
     {
@@ -64,8 +68,13 @@ class Machine
         $this->brand = $brand;
     }
 
+    public function isTruck()
+    {
+        return $this->type === self::TYPE_TRUCK;
+    }
 
-
-
-
+    public function isMachine()
+    {
+        return $this->type === self::TYPE_MACHINE;
+    }
 }

@@ -14,6 +14,8 @@ App\Entity\Ticket:
         nullable: false
       hours:
         type: float
+      hammer_hours:
+        type: float
       num_travels:
         type: integer
       tons:
