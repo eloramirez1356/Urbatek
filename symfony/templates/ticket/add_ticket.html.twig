@@ -8,6 +8,7 @@
             Volver
         </a>
     {% else %}
+<div class="col-sm-5  col-md-offset-3">
         <div id="tab-index" class="tab">
             <p>
                 <a class="btn btn-primary btn-lg btn-block" href="{{ path('add_ticket', {'type': 'machine'}) }}">
@@ -59,6 +60,7 @@
                 </a>
             </p>
         </div>
+</div>
     {% endif %}
 {% endblock %}
 
