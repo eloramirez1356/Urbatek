@@ -9,6 +9,13 @@ $(document).ready(function () {
         let type = $('option:selected', this).attr('js-type');
         setMaterialSelector(type);
     });
+
+    $('.js-type-select').on('click', function () {
+        $('.tab').hide();
+        console.log($(this).data('target'))
+        $('#'+$(this).data('target')).show();
+
+    })
 });
 
 function setMaterialSelector(type) {

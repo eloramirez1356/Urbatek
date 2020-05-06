@@ -19,3 +19,6 @@ App\Entity\Machine:
       register:
         type: string
         length: 30
+      type:
+        type: string
+        length: 30

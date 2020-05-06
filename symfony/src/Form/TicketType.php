@@ -6,9 +6,11 @@ use App\Entity\Employee;
 use App\Entity\Machine;
 use App\Entity\Material;
 use App\Entity\Site;
+use App\Entity\Ticket;
 use App\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -33,15 +35,21 @@ class TicketType extends AbstractType
         /** @var User $user */
         $user = $options['user'];
 
+        $type = $options['type'];
+
         $builder
             ->add('date', DateType::class, [
                 'label' => 'Fecha',
                 'data' => new \DateTime(),
             ])
 
-            ->add('site', EntityType::class, $this->buildSiteOptions($user))
-            ->add('machine', EntityType::class, $this->buildMachineOptions($user))
-            ->add('material', EntityType::class, [
+            ->add('site', EntityType::class, $this->buildSiteOptions($user));
+
+        if (in_array($type, [Ticket::TYPE_TRUCK_SUPPLY, Ticket::TYPE_TRUCK_WITHDRAWAL])) {
+            $builder->add('machine', EntityType::class, $this->buildMachineOptions($user, $type));
+        }
+
+            $builder->add('material', EntityType::class, [
                 'class' => Material::class,
                 'choice_label' => 'name',
                 'choice_attr' => function (Material $material) {
@@ -50,37 +58,49 @@ class TicketType extends AbstractType
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('m');
                 },
-            ])
+            ]);
 
-            ->add('num_travels', NumberType::class, [
+        if ($type == Ticket::TYPE_TRUCK_WITHDRAWAL) {
+            $builder->add('num_travels', NumberType::class, [
                 'label' => 'Nº de viajes',
                 'required' => false
-            ])
+            ]);
+        }
 
-            ->add('tons', NumberType::class, [
+        if ($type == Ticket::TYPE_TRUCK_SUPPLY) {
+            $builder->add('tons', NumberType::class, [
                 'label' => 'Toneladas',
                 'required' => false
-            ])
+            ]);
+        }
 
-            ->add('portages', ChoiceType::class, [
+        if ($type == Ticket::TYPE_TRUCK_PORT) {
+            $builder->add('portages', ChoiceType::class, [
                 'choices' => [
                     1 => 1,
                     2 => 2
                 ],
                 'label' => 'Portes'
-            ])
+            ]);
+        }
 
-            ->add('hours', NumberType::class, [
+        if ($type == Ticket::TYPE_TRUCK_HOURS) {
+            $builder->add('hours', NumberType::class, [
                 'label' => 'Horas',
-            ])
+            ]);
+        }
 
-            ->add('hammer_hours', NumberType::class, [
+        if ($type == Ticket::TYPE_MACHINE) {
+            $builder->add('hours', NumberType::class, [
+                'label' => 'Horas cazo',
+            ]);
+
+            $builder->add('hammer_hours', NumberType::class, [
                 'label' => 'Horas martillo',
-            ])
+            ]);
+        }
 
-            ->add('file', FileType::class)
-
-        ;
+        $builder->add('file', FileType::class);
 
         if ($user->isAdmin()) {
             $builder->add('employee', EntityType::class, [
@@ -107,6 +127,7 @@ class TicketType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('user', null);
+        $resolver->setDefault('type', null);
         $resolver->setDefault('all_employees', []);
     }
 
@@ -123,12 +144,14 @@ class TicketType extends AbstractType
         ];
     }
 
-    private function buildMachineOptions(User $user)
+    private function buildMachineOptions(User $user, $type)
     {
+        $machine_type = $this->mapMachineTypeFromTicket($type);
+
         return [
             'class' => Machine::class,
-            'query_builder' => function (EntityRepository $er) {
-                return $er->createQueryBuilder('m');
+            'query_builder' => function (EntityRepository $er) use($machine_type) {
+                return $er->createQueryBuilder('m')->andWhere('m.type = :type')->setParameter('type', $machine_type);
             },
 //            'choices' => $user->getEmployee()->getMachines(),     Show only employee machines
             'label' => 'Máquina',
@@ -137,5 +160,21 @@ class TicketType extends AbstractType
                 return $machine->getName();
             }
         ];
+    }
+
+    private function mapMachineTypeFromTicket($type)
+    {
+        switch ($type) {
+            case Ticket::TYPE_MACHINE:
+                $type = Machine::TYPE_MACHINE;
+                break;
+            case Ticket::TYPE_TRUCK_HOURS:
+            case Ticket::TYPE_TRUCK_PORT:
+            case Ticket::TYPE_TRUCK_SUPPLY:
+            case Ticket::TYPE_TRUCK_WITHDRAWAL:
+                $type = Machine::TYPE_TRUCK;
+        }
+
+        return $type;
     }
 }

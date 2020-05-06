@@ -1,10 +1,65 @@
 {% extends 'base.html.twig' %}
 
 {% block main %}
-<div class="col-sm-5  col-md-offset-3">
-    {{ form_start(form) }}
-    {{ form_end(form) }}
-</div>
+    {% if form is not null %}
+        {{ form_start(form) }}
+        {{ form_end(form) }}
+        <a href="{{ path('add_ticket') }}">
+            Volver
+        </a>
+    {% else %}
+        <div id="tab-index" class="tab">
+            <p>
+                <a class="btn btn-primary btn-lg btn-block" href="{{ path('add_ticket', {'type': 'machine'}) }}">
+                    <i class="fa fa-tools" aria-hidden="true"></i> Excavación/Compactación -  Máquina
+                </a>
+            </p>
+            <p>
+                <a class="btn btn-primary btn-lg btn-block js-type-select" data-target="tab-truck">
+                    <i class="fa fa-truck-moving" aria-hidden="true"></i> Transporte - Camiones
+                </a>
+            </p>
+        </div>
+
+        <div id="tab-truck" class="tab" hidden>
+            <p>
+                <a class="btn btn-primary btn-lg btn-block" href="{{ path('add_ticket', {'type': 'truck_hours'}) }}">
+                    <i class="fa fa-clock" aria-hidden="true"></i> Horas
+                </a>
+            </p>
+            <p>
+                <a class="btn btn-primary btn-lg btn-block js-type-select" data-target="tab-material-type">
+                    <i class="fa fa-truck-moving" aria-hidden="true"></i> Transporte de material
+                </a>
+            </p>
+            <p>
+                <a class="btn btn-primary btn-lg btn-block" href="{{ path('add_ticket', {'type': 'truck_port'}) }}">
+                    <i class="fa fa-truck-moving" aria-hidden="true"></i> Porte
+                </a>
+            </p>
+            <a class="js-type-select" data-target="tab-index" style="cursor: pointer">
+                Volver
+            </a>
+        </div>
+
+        <div id="tab-material-type" class="tab" hidden>
+            <p>
+                <a class="btn btn-primary btn-lg btn-block" href="{{ path('add_ticket', {'type': 'truck_supply'}) }}">
+                    <i class="fa fa-tools" aria-hidden="true"></i> Suministro
+                </a>
+            </p>
+            <p>
+                <a class="btn btn-primary btn-lg btn-block" href="{{ path('add_ticket',{'type': 'truck_withdrawal'}) }}">
+                    <i class="fa fa-truck-moving" aria-hidden="true"></i> Retirada
+                </a>
+            </p>
+            <p>
+                <a class="js-type-select" data-target="tab-truck" style="cursor: pointer">
+                    Volver
+                </a>
+            </p>
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block javascripts %}

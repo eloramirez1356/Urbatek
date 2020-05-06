@@ -25,6 +25,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Ticket
 {
+    const TYPE_MACHINE = 'machine';
+    const TYPE_TRUCK_HOURS = 'truck_hours';
+    const TYPE_TRUCK_SUPPLY = 'truck_supply';
+    const TYPE_TRUCK_WITHDRAWAL = 'truck_withdrawal';
+    const TYPE_TRUCK_PORT = 'truck_port';
+
     /**
      * @var int
      *
