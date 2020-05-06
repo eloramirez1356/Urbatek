@@ -12,9 +12,7 @@ $(document).ready(function () {
 
     $('.js-type-select').on('click', function () {
         $('.tab').hide();
-        console.log($(this).data('target'))
         $('#'+$(this).data('target')).show();
-
     })
 });
 
