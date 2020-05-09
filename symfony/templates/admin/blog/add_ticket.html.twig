@@ -26,6 +26,7 @@
         <table style="width:100%" id="{{ site ~'_table' }}">
 
             <tr>
+                <th>Tipo</th>
                 <th>Obra</th>
                 <th>Empleado</th>
                 <th>Fecha</th>
@@ -36,22 +37,25 @@
                 <th>Portes</th>
                 <th>Horas</th>
                 <th>Horas martillo</th>
+                <th>Origen/destino</th>
                 <th>Albarán</th>
 
             </tr>
 
             {% for ticket in  tickets[site] %}
                 <tr>
+                    <td>{{ ticket.type }}</td>
                     <td>{{ ticket.site.name }}</td>
                     <td>{{ ticket.employee.name }}</td>
                     <td>{{ ticket.date | date('Y-m-d') }}</td>
                     <td>{{ ticket.machine.name }}</td>
-                    <td>{{ ticket.material.name }}</td>
+                    <td>{% if material is defined %} {{ ticket.material.name }}{% endif %}</td>
                     <td>{{ ticket.numTravels }}</td>
                     <td>{{ ticket.tons }}</td>
                     <td>{{ ticket.portages }}</td>
                     <td>{{ ticket.hours }}</td>
                     <td>{{ ticket.hammerHours }}</td>
+                    <td>{{ ticket.provider }}</td>
                     <td><a target="_blank" href="{{ path('admin_view_document', {'document_id': ticket.document.id}) }}">Ver</a></td>
                 </tr>
             {% endfor %}

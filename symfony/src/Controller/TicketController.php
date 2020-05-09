@@ -49,15 +49,18 @@ class TicketController extends AbstractController
                 $employee = $data['employee'] ?? $user->getEmployee();
 
                 $ticket = new Ticket(
+                    $type,
                     $data['date'],
                     $data['site'],
                     $employee,
                     $data['machine'],
-                    $data['hours'],
-                    $data['num_travels'],
-                    $data['material'],
-                    $data['tons'],
-                    $data['portages']
+                    $data['hours'] ?? null,
+                    $data['num_travels'] ?? null,
+                    $data['material'] ?? null,
+                    $data['tons'] ?? null,
+                    $data['portages'] ?? null,
+                    $data['provider'] ?? null,
+                    $data['hammer_hours'] ?? null
                 );
 
                 $document_name = $data['file']->getClientOriginalName();

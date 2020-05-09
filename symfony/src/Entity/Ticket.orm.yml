@@ -9,6 +9,8 @@ App\Entity\Ticket:
       generator:
         strategy: AUTO
   fields:
+      type:
+        type: string
       date:
         type: date
         nullable: false
@@ -22,6 +24,8 @@ App\Entity\Ticket:
         type: integer
       portages:
         type: integer
+      provider:
+        type: string
   oneToOne:
     document:
       targetEntity: App\Entity\Document

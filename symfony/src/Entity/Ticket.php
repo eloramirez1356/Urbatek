@@ -40,6 +40,9 @@ class Ticket
      */
     private $id;
 
+    /** @var string */
+    private $type;
+
     /** @var Site */
     private $site;
 
@@ -73,17 +76,24 @@ class Ticket
     /** @var int */
     private $portages;
 
+    /** @var string */
+    private $provider;
+
     public function __construct(
+        string $type,
         \DateTime $date,
         Site $site,
         Employee $employee,
         Machine $machine,
-        int $hours,
+        int $hours = null,
         int $num_travels = null,
-        Material $material,
+        Material $material = null,
         int $tons = null,
-        int $portages
+        int $portages = null,
+        $provider = null,
+        $hammer_hours = null
     ) {
+        $this->type = $type;
         $this->date = $date;
         $this->site = $site;
         $this->employee = $employee;
@@ -93,6 +103,8 @@ class Ticket
         $this->material = $material;
         $this->tons = $tons;
         $this->portages = $portages;
+        $this->provider = $provider;
+        $this->hammer_hours = $hammer_hours;
     }
 
     public function getId(): ?int
@@ -124,7 +136,7 @@ class Ticket
     {
         $this->material = $material;
     }
-    public function getMaterial(): Material
+    public function getMaterial(): ?Material
     {
         return $this->material;
     }
@@ -212,5 +224,25 @@ class Ticket
     public function setPortages(int $portages): void
     {
         $this->portages = $portages;
+    }
+
+    public function getProvider()
+    {
+        return $this->provider;
+    }
+
+    public function setProvider(string $provider): void
+    {
+        $this->provider = $provider;
+    }
+
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): void
+    {
+        $this->type = $type;
     }
 }

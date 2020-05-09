@@ -10,7 +10,6 @@ use App\Entity\Ticket;
 use App\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -43,24 +42,34 @@ class TicketType extends AbstractType
                 'data' => new \DateTime(),
             ])
 
-            ->add('site', EntityType::class, $this->buildSiteOptions($user));
+            ->add('site', EntityType::class, $this->buildSiteOptions($user))
+            ->add('machine', EntityType::class, $this->buildMachineOptions($user, $type))
+        ;
 
         if (in_array($type, [Ticket::TYPE_TRUCK_SUPPLY, Ticket::TYPE_TRUCK_WITHDRAWAL])) {
-            $builder->add('machine', EntityType::class, $this->buildMachineOptions($user, $type));
-        }
-
+            $material_type = $this->mapMaterialType($type);
             $builder->add('material', EntityType::class, [
                 'class' => Material::class,
                 'choice_label' => 'name',
                 'choice_attr' => function (Material $material) {
                     return ['js-type' => $material->getType()];
                 },
-                'query_builder' => function (EntityRepository $er) {
-                    return $er->createQueryBuilder('m');
-                },
+                'query_builder' => function (EntityRepository $er) use($material_type) {
+                    return $er->createQueryBuilder('m')->andWhere('m.type = :type')->setParameter('type', $material_type);
+                }
             ]);
+        }
 
         if ($type == Ticket::TYPE_TRUCK_WITHDRAWAL) {
+            $builder->add('provider', ChoiceType::class, [
+                'choices' => [
+                    'RECICAM' => 'RECICAM',
+                    'SALMEDINA' => 'SALMEDINA',
+                    'AMAEXCO' => 'AMAEXCO',
+                ],
+                'label' => 'Destino'
+            ]);
+
             $builder->add('num_travels', NumberType::class, [
                 'label' => 'Nº de viajes',
                 'required' => false
@@ -68,6 +77,19 @@ class TicketType extends AbstractType
         }
 
         if ($type == Ticket::TYPE_TRUCK_SUPPLY) {
+            $builder->add('provider', ChoiceType::class, [
+                'choices' => [
+                    'Tramsa' => 'Tramsa',
+                    'Sodira' => 'Sodira',
+                    'Tec Rec' => 'Tec Rec',
+                    'Msc aridos' => 'Msc aridos',
+                    'Hanson' => 'Hanson',
+                    'Mahorsa' => 'Mahorsa',
+                    'Otro' => 'other'
+                ],
+                'label' => 'Origen'
+            ]);
+
             $builder->add('tons', NumberType::class, [
                 'label' => 'Toneladas',
                 'required' => false
@@ -173,6 +195,21 @@ class TicketType extends AbstractType
             case Ticket::TYPE_TRUCK_SUPPLY:
             case Ticket::TYPE_TRUCK_WITHDRAWAL:
                 $type = Machine::TYPE_TRUCK;
+                break;
+        }
+
+        return $type;
+    }
+
+    private function mapMaterialType($type)
+    {
+        switch ($type) {
+            case Ticket::TYPE_TRUCK_SUPPLY:
+                $type = Material::TYPE_SUPPLY;
+                break;
+            case Ticket::TYPE_TRUCK_WITHDRAWAL:
+                $type = Material::TYPE_WITHDRAWAL;
+                break;
         }
 
         return $type;
