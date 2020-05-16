@@ -1,0 +1,22 @@
+App\Entity\DailyReport:
+  type: entity
+  table: daily_report
+  repositoryClass: App\Repository\DailyReportRepository
+  id:
+    id:
+      type: integer
+      id: true
+      generator:
+        strategy: AUTO
+  fields:
+      date:
+        type: date
+        nullable: false
+      hours:
+        type: float
+  manyToOne:
+    employee:
+      targetEntity: App\Entity\Employee
+      joinColumn:
+        name: employee_id
+        referencedColumnName: id

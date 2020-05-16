@@ -20,6 +20,9 @@ class User implements UserInterface
      */
     private $id;
 
+    /** @var string */
+    private $api_token;
+
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      */
@@ -158,6 +161,11 @@ class User implements UserInterface
         }
 
         return false;
+    }
+
+    public function getApiToken(): string
+    {
+        return $this->api_token;
     }
 
 }

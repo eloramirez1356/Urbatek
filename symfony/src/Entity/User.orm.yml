@@ -21,6 +21,10 @@ App\Entity\User:
         type: json
       password:
         type: string
+      api_token:
+        type: string
+        nullable: true
+        unique: true
   oneToOne:
     employee:
       targetEntity: App\Entity\Employee
