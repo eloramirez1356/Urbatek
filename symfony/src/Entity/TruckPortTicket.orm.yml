@@ -1,0 +1,5 @@
+App\Entity\TruckPortTicket:
+  type: entity
+  table: ticket
+  repositoryClass: App\Repository\TicketRepository
+

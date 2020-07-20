@@ -50,12 +50,12 @@
                     <td>{{ ticket.date | date('Y-m-d') }}</td>
                     <td>{{ ticket.machine.name }}</td>
                     <td>{% if material is defined %} {{ ticket.material.name }}{% endif %}</td>
-                    <td>{{ ticket.numTravels }}</td>
-                    <td>{{ ticket.tons }}</td>
-                    <td>{{ ticket.portages }}</td>
-                    <td>{{ ticket.hours }}</td>
-                    <td>{{ ticket.hammerHours }}</td>
-                    <td>{{ ticket.provider }}</td>
+                    <td>{% if ticket.numTravels is defined %}{{ ticket.numTravels }}{% endif %}</td>
+                    <td>{% if ticket.tons is defined %}{{ ticket.tons }}{% endif %}</td>
+                    <td>{% if ticket.portages is defined %}{{ ticket.portages }}{% endif %}</td>
+                    <td>{% if ticket.hours is defined %}{{ ticket.hours }}{% endif %}</td>
+                    <td>{% if ticket.hammerHours is defined %}{{ ticket.hammerHours }}{% endif %}</td>
+                    <td>{% if ticket.provider is defined %}{{ ticket.provider }}{% endif %}</td>
                     <td><a target="_blank" href="{{ path('admin_view_document', {'document_id': ticket.document.id}) }}">Ver</a></td>
                 </tr>
             {% endfor %}

@@ -2,26 +2,8 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
-abstract class Ticket
+class CreateTicketRequest
 {
-    const TYPE_MACHINE = 'machine';
-    const TYPE_TRUCK_HOURS = 'truck_hours';
-    const TYPE_TRUCK_MATERIAL = 'truck_material';
-    const TYPE_TRUCK_SUPPLY = 'truck_supply';
-    const TYPE_TRUCK_WITHDRAWAL = 'truck_withdrawal';
-    const TYPE_TRUCK_PORT = 'truck_port';
-
-    /**
-     * @var int
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    protected $id;
-
     /** @var string */
     protected $type;
 
@@ -115,8 +97,83 @@ abstract class Ticket
         $this->machine = $machine;
     }
 
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
+    }
+
+    public function getPortages(): int
+    {
+        return $this->portages;
+    }
+
+    public function getTons(): int
+    {
+        return $this->tons;
+    }
+
+    public function getHammerHours(): int
+    {
+        return $this->hammer_hours;
+    }
+
+    public function getHours(): ?int
+    {
+        return $this->hours;
+    }
+
+    public function getMaterial(): Material
+    {
+        return $this->material;
+    }
+
+    public function getNumTravels(): int
+    {
+        return $this->num_travels;
+    }
+
+    public function getProvider(): string
+    {
+        return $this->provider;
+    }
+
+    public function setPortages(int $portages): void
+    {
+        $this->portages = $portages;
+    }
+
+    public function setType(string $type): void
+    {
+        $this->type = $type;
+    }
+
+    public function setProvider(string $provider): void
+    {
+        $this->provider = $provider;
+    }
+
+    public function setTons(int $tons): void
+    {
+        $this->tons = $tons;
+    }
+
+    public function setHammerHours(int $hammer_hours): void
+    {
+        $this->hammer_hours = $hammer_hours;
+    }
+
+    public function setHours(int $hours): void
+    {
+        $this->hours = $hours;
+    }
+
+    public function setMaterial(Material $material): void
+    {
+        $this->material = $material;
+    }
+
+    public function setNumTravels(int $num_travels): void
+    {
+        $this->num_travels = $num_travels;
     }
 }

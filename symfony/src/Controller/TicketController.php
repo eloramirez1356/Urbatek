@@ -2,12 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\CreateTicketRequest;
 use App\Entity\DailyReport;
 use App\Entity\Document;
-use App\Entity\Ticket;
+use App\Entity\TicketFactory;
 use App\Entity\User;
 use App\Form\DailyReportType;
 use App\Form\TicketType;
+use App\Library\ReflectionObjectSetter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -96,28 +98,25 @@ class TicketController extends AbstractController
     }
 
     private function submitTicket($user, $type, $data)
+
+
     {
-        $employee = $data['employee'] ?? $user->getEmployee();
+        $uploaded_file = $data['file'];
+        unset($data['file']);
+        $data['employee'] = $data['employee'] ?? $user->getEmployee();
+        $data['type'] = $type;
 
-        $ticket = new Ticket(
-            $type,
-            $data['date'],
-            $data['site'],
-            $employee,
-            $data['machine'],
-            $data['hours'] ?? null,
-            $data['num_travels'] ?? null,
-            $data['material'] ?? null,
-            $data['tons'] ?? null,
-            $data['portages'] ?? null,
-            $data['provider'] ?? null,
-            $data['hammer_hours'] ?? null
-        );
+        $setter = new ReflectionObjectSetter();
+        $request = new CreateTicketRequest();
 
-        $document_name = $data['file']->getClientOriginalName();
+        $setter->fillObject($request, $data);
+        $ticket_factory = new TicketFactory();
+        $ticket = $ticket_factory->createFromRequest($request);
+
+        $document_name = $uploaded_file->getClientOriginalName();
         $document_path = $this->getParameter('kernel.root_dir') . '/../uploads/documents/ticket/' . $user->getId();
         $document = new Document($document_name, $document_path);
-        $document->setFile($data['file']);
+        $document->setFile($uploaded_file);
         $document->upload($document_path);
 
         $ticket->setDocument($document);

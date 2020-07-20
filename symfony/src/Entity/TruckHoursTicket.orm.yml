@@ -1,0 +1,5 @@
+App\Entity\TruckHoursTicket:
+  type: entity
+  table: ticket
+  repositoryClass: App\Repository\TicketRepository
+

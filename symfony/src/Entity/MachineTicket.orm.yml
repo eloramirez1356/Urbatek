@@ -1,0 +1,5 @@
+App\Entity\MachineTicket:
+  type: entity
+  table: ticket
+  repositoryClass: App\Repository\TicketRepository
+

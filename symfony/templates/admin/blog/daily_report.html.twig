@@ -1,0 +1,41 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block body_id 'admin_daily_report' %}
+
+{% block main %}
+    <h1>Reportes de horas</h1>
+
+    <style>
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+            width: 100%;
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 16px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2
+        }
+    </style>
+
+    <table style="width:100%">
+        <tr>
+            <th>Fecha</th>
+            <th>Empleado</th>
+            <th>Horas</th>
+        </tr>
+
+        {% for report in reports %}
+            <tr>
+                <td>{{ report.date | date('Y-m-d') }}</td>
+                <td>{{ report.employee.fullName }}</td>
+                <td>{{ report.hours }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\DailyReport;
 use App\Entity\Document;
 use App\Entity\Employee;
 use App\Entity\Machine;
@@ -267,6 +268,23 @@ class AdminController extends AbstractController
         return $this->render('admin/blog/edit_site.html.twig', [
             'site'=> $site,
             'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * Add a site
+     *
+     * @Route("/daily_report", methods={"GET"}, name="admin_daily_report")
+     *
+     */
+    public function dailyReportAction(Request $request): Response
+    {
+        $daily_report_repo = $this->getDoctrine()->getRepository(DailyReport::class);
+        $reports = $daily_report_repo->findAll();
+
+
+        return $this->render('admin/blog/daily_report.html.twig', [
+            'reports'=> $reports
         ]);
     }
 
