@@ -110,7 +110,7 @@ class CreateTicketRequest
         return $this->portages;
     }
 
-    public function getTons(): int
+    public function getTons(): ?int
     {
         return $this->tons;
     }

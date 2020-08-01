@@ -10,6 +10,7 @@ class TicketFactory
             case Ticket::TYPE_TRUCK_HOURS:
                 return $this->createTruckHoursTicket($request);
                 break;
+            case Ticket::TYPE_TRUCK_WITHDRAWAL:
             case Ticket::TYPE_TRUCK_SUPPLY:
                 return $this->createTruckMaterialTicket($request);
                 break;
