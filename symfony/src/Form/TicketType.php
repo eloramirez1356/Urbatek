@@ -181,10 +181,10 @@ class TicketType extends AbstractType
 
         return [
             'class' => Machine::class,
-            'query_builder' => function (EntityRepository $er) use($machine_type) {
-                return $er->createQueryBuilder('m')->andWhere('m.type = :type')->setParameter('type', $machine_type);
-            },
-//            'choices' => $user->getEmployee()->getMachines(),     Show only employee machines
+//            'query_builder' => function (EntityRepository $er) use($machine_type) {
+//                return $er->createQueryBuilder('m')->andWhere('m.type = :type')->setParameter('type', $machine_type);
+//            },
+            'choices' => $user->getEmployee()->getMachines(),//      Show only employee machines
             'label' => 'Máquina',
             'choice_value' => 'getId',
             'choice_label' => function (Machine $machine) {
