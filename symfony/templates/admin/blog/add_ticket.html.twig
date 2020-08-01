@@ -58,7 +58,7 @@
                     <td>{% if ticket.hammerHours is defined %}{{ ticket.hammerHours }}{% endif %}</td>
                     <td>{% if ticket.provider is defined %}{{ ticket.provider }}{% endif %}</td>
                     <td>{% if ticket.comments is not null %}{{ ticket.comments }}{% endif %}</td>
-                    <td><a target="_blank" href="{{ path('admin_view_document', {'document_id': ticket.document.id}) }}">Ver</a></td>
+                    <td>{% if ticket.document is not null %}<a target="_blank" href="{{ path('admin_view_document', {'document_id': ticket.document.id}) }}">Ver</a>{% else %}No{% endif %}</td>
                 </tr>
             {% endfor %}
         </table>
