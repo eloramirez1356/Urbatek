@@ -61,6 +61,9 @@ abstract class Ticket
     /** @var string */
     protected $provider;
 
+    /** @var string */
+    protected $comments;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -118,5 +121,15 @@ abstract class Ticket
     public function getType()
     {
         return $this->type;
+    }
+
+    public function getComments(): string
+    {
+        return $this->comments;
+    }
+
+    public function setComments(string $comments): void
+    {
+        $this->comments = $comments;
     }
 }

@@ -20,23 +20,23 @@ function setMaterialSelector(type) {
     let $tons_selector = $('#ticket_tons');
     let $num_travels_selector = $('#ticket_num_travels');
     if (type === 'withdrawal') {
-        $num_travels_selector.parent().show();
-        $num_travels_selector.attr('required', true);
-        $num_travels_selector.attr('disabled', false);
-
-        $tons_selector.parent().hide();
-        $tons_selector.attr('required', false);
-        $tons_selector.attr('disabled', true);
+        // $num_travels_selector.parent().show();
+        // $num_travels_selector.attr('required', true);
+        // $num_travels_selector.attr('disabled', false);
+        //
+        // $tons_selector.parent().hide();
+        // $tons_selector.attr('required', false);
+        // $tons_selector.attr('disabled', true);
 
     }
 
     if (type === 'supply') {
-        $tons_selector.parent().show();
-        $tons_selector.attr('required', true);
-        $tons_selector.attr('disabled', false);
-
-        $num_travels_selector.parent().hide();
-        $num_travels_selector.attr('required', false);
-        $num_travels_selector.attr('disabled', true);
+        // $tons_selector.parent().show();
+        // $tons_selector.attr('required', true);
+        // $tons_selector.attr('disabled', false);
+        //
+        // $num_travels_selector.parent().hide();
+        // $num_travels_selector.attr('required', false);
+        // $num_travels_selector.attr('disabled', true);
     }
 }

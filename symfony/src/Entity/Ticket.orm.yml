@@ -33,6 +33,8 @@ App\Entity\Ticket:
         type: integer
       provider:
         type: string
+      commments:
+        type: string
   oneToOne:
     document:
       targetEntity: App\Entity\Document

@@ -16,6 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -94,6 +95,12 @@ class TicketType extends AbstractType
                 'label' => 'Toneladas',
                 'required' => false
             ]);
+
+            $builder->add('num_travels', NumberType::class, [
+                'label' => 'Nº de viajes',
+                'required' => false
+            ]);
+
         }
 
         if ($type == Ticket::TYPE_TRUCK_PORT) {
@@ -106,15 +113,9 @@ class TicketType extends AbstractType
             ]);
         }
 
-        if ($type == Ticket::TYPE_TRUCK_HOURS) {
-            $builder->add('hours', NumberType::class, [
-                'label' => 'Horas',
-            ]);
-        }
-
         if ($type == Ticket::TYPE_MACHINE) {
             $builder->add('hours', NumberType::class, [
-                'label' => 'Horas cazo',
+                'label' => 'Horas trabajadas totales',
             ]);
 
             $builder->add('hammer_hours', NumberType::class, [
@@ -122,7 +123,15 @@ class TicketType extends AbstractType
             ]);
         }
 
-        $builder->add('file', FileType::class);
+        $builder->add('hours', NumberType::class, [
+            'label' => 'Horas',
+        ]);
+
+        $builder->add('comments', TextType::class, [
+            'required' => false,
+            'label' => 'Comentarios'
+        ]);
+        $builder->add('file', FileType::class, ['required' => false]);
 
         if ($user->isAdmin()) {
             $builder->add('employee', EntityType::class, [
