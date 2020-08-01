@@ -76,7 +76,7 @@ class TicketType extends AbstractType
 
             $builder->add('num_travels', NumberType::class, [
                 'label' => 'Nº de viajes',
-                'required' => false
+                'required' => true
             ]);
         }
 
@@ -101,7 +101,7 @@ class TicketType extends AbstractType
 
             $builder->add('num_travels', NumberType::class, [
                 'label' => 'Nº de viajes',
-                'required' => false
+                'required' => true
             ]);
 
         }
