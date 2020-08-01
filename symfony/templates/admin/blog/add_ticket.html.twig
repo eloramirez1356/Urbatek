@@ -38,6 +38,7 @@
                 <th>Horas</th>
                 <th>Horas martillo</th>
                 <th>Origen/destino</th>
+                <th>Comentarios</th>
                 <th>Albarán</th>
 
             </tr>
@@ -56,6 +57,7 @@
                     <td>{% if ticket.hours is defined %}{{ ticket.hours }}{% endif %}</td>
                     <td>{% if ticket.hammerHours is defined %}{{ ticket.hammerHours }}{% endif %}</td>
                     <td>{% if ticket.provider is defined %}{{ ticket.provider }}{% endif %}</td>
+                    <td>{% if ticket.comments is not null %}{{ ticket.comments }}{% endif %}</td>
                     <td><a target="_blank" href="{{ path('admin_view_document', {'document_id': ticket.document.id}) }}">Ver</a></td>
                 </tr>
             {% endfor %}

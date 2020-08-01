@@ -123,7 +123,7 @@ abstract class Ticket
         return $this->type;
     }
 
-    public function getComments(): string
+    public function getComments(): ?string
     {
         return $this->comments;
     }
