@@ -111,15 +111,17 @@ class TicketController extends AbstractController
         $ticket_factory = new TicketFactory();
         $ticket = $ticket_factory->createFromRequest($request);
 
-        $document_name = $uploaded_file->getClientOriginalName();
-        $document_path = $this->getParameter('kernel.root_dir') . '/../uploads/documents/ticket/' . $user->getId();
-        $document = new Document($document_name, $document_path);
-        $document->setFile($uploaded_file);
-        $document->upload($document_path);
+        if ($uploaded_file) {
+            $document_name = $uploaded_file->getClientOriginalName();
+            $document_path = $this->getParameter('kernel.root_dir') . '/../uploads/documents/ticket/' . $user->getId();
+            $document = new Document($document_name, $document_path);
+            $document->setFile($uploaded_file);
+            $document->upload($document_path);
 
-        $ticket->setDocument($document);
+            $ticket->setDocument($document);
+            $this->get('doctrine')->getEntityManager()->persist($document);
+        }
 
-        $this->get('doctrine')->getEntityManager()->persist($document);
         $this->get('doctrine')->getEntityManager()->persist($ticket);
         $this->get('doctrine')->getEntityManager()->flush();
     }
