@@ -115,7 +115,7 @@ class CreateTicketRequest
         return $this->tons;
     }
 
-    public function getHammerHours(): int
+    public function getHammerHours(): ?int
     {
         return $this->hammer_hours;
     }
