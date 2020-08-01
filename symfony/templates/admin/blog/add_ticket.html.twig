@@ -50,7 +50,7 @@
                     <td>{{ ticket.employee.name }}</td>
                     <td>{{ ticket.date | date('Y-m-d') }}</td>
                     <td>{{ ticket.machine.name }}</td>
-                    <td>{% if material is defined %} {{ ticket.material.name }}{% endif %}</td>
+                    <td>{% if ticket.material is defined %} {{ ticket.material.name }}{% endif %}</td>
                     <td>{% if ticket.numTravels is defined %}{{ ticket.numTravels }}{% endif %}</td>
                     <td>{% if ticket.tons is defined %}{{ ticket.tons }}{% endif %}</td>
                     <td>{% if ticket.portages is defined %}{{ ticket.portages }}{% endif %}</td>
