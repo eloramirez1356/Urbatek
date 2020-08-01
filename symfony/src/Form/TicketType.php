@@ -118,7 +118,7 @@ class TicketType extends AbstractType
 
         if ($type == Ticket::TYPE_MACHINE) {
             $builder->add('hours', NumberType::class, [
-                'label' => 'Horas trabajadas totales',
+                'label' => 'Horas totales',
             ]);
 
             $builder->add('hammer_hours', NumberType::class, [
