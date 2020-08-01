@@ -43,6 +43,9 @@ class CreateTicketRequest
     /** @var string */
     protected $provider;
 
+    /** @var string */
+    protected $comments;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -175,5 +178,15 @@ class CreateTicketRequest
     public function setNumTravels(int $num_travels): void
     {
         $this->num_travels = $num_travels;
+    }
+    
+    public function getComments(): string
+    {
+        return $this->comments;
+    }
+
+    public function setComments(string $comments): void
+    {
+        $this->comments = $comments;
     }
 }

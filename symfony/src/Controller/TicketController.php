@@ -98,8 +98,6 @@ class TicketController extends AbstractController
     }
 
     private function submitTicket($user, $type, $data)
-
-
     {
         $uploaded_file = $data['file'];
         unset($data['file']);
