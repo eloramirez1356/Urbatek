@@ -123,9 +123,11 @@ class TicketType extends AbstractType
             ]);
         }
 
-        $builder->add('hours', NumberType::class, [
-            'label' => 'Horas',
-        ]);
+        if ($type != Ticket::TYPE_MACHINE) {
+            $builder->add('hours', NumberType::class, [
+                'label' => 'Horas',
+            ]);
+        }
 
         $builder->add('comments', TextType::class, [
             'required' => false,
