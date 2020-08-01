@@ -16,7 +16,8 @@ class MachineTicket extends Ticket
         Employee $employee,
         Machine $machine,
         int $hours = null,
-        $hammer_hours = null
+        $hammer_hours = null,
+        $comments
     ) {
         $this->type = self::TYPE_MACHINE;
         $this->date = $date;
@@ -25,6 +26,7 @@ class MachineTicket extends Ticket
         $this->machine = $machine;
         $this->hours = $hours;
         $this->hammer_hours = $hammer_hours;
+        $this->comments = $comments;
     }
 
     public function getMaterial(): ?Material

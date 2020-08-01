@@ -25,6 +25,8 @@ class TruckMaterialTicket extends Ticket
         Employee $employee,
         Machine $machine,
         int $num_travels = null,
+        $hours,
+        $comments,
         Material $material = null,
         int $tons = null,
         $provider = null
@@ -38,6 +40,8 @@ class TruckMaterialTicket extends Ticket
         $this->tons = $tons;
         $this->provider = $provider;
         $this->num_travels = $num_travels;
+        $this->comments = $comments;
+        $this->hours = $hours;
     }
 
     public function setMaterial(Material $material): void
