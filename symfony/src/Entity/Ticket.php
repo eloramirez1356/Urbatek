@@ -128,7 +128,7 @@ abstract class Ticket
         return $this->comments;
     }
 
-    public function setComments(string $comments): void
+    public function setComments(string $comments = null): void
     {
         $this->comments = $comments;
     }
