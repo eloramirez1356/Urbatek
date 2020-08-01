@@ -180,7 +180,7 @@ class CreateTicketRequest
         $this->num_travels = $num_travels;
     }
 
-    public function getComments(): string
+    public function getComments(): ?string
     {
         return $this->comments;
     }

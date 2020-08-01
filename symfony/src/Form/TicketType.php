@@ -123,6 +123,7 @@ class TicketType extends AbstractType
 
             $builder->add('hammer_hours', NumberType::class, [
                 'label' => 'Horas martillo',
+                'required' => false
             ]);
         }
 
