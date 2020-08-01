@@ -67,6 +67,9 @@ class TicketType extends AbstractType
                     'RECICAM' => 'RECICAM',
                     'SALMEDINA' => 'SALMEDINA',
                     'AMAEXCO' => 'AMAEXCO',
+                    'ARIDOS 2002' => 'ARIDOS 2002',
+                    'COLMENAR' => 'COLMENAR',
+                    'Otro' => 'Otro',
                 ],
                 'label' => 'Destino'
             ]);
