@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\CreateTicketRequest;
 use App\Entity\DailyReport;
 use App\Entity\Document;
+use App\Entity\Ticket;
 use App\Entity\TicketFactory;
 use App\Entity\User;
 use App\Form\DailyReportType;
@@ -134,5 +135,31 @@ class TicketController extends AbstractController
     {
         $user = $this->getUser();
         return new Response($user->getUsername());
+    }
+
+    /**
+     * @Route("/u/tickets", defaults={"page": "1", "_format"="html", "type": null }, methods={"GET"}, name="my_tickets")
+     *
+     * NOTE: For standard formats, Symfony will also automatically choose the best
+     * Content-Type header for the response.
+     * See https://symfony.com/doc/current/quick_tour/the_controller.html#using-formats
+     */
+    public function myTicketsAction(Request $request, $type = null): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+
+        }
+
+        $ticket_repo = $this->getDoctrine()->getRepository(Ticket::class);
+
+        $tickets = $ticket_repo->findOfEmployee($user->getEmployee());
+
+        return $this->render('ticket/my_tickets.html.twig', [
+            'tickets' => $tickets,
+
+        ]);
     }
 }

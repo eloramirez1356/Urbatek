@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id 'user_my_tickets' %}
+
+{% block main %}
+        <div class="col-sm-5 ">
+            <style>
+                table {
+                    border-collapse: collapse;
+                    border-spacing: 0;
+                    width: 100%;
+                    border: 1px solid #ddd;
+                }
+
+                th, td {
+                    text-align: left;
+                    padding: 16px;
+                }
+
+                tr:nth-child(even) {
+                    background-color: #f2f2f2
+                }
+            </style>
+
+                <h2>Mis albaranes</h2>
+                <table style="width:100%">
+
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Obra</th>
+                        <th>Empleado</th>
+                        <th>Fecha</th>
+                        <th>Máquina</th>
+                        <th>Material</th>
+                        <th>Numero viajes</th>
+                        <th>Toneladas</th>
+                        <th>Portes</th>
+                        <th>Horas</th>
+                        <th>Horas martillo</th>
+                        <th>Origen/destino</th>
+                        <th>Comentarios</th>
+                        <th>Albarán</th>
+
+                    </tr>
+
+                    {% for ticket in  tickets %}
+                        <tr>
+                            <td>{{ ticket.type }}</td>
+                            <td>{{ ticket.site.name }}</td>
+                            <td>{{ ticket.employee.name }}</td>
+                            <td>{{ ticket.date | date('Y-m-d') }}</td>
+                            <td>{{ ticket.machine.name }}</td>
+                            <td>{% if ticket.material is defined and ticket.material is not null %} {{ ticket.material.name }}{% endif %}</td>
+                            <td>{% if ticket.numTravels is defined %}{{ ticket.numTravels }}{% endif %}</td>
+                            <td>{% if ticket.tons is defined %}{{ ticket.tons }}{% endif %}</td>
+                            <td>{% if ticket.portages is defined %}{{ ticket.portages }}{% endif %}</td>
+                            <td>{% if ticket.hours is defined %}{{ ticket.hours }}{% endif %}</td>
+                            <td>{% if ticket.hammerHours is defined %}{{ ticket.hammerHours }}{% endif %}</td>
+                            <td>{% if ticket.provider is defined %}{{ ticket.provider }}{% endif %}</td>
+                            <td>{% if ticket.comments is not null %}{{ ticket.comments }}{% endif %}</td>
+                            <td>{% if ticket.document is not null %}<a target="_blank" href="{{ path('admin_view_document', {'document_id': ticket.document.id}) }}">Ver</a>{% else %}No{% endif %}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+        </div>
+
+{% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}
