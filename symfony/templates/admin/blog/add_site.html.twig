@@ -2,6 +2,8 @@
 
 {% block body_id 'admin_post_index' %}
 
+{% block header_navigation_links %}
+{% endblock %}
 {% block main %}
     <h1>Editar obras</h1>
 
@@ -40,7 +42,11 @@
                         {{ employee.name }}{% if not loop.last %}, {% endif %}
                     {% endfor %}
                 </td>
-                <td><a href="{{ url('admin_edit_site', {'site_id':site.id}) }}">Editar</a></td>
+                <td>
+                    <a href="{{ url('admin_edit_site', {'site_id':site.id}) }}">Editar</a>
+                    <br>
+                    <a href="{{ url('admin_site_tickets', {'site_id':site.id}) }}">Ver albaranes</a>
+                </td>
             </tr>
         {% endfor %}
     </table>

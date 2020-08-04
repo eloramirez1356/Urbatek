@@ -175,6 +175,27 @@ class AdminController extends AbstractController
     }
 
     /**
+     * View site tickets
+     *
+     * @Route("/site-tickets/{site_id}", methods={"GET"}, name="admin_site_tickets")
+     * @param $site_id
+     * @return Response
+     */
+    public function siteTicketsAction($site_id): Response
+    {
+        $ticket_repo = $this->getDoctrine()->getRepository(Ticket::class);
+        $site_repo = $this->getDoctrine()->getRepository(Site::class);
+
+        $site = $site_repo->find($site_id);
+        $site_tickets = $ticket_repo->findOfSite($site);
+
+        return $this->render('admin/blog/add_ticket.html.twig', [
+            'tickets' => [$site->getName() => $site_tickets],
+            'sites' => [$site]
+        ]);
+    }
+
+    /**
      * Add a site
      *
      * @Route("/view_document/{document_id}", methods={"GET"}, name="admin_view_document")

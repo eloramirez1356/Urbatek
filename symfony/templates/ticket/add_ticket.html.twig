@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% block body_id 'useradd_ticket' %}
+
 {% block main %}
     {% if form is not null %}
         {{ form_start(form) }}
@@ -8,71 +10,68 @@
             Volver
         </a>
     {% else %}
-<div class="col-sm-5 ">
-        <div id="tab-index" class="tab">
-            <p>
-                <a class="btn btn-primary btn-lg btn-block" href="{{ path('add_ticket', {'type': 'machine'}) }}">
-                    <i class="fa fa-tools" aria-hidden="true"></i> Excavación -  Máquinas
-                </a>
-            </p>
-            <p>
-                <a class="btn btn-primary btn-lg btn-block js-type-select" data-target="tab-truck">
-                    <i class="fa fa-truck-moving" aria-hidden="true"></i> Transporte - Camiones
-                </a>
-            </p>
+        <div class="col-sm-5 ">
+            <div id="tab-index" class="tab">
+                <p>
+                    <a class="btn btn-primary btn-lg btn-block" href="{{ path('add_ticket', {'type': 'machine'}) }}">
+                        <i class="fa fa-tools" aria-hidden="true"></i> Excavación -  Máquinas
+                    </a>
+                </p>
+                <p>
+                    <a class="btn btn-primary btn-lg btn-block js-type-select" data-target="tab-truck">
+                        <i class="fa fa-truck-moving" aria-hidden="true"></i> Transporte - Camiones
+                    </a>
+                </p>
 
-{#            <p>#}
-{#                <a class="btn btn-primary btn-lg btn-block" href="{{ path('add_daily_report') }}">#}
-{#                    <i class="fa fa-clock" aria-hidden="true"></i> Parte horas diario#}
-{#                </a>#}
-{#            </p>#}
-        </div>
+                {#            <p>#}
+                {#                <a class="btn btn-primary btn-lg btn-block" href="{{ path('add_daily_report') }}">#}
+                {#                    <i class="fa fa-clock" aria-hidden="true"></i> Parte horas diario#}
+                {#                </a>#}
+                {#            </p>#}
+            </div>
 
-        <div id="tab-truck" class="tab" hidden>
-{#            <p>#}
-{#                <a class="btn btn-primary btn-lg btn-block" href="{{ path('add_ticket', {'type': 'truck_hours'}) }}">#}
-{#                    <i class="fa fa-clock" aria-hidden="true"></i> Horas#}
-{#                </a>#}
-{#            </p>#}
-            <p>
-                <a class="btn btn-primary btn-lg btn-block js-type-select" data-target="tab-material-type">
-                    <i class="fa fa-truck-moving" aria-hidden="true"></i> Transporte de material
-                </a>
-            </p>
-            <p>
-                <a class="btn btn-primary btn-lg btn-block" href="{{ path('add_ticket', {'type': 'truck_port'}) }}">
-                    <i class="fa fa-truck-moving" aria-hidden="true"></i> Portes
-                </a>
-            </p>
-            <a class="js-type-select" data-target="tab-index" style="cursor: pointer">
-                Volver
-            </a>
-        </div>
-
-        <div id="tab-material-type" class="tab" hidden>
-            <p>
-                <a class="btn btn-primary btn-lg btn-block" href="{{ path('add_ticket', {'type': 'truck_supply'}) }}">
-                    <i class="fa fa-tools" aria-hidden="true"></i> Suministro
-                </a>
-            </p>
-            <p>
-                <a class="btn btn-primary btn-lg btn-block" href="{{ path('add_ticket',{'type': 'truck_withdrawal'}) }}">
-                    <i class="fa fa-truck-moving" aria-hidden="true"></i> Retirada
-                </a>
-            </p>
-            <p>
-                <a class="js-type-select" data-target="tab-truck" style="cursor: pointer">
+            <div id="tab-truck" class="tab" hidden>
+                {#            <p>#}
+                {#                <a class="btn btn-primary btn-lg btn-block" href="{{ path('add_ticket', {'type': 'truck_hours'}) }}">#}
+                {#                    <i class="fa fa-clock" aria-hidden="true"></i> Horas#}
+                {#                </a>#}
+                {#            </p>#}
+                <p>
+                    <a class="btn btn-primary btn-lg btn-block js-type-select" data-target="tab-material-type">
+                        <i class="fa fa-truck-moving" aria-hidden="true"></i> Transporte de material
+                    </a>
+                </p>
+                <p>
+                    <a class="btn btn-primary btn-lg btn-block" href="{{ path('add_ticket', {'type': 'truck_port'}) }}">
+                        <i class="fa fa-truck-moving" aria-hidden="true"></i> Portes
+                    </a>
+                </p>
+                <a class="js-type-select" data-target="tab-index" style="cursor: pointer">
                     Volver
                 </a>
-            </p>
+            </div>
+
+            <div id="tab-material-type" class="tab" hidden>
+                <p>
+                    <a class="btn btn-primary btn-lg btn-block" href="{{ path('add_ticket', {'type': 'truck_supply'}) }}">
+                        <i class="fa fa-tools" aria-hidden="true"></i> Suministro
+                    </a>
+                </p>
+                <p>
+                    <a class="btn btn-primary btn-lg btn-block" href="{{ path('add_ticket',{'type': 'truck_withdrawal'}) }}">
+                        <i class="fa fa-truck-moving" aria-hidden="true"></i> Retirada
+                    </a>
+                </p>
+                <p>
+                    <a class="js-type-select" data-target="tab-truck" style="cursor: pointer">
+                        Volver
+                    </a>
+                </p>
+            </div>
         </div>
-</div>
     {% endif %}
 {% endblock %}
 
-{% block javascripts %}
-    {{ encore_entry_script_tags('ticket') }}
-{% endblock %}
-
 {% block sidebar %}
+
 {% endblock %}
