@@ -22,7 +22,7 @@
     </style>
 
     {% for site in sites %}
-        <h2>Albaranes de {{ site }}</h2>
+        <h2>Albaranes de {{ site.name }}</h2>
         <table style="width:100%" id="{{ site.id ~'_table' }}">
 
             <tr>
@@ -43,7 +43,7 @@
 
             </tr>
 
-            {% for ticket in  tickets[site] %}
+            {% for ticket in  tickets[site.name] %}
                 <tr>
                     <td>{{ ticket.type }}</td>
                     <td>{{ ticket.site.name }}</td>
