@@ -23,7 +23,7 @@
 
     {% for site in sites %}
         <h2>Albaranes de {{ site }}</h2>
-        <table style="width:100%" id="{{ site ~'_table' }}">
+        <table style="width:100%" id="{{ site.id ~'_table' }}">
 
             <tr>
                 <th>Tipo</th>
@@ -61,7 +61,7 @@
                     <td>{% if ticket.document is not null %}<a target="_blank" href="{{ path('admin_view_document', {'document_id': ticket.document.id}) }}">Ver</a>{% else %}No{% endif %}</td>
                 </tr>
             {% endfor %}
-            <a class="export_table" js_site="{{ site ~'_table' }}" style="cursor: pointer">Exportar a CSV</a>
+            <a class="export_table" js_site="{{ site.id ~'_table' }}" style="cursor: pointer">Exportar a CSV</a>
         </table>
     {% endfor %}
 
