@@ -69,7 +69,7 @@ class TruckMaterialTicket extends Ticket
         return $this->tons;
     }
 
-    public function setTons(int $tons): void
+    public function setTons(float $tons): void
     {
         $this->tons = $tons;
     }

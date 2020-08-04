@@ -50,7 +50,7 @@
                     <td>{{ ticket.employee.name }}</td>
                     <td>{{ ticket.date | date('Y-m-d') }}</td>
                     <td>{{ ticket.machine.name }}</td>
-                    <td>{% if ticket.material is defined %} {{ ticket.material.name }}{% endif %}</td>
+                    <td>{% if ticket.material is defined and ticket.material is not null %} {{ ticket.material.name }}{% endif %}</td>
                     <td>{% if ticket.numTravels is defined %}{{ ticket.numTravels }}{% endif %}</td>
                     <td>{% if ticket.tons is defined %}{{ ticket.tons }}{% endif %}</td>
                     <td>{% if ticket.portages is defined %}{{ ticket.portages }}{% endif %}</td>
@@ -61,8 +61,8 @@
                     <td>{% if ticket.document is not null %}<a target="_blank" href="{{ path('admin_view_document', {'document_id': ticket.document.id}) }}">Ver</a>{% else %}No{% endif %}</td>
                 </tr>
             {% endfor %}
+            <a class="export_table" js_site="{{ site ~'_table' }}" style="cursor: pointer">Exportar a CSV</a>
         </table>
-        <a class="export_table" js_site="{{ site ~'_table' }}" style="cursor: pointer">Exportar a CSV</a>
     {% endfor %}
 
 

@@ -39,16 +39,6 @@ class MachineTicket extends Ticket
         $this->material = $material;
     }
 
-    public function setHours(int $hours): void
-    {
-        $this->hours = $hours;
-    }
-
-    public function getHours()
-    {
-        return $this->hours;
-    }
-
     public function getHammerHours()
     {
         return $this->hammer_hours;

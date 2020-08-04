@@ -21,14 +21,4 @@ class TruckHoursTicket extends Ticket
         $this->machine = $machine;
         $this->hours = $hours;
     }
-
-    public function getHours()
-    {
-        return $this->hours;
-    }
-
-    public function setHours(int $hours): void
-    {
-        $this->hours = $hours;
-    }
 }

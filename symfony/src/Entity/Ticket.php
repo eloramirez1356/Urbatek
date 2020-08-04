@@ -52,7 +52,7 @@ abstract class Ticket
     /** @var string */
     protected $document;
 
-    /** @var int */
+    /** @var float */
     protected $tons;
 
     /** @var int */
@@ -131,5 +131,21 @@ abstract class Ticket
     public function setComments(string $comments = null): void
     {
         $this->comments = $comments;
+    }
+
+    /**
+     * @return int
+     */
+    public function getHours()
+    {
+        return $this->hours;
+    }
+
+    /**
+     * @param int $hours
+     */
+    public function setHours(int $hours): void
+    {
+        $this->hours = $hours;
     }
 }

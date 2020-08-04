@@ -28,7 +28,7 @@ App\Entity\Ticket:
       num_travels:
         type: integer
       tons:
-        type: integer
+        type: float
       portages:
         type: integer
       provider:

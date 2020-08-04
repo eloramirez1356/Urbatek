@@ -110,7 +110,7 @@ class CreateTicketRequest
         return $this->portages;
     }
 
-    public function getTons(): ?int
+    public function getTons(): ?float
     {
         return $this->tons;
     }
@@ -155,7 +155,7 @@ class CreateTicketRequest
         $this->provider = $provider;
     }
 
-    public function setTons(int $tons): void
+    public function setTons(float $tons): void
     {
         $this->tons = $tons;
     }
