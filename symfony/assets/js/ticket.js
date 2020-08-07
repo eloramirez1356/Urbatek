@@ -1,17 +1,17 @@
 $(document).ready(function () {
-    $material_element = $('#ticket_material');
-    $material_element.ready(function () {
-        setMaterialSelector($('option:selected', this).attr('js-type'));
-    });
-
-    setMaterialSelector($('option:selected', $material_element).attr('js-type'));
-    $material_element.on('change', function () {
-        let type = $('option:selected', this).attr('js-type');
-        setMaterialSelector(type);
-    });
+    // $material_element = $('#ticket_material');
+    // $material_element.ready(function () {
+    //     setMaterialSelector($('option:selected', this).attr('js-type'));
+    // });
+    //
+    // setMaterialSelector($('option:selected', $material_element).attr('js-type'));
+    // $material_element.on('change', function () {
+    //     let type = $('option:selected', this).attr('js-type');
+    //     setMaterialSelector(type);
+    // });
 
     $('.js-type-select').on('click', function () {
-        $('.tab').hide();
+        $('.ticket-tab').hide();
         $('#'+$(this).data('target')).show();
     })
 });

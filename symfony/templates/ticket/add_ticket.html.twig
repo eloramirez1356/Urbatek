@@ -11,7 +11,7 @@
         </a>
     {% else %}
         <div class="col-sm-5 ">
-            <div id="tab-index" class="tab">
+            <div id="tab-index" class="tab ticket-tab">
                 <p>
                     <a class="btn btn-primary btn-lg btn-block" href="{{ path('add_ticket', {'type': 'machine'}) }}">
                         <i class="fa fa-tools" aria-hidden="true"></i> Excavación -  Máquinas
@@ -30,7 +30,7 @@
                 {#            </p>#}
             </div>
 
-            <div id="tab-truck" class="tab" hidden>
+            <div id="tab-truck" class="tab ticket-tab" hidden>
                 {#            <p>#}
                 {#                <a class="btn btn-primary btn-lg btn-block" href="{{ path('add_ticket', {'type': 'truck_hours'}) }}">#}
                 {#                    <i class="fa fa-clock" aria-hidden="true"></i> Horas#}
@@ -51,7 +51,7 @@
                 </a>
             </div>
 
-            <div id="tab-material-type" class="tab" hidden>
+            <div id="tab-material-type" class="tab ticket-tab" hidden>
                 <p>
                     <a class="btn btn-primary btn-lg btn-block" href="{{ path('add_ticket', {'type': 'truck_supply'}) }}">
                         <i class="fa fa-tools" aria-hidden="true"></i> Suministro
