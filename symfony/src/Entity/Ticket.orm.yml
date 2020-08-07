@@ -35,6 +35,8 @@ App\Entity\Ticket:
         type: string
       comments:
         type: string
+      liters:
+        type: float
   oneToOne:
     document:
       targetEntity: App\Entity\Document

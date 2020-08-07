@@ -133,6 +133,11 @@ class TicketType extends AbstractType
             ]);
         }
 
+        $builder->add('liters', NumberType::class, [
+            'required' => false,
+            'label' => 'Litros de gasóleo repostado'
+        ]);
+
         $builder->add('comments', TextType::class, [
             'required' => false,
             'label' => 'Comentarios'

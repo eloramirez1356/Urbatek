@@ -64,6 +64,9 @@ abstract class Ticket
     /** @var string */
     protected $comments;
 
+    /** @var float */
+    protected $liters;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -147,5 +150,15 @@ abstract class Ticket
     public function setHours(int $hours): void
     {
         $this->hours = $hours;
+    }
+
+    public function getLiters(): ?float
+    {
+        return $this->liters;
+    }
+
+    public function setLiters(float $liters): void
+    {
+        $this->liters = $liters;
     }
 }
