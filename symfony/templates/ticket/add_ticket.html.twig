@@ -1,5 +1,9 @@
 {% extends 'base.html.twig' %}
 
+{% block javascripts %}
+    {{ encore_entry_script_tags('ticket') }}
+{% endblock %}
+
 {% block body_id 'useradd_ticket' %}
 
 {% block main %}
@@ -70,9 +74,6 @@
             </div>
         </div>
     {% endif %}
-{% endblock %}
-{% block javascripts %}
-    {{ encore_entry_script_tags('ticket') }}
 {% endblock %}
 
 {% block sidebar %}
