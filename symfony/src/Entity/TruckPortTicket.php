@@ -16,7 +16,8 @@ class TruckPortTicket extends Ticket
         Machine $machine,
         int $portages,
         $hours,
-        $comments
+        $comments,
+        $liters
     ) {
         $this->type = self::TYPE_TRUCK_PORT;
         $this->date = $date;
@@ -26,6 +27,7 @@ class TruckPortTicket extends Ticket
         $this->portages = $portages;
         $this->hours = $hours;
         $this->comments = $comments;
+        $this->liters = $liters;
     }
 
     public function getPortages()

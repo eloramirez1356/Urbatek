@@ -29,7 +29,8 @@ class TruckMaterialTicket extends Ticket
         $comments,
         Material $material = null,
         int $tons = null,
-        $provider = null
+        $provider = null,
+        $liters
     ) {
         $this->type = self::TYPE_TRUCK_MATERIAL;
         $this->date = $date;
@@ -42,6 +43,7 @@ class TruckMaterialTicket extends Ticket
         $this->num_travels = $num_travels;
         $this->comments = $comments;
         $this->hours = $hours;
+        $this->liters = $liters;
     }
 
     public function setMaterial(Material $material): void

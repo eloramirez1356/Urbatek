@@ -46,6 +46,9 @@ class CreateTicketRequest
     /** @var string */
     protected $comments;
 
+    /** @var float */
+    protected $liters;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -188,5 +191,15 @@ class CreateTicketRequest
     public function setComments(string $comments= null): void
     {
         $this->comments = $comments;
+    }
+
+    public function getLiters(): ?float
+    {
+        return $this->liters;
+    }
+
+    public function setLiters(float $liters): void
+    {
+        $this->liters = $liters;
     }
 }

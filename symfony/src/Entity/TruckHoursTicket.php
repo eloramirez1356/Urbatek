@@ -12,7 +12,8 @@ class TruckHoursTicket extends Ticket
         Site $site,
         Employee $employee,
         Machine $machine,
-        int $hours = null
+        int $hours = null,
+        $liters
     ) {
         $this->type = self::TYPE_TRUCK_HOURS;
         $this->date = $date;
@@ -20,5 +21,6 @@ class TruckHoursTicket extends Ticket
         $this->employee = $employee;
         $this->machine = $machine;
         $this->hours = $hours;
+        $this->liters = $liters;
     }
 }

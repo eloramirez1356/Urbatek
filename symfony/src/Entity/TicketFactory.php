@@ -30,7 +30,8 @@ class TicketFactory
             $request->getSite(),
             $request->getEmployee(),
             $request->getMachine(),
-            $request->getHours()
+            $request->getHours(),
+            $request->getLiters()
         );
     }
 
@@ -46,7 +47,8 @@ class TicketFactory
             $request->getComments(),
             $request->getMaterial(),
             $request->getTons(),
-            $request->getProvider()
+            $request->getProvider(),
+            $request->getLiters()
         );
     }
 
@@ -59,7 +61,8 @@ class TicketFactory
             $request->getMachine(),
             $request->getPortages(),
             $request->getHours(),
-            $request->getComments()
+            $request->getComments(),
+            $request->getLiters()
         );
     }
 
@@ -72,7 +75,8 @@ class TicketFactory
             $request->getMachine(),
             $request->getHours(),
             $request->getHammerHours(),
-            $request->getComments()
+            $request->getComments(),
+            $request->getLiters()
         );
     }
 }
