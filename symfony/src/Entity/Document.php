@@ -12,6 +12,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 
@@ -53,7 +54,7 @@ class Document
             : $this->path;
     }
 
-    public function setFile(UploadedFile $file = null)
+    public function setFile(File $file = null)
     {
         $this->file = $file;
     }
@@ -70,9 +71,10 @@ class Document
 
         // move takes the target directory and then the
         // target filename to move to
+        $file_name = $this->getFile() instanceof UploadedFile ? $this->getFile()->getClientOriginalName() : $this->getFile()->getFilename();
         $this->getFile()->move(
             $path,
-            $this->getFile()->getClientOriginalName()
+            $file_name
         );
 
 
@@ -86,7 +88,7 @@ class Document
     /**
      * Get file.
      *
-     * @return UploadedFile
+     * @return File|UploadedFile
      */
     public function getFile()
     {

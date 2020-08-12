@@ -142,6 +142,7 @@ class TicketType extends AbstractType
             'required' => false,
             'label' => 'Comentarios'
         ]);
+
         $builder->add('file', FileType::class, ['required' => false]);
 
         if ($user->isAdmin()) {
