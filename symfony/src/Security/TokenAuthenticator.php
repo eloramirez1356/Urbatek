@@ -4,11 +4,14 @@ namespace App\Security;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Firebase\JWT\ExpiredException;
+use Firebase\JWT\JWT;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\CredentialsExpiredException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
@@ -49,9 +52,17 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
             return null;
         }
 
-// if a User is returned, checkCredentials() is called
-        return $this->em->getRepository(User::class)
-            ->findOneBy(['api_token' => $credentials]);
+        $secret = 'wprMD6If8MmwcHP0p19RAfX0gXvBbl6N5EmotfAH0oO3FnZfRZGZomzP93izsyN';
+        try {
+            $data = (array)JWT::decode($credentials, $secret, ['HS256']);
+
+        } catch (ExpiredException $e) {
+            throw new CredentialsExpiredException();
+        }
+
+        $user = $this->em->getRepository(User::class)->findOneBy(['username' => $data['username']]);
+
+        return $user;
     }
 
     public function checkCredentials($credentials, UserInterface $user)
