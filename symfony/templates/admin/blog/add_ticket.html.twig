@@ -21,11 +21,11 @@
         }
     </style>
 
-    {% for site in sites %}
-        <h2>Albaranes de {{ site.name }}</h2>
-        <table style="width:100%" id="{{ site.id ~'_table' }}">
+        <h2>Albaranes</h2>
+        <table style="width:100%" id="tickets_table">
 
             <tr>
+                <th>id</th>
                 <th>Tipo</th>
                 <th>Obra</th>
                 <th>Empleado</th>
@@ -41,11 +41,11 @@
                 <th>Litros gasóleo</th>
                 <th>Comentarios</th>
                 <th>Albarán</th>
-
             </tr>
 
-            {% for ticket in  tickets[site.name] %}
+            {% for ticket in  tickets %}
                 <tr>
+                    <td>{{ ticket.id }}</td>
                     <td>{{ ticket.type }}</td>
                     <td>{{ ticket.site.name }}</td>
                     <td>{{ ticket.employee.name }}</td>
@@ -63,9 +63,8 @@
                     <td>{% if ticket.document is not null %}<a target="_blank" href="{{ path('admin_view_document', {'document_id': ticket.document.id}) }}">Ver</a>{% else %}No{% endif %}</td>
                 </tr>
             {% endfor %}
-            <a class="export_table" js_site="{{ site.id ~'_table' }}" style="cursor: pointer">Exportar a CSV</a>
+            <a class="export_table" js_site="tickets_table" style="cursor: pointer">Exportar a CSV</a>
         </table>
-    {% endfor %}
 
 
 {% endblock %}

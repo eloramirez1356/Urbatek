@@ -157,19 +157,9 @@ class AdminController extends AbstractController
 
         $all_tickets= $ticket_repo->findAll();
 
-        $sites = [];
-        $tickets_by_site = [];
-        foreach ($all_tickets as $ticket) {
-            $tickets_by_site[$ticket->getSite()->getName()][] = $ticket;
-            if (!in_array($ticket->getSite(), $sites)) {
-                $sites[$ticket->getSite()->getName()] = $ticket->getSite();
-            }
-        }
-
 
         return $this->render('admin/blog/add_ticket.html.twig', [
-            'tickets' => $tickets_by_site,
-            'sites' => $sites
+            'tickets' => $all_tickets,
         ]);
 
     }
