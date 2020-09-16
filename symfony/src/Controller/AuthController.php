@@ -29,7 +29,7 @@ class AuthController extends Controller
             return new JsonResponse(['token' => $token]);
         }
 
-        throw new AuthenticationCredentialsNotFoundException();
+        return new Response('Invalid redentials', 401);
     }
 
     private function generateUserJWTToken($api_token, $data)
