@@ -120,4 +120,9 @@ class Document
         // when displaying uploaded doc/image in the view.
         return 'uploads/documents';
     }
+
+    public function getId()
+    {
+        return $this->id;
+    }
 }

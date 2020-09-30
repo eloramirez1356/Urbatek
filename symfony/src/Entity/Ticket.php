@@ -49,7 +49,7 @@ abstract class Ticket
     /** @var Material */
     protected $material;
 
-    /** @var string */
+    /** @var Document */
     protected $document;
 
     /** @var float */
@@ -91,7 +91,7 @@ abstract class Ticket
         return $this->site;
     }
 
-    public function getDocument()
+    public function getDocument(): ?Document
     {
         return $this->document;
     }
@@ -161,4 +161,32 @@ abstract class Ticket
     {
         $this->liters = $liters;
     }
+
+    public function toArray()
+    {
+        return [
+            'id' => $this->getId(),
+            'type' => $this->getType(),
+            'site' => [
+                'name' => $this->getSite()->getName(),
+                'id' => $this->getSite()->getId(),
+            ],
+            'employee' => $this->getEmployee()->getName(),
+            'machine' => [
+                'id' => $this->getMachine() ? $this->getMachine()->getId() : null,
+                'name' => $this->getMachine() ? $this->getMachine()->getName() : null,
+            ],
+            'date' => $this->date,
+            'hours' => $this->hours,
+            'hammer_hours' => $this->hammer_hours,
+            'num_travels' => $this->num_travels,
+            'material' => $this->material ? $this->material->getName() : null,
+            'tons' => $this->tons,
+            'portages' => $this->portages,
+            'provider' => $this->provider,
+            'comments' => $this->comments,
+            'liters' => $this->liters
+        ];
+    }
+
 }

@@ -172,6 +172,8 @@ class TicketType extends AbstractType
         $resolver->setDefault('user', null);
         $resolver->setDefault('type', null);
         $resolver->setDefault('all_employees', []);
+        $resolver->setDefault('csrf_protection', false);
+        $resolver->setDefault('allow_extra_fields', true);
     }
 
     private function buildSiteOptions(User $user)

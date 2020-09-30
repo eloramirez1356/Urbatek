@@ -10,9 +10,6 @@ class TruckMaterialTicket extends Ticket
     /** @var Material */
     protected $material;
 
-    /** @var string */
-    protected $document;
-
     /** @var int */
     protected $tons;
 
