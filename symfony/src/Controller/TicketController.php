@@ -163,7 +163,11 @@ class TicketController extends AbstractController
 
         $post_data = [];
         foreach ($fields as $field => $type) {
-            if (is_array($type)) {
+            if (is_null($request->get($field))) {
+                continue;
+            }
+
+            if (is_array($type) && isset($type['entity'])) {
                 $value = $doctrine->getRepository($type['entity'])->find($request->get($field));
 
             } elseif ($type == 'date') {
