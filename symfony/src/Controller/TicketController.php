@@ -124,7 +124,7 @@ class TicketController extends AbstractController
         $ticket_factory = new TicketFactory();
         $ticket = $ticket_factory->createFromRequest($request);
 
-        if ($uploaded_file) {
+        if (isset($uploaded_file) && $uploaded_file) {
             $document_path = $this->getParameter('kernel.root_dir') . '/../uploads/documents/ticket/' . $user->getId();
             $document = new Document($file_name, $document_path);
             $document->setFile($uploaded_file);
