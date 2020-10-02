@@ -107,10 +107,13 @@ class TicketController extends AbstractController
 
     private function submitTicket($user, $type, $data)
     {
-        $uploaded_file = $data['file'];
-        $file_name = $data['file_name'];
-        unset($data['file']);
-        unset($data['file_name']);
+        if (isset($data['file'])) {
+            $uploaded_file = $data['file'];
+            $file_name = $data['file_name'];
+            unset($data['file']);
+            unset($data['file_name']);
+        }
+
         $data['employee'] = $data['employee'] ?? $user->getEmployee();
         $data['type'] = $type;
 
