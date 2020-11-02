@@ -134,15 +134,15 @@ class TicketType extends AbstractType
 
         $builder->add('provider_signed', ChoiceType::class, [
             'choices' => [
-                'Si' => 1,
-                'No' => 0
+                'No' => 0,
+                'Si' => 1
             ],
             'label' => '¿Firmado por el cliente?'
         ]);
 
         if ($type != Ticket::TYPE_MACHINE) {
             $builder->add('hours', NumberType::class, [
-                'label' => 'Horas',
+                'label' => 'Horas (Antonio Aguado)',
             ]);
         }
 

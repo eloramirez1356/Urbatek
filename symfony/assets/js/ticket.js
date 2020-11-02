@@ -6,10 +6,10 @@ $(document).ready(function () {
 
     $file = $('#ticket_file');
     $provider_signed = $('#ticket_provider_signed');
-    $file.attr('required', $provider_signed.val());
+    $file.attr('required', false);
 
     $provider_signed.on('change', function (){
-        if ($(this).val() === 1) {
+        if ($(this).val() == 1) {
             $file.attr('required', true);
         } else {
             $file.attr('required', false);
