@@ -67,6 +67,12 @@ abstract class Ticket
     /** @var float */
     protected $liters;
 
+    /** @var float */
+    protected $spoon_hours;
+
+    /** @var bool */
+    protected $provider_signed;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -160,6 +166,32 @@ abstract class Ticket
     public function setLiters(float $liters): void
     {
         $this->liters = $liters;
+    }
+
+    public function isProviderSigned(): bool
+    {
+        return boolval($this->provider_signed);
+    }
+
+    public function setProviderSigned(bool $provider_signed): void
+    {
+        $this->provider_signed = $provider_signed;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSpoonHours(): float
+    {
+        return $this->spoon_hours;
+    }
+
+    /**
+     * @param float $spoon_hours
+     */
+    public function setSpoonHours(float $spoon_hours): void
+    {
+        $this->spoon_hours = $spoon_hours;
     }
 
     public function toArray()

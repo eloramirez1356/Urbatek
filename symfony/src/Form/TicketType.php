@@ -118,14 +118,27 @@ class TicketType extends AbstractType
 
         if ($type == Ticket::TYPE_MACHINE) {
             $builder->add('hours', NumberType::class, [
-                'label' => 'Horas totales',
+                'label' => 'Horas totales (Antonio Aguado)',
             ]);
 
             $builder->add('hammer_hours', NumberType::class, [
-                'label' => 'Horas martillo',
+                'label' => 'Horas martillo (Firmadas)',
+                'required' => false
+            ]);
+
+            $builder->add('spoon_hours', NumberType::class, [
+                'label' => 'Horas cazo/máquina (Firmadas)',
                 'required' => false
             ]);
         }
+
+        $builder->add('provider_signed', ChoiceType::class, [
+            'choices' => [
+                'Si' => 1,
+                'No' => 0
+            ],
+            'label' => '¿Firmado por el cliente?'
+        ]);
 
         if ($type != Ticket::TYPE_MACHINE) {
             $builder->add('hours', NumberType::class, [
@@ -143,7 +156,10 @@ class TicketType extends AbstractType
             'label' => 'Comentarios'
         ]);
 
-        $builder->add('file', FileType::class, ['required' => false]);
+        $builder->add('file', FileType::class, [
+            'required' => false,
+            'label' => 'Foto albarán'
+        ]);
 
         if ($user->isAdmin()) {
             $builder->add('employee', EntityType::class, [

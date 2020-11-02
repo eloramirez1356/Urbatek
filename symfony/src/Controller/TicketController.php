@@ -16,7 +16,6 @@ use App\Form\TicketType;
 use App\Library\ReflectionObjectSetter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -107,12 +106,10 @@ class TicketController extends AbstractController
 
     private function submitTicket($user, $type, $data)
     {
-        if (isset($data['file'])) {
-            $uploaded_file = $data['file'];
-            $file_name = $data['file_name'];
-            unset($data['file']);
-            unset($data['file_name']);
-        }
+        $uploaded_file = $data['file'] ?? null;
+        $file_name = $data['file_name'] ?? null;
+        unset($data['file']);
+        unset($data['file_name']);
 
         $data['employee'] = $data['employee'] ?? $user->getEmployee();
         $data['type'] = $type;
@@ -124,7 +121,7 @@ class TicketController extends AbstractController
         $ticket_factory = new TicketFactory();
         $ticket = $ticket_factory->createFromRequest($request);
 
-        if (isset($uploaded_file) && $uploaded_file) {
+        if ($uploaded_file) {
             $document_path = $this->getParameter('kernel.root_dir') . '/../uploads/documents/ticket/' . $user->getId();
             $document = new Document($file_name, $document_path);
             $document->setFile($uploaded_file);

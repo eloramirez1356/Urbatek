@@ -48,7 +48,8 @@ class TicketFactory
             $request->getMaterial(),
             $request->getTons(),
             $request->getProvider(),
-            $request->getLiters()
+            $request->getLiters(),
+            $request->isProviderSigned()
         );
     }
 
@@ -62,7 +63,8 @@ class TicketFactory
             $request->getPortages(),
             $request->getHours(),
             $request->getComments(),
-            $request->getLiters()
+            $request->getLiters(),
+            $request->isProviderSigned()
         );
     }
 
@@ -76,7 +78,9 @@ class TicketFactory
             $request->getHours(),
             $request->getHammerHours(),
             $request->getComments(),
-            $request->getLiters()
+            $request->getLiters(),
+            $request->getSpoonHours(),
+            $request->isProviderSigned()
         );
     }
 }

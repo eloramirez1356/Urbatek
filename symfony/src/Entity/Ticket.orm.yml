@@ -37,6 +37,10 @@ App\Entity\Ticket:
         type: string
       liters:
         type: float
+      spoon_hours:
+        type: float
+      provider_signed:
+        type: boolean
   oneToOne:
     document:
       targetEntity: App\Entity\Document

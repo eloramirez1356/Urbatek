@@ -40,6 +40,7 @@
                 <th>Origen/destino</th>
                 <th>Litros gasóleo</th>
                 <th>Comentarios</th>
+                <th>Firma cliente</th>
                 <th>Albarán</th>
             </tr>
 
@@ -60,6 +61,7 @@
                     <td>{% if ticket.provider is defined %}{{ ticket.provider }}{% endif %}</td>
                     <td>{% if ticket.liters is not null %}{{ ticket.liters }}{% endif %}</td>
                     <td>{% if ticket.comments is not null %}{{ ticket.comments }}{% endif %}</td>
+                    <td>{{ ticket.providerSigned }}</td>
                     <td>{% if ticket.document is not null %}<a target="_blank" href="{{ path('admin_view_document', {'document_id': ticket.document.id}) }}">Ver</a>{% else %}No{% endif %}</td>
                 </tr>
             {% endfor %}
