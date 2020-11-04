@@ -61,7 +61,7 @@ class MachineTicket extends Ticket
         $this->hammer_hours = $hammer_hours;
     }
 
-    public function getSpoonHours(): float
+    public function getSpoonHours(): ?float
     {
         return $this->spoon_hours;
     }

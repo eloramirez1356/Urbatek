@@ -181,7 +181,7 @@ abstract class Ticket
     /**
      * @return float
      */
-    public function getSpoonHours(): float
+    public function getSpoonHours(): ?float
     {
         return $this->spoon_hours;
     }
