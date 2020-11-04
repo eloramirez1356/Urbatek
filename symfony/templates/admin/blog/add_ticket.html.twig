@@ -37,7 +37,6 @@
                 <th>Portes</th>
                 <th>Horas</th>
                 <th>Horas martillo</th>
-                <th>Horas cazo</th>
                 <th>Origen/destino</th>
                 <th>Litros gasóleo</th>
                 <th>Comentarios</th>
@@ -59,7 +58,6 @@
                     <td>{% if ticket.portages is defined %}{{ ticket.portages }}{% endif %}</td>
                     <td>{% if ticket.hours is defined %}{{ ticket.hours }}{% endif %}</td>
                     <td>{% if ticket.hammerHours is defined %}{{ ticket.hammerHours }}{% endif %}</td>
-                    <td>{% if ticket.spoonHours is defined %}{{ ticket.spoonHours }}{% endif %}</td>
                     <td>{% if ticket.provider is defined %}{{ ticket.provider }}{% endif %}</td>
                     <td>{% if ticket.liters is not null %}{{ ticket.liters }}{% endif %}</td>
                     <td>{% if ticket.comments is not null %}{{ ticket.comments }}{% endif %}</td>
