@@ -19,53 +19,8 @@
     <a class="export_table" js_site="tickets_table" style="cursor: pointer">Exportar a CSV</a>
     <input class="form-control" id="searchTickets" type="text" placeholder="Buscar..">
     <br>
-    <table id="tickets_table" class="table table-striped table-hover table-responsive">
-            <thead>
-                <tr>
-                    <th>id</th>
-                    <th>Obra</th>
-                    <th>Empleado</th>
-                    <th>Fecha</th>
-                    <th>Máquina</th>
-                    <th>Material</th>
-                    <th>Numero viajes</th>
-                    <th>Toneladas</th>
-                    <th>Portes</th>
-                    <th>Horas</th>
-                    <th>Horas martillo</th>
-                    <th>Horas cazo</th>
-                    <th>Origen/destino</th>
-                    <th>Litros gasóleo</th>
-                    <th>Comentarios</th>
-                    <th>Firma cliente</th>
-                    <th>Albarán</th>
-                </tr>
-            </thead>
 
-            <tbody>
-            {% for ticket in  tickets %}
-                    <tr class="js-row">
-                        <td>{{ ticket.id }}</td>
-                        <td><a href="{{ path('admin_site_tickets', {'site_id': ticket.site.id}) }}">{{ ticket.site.name }}</a></td>
-                        <td>{{ ticket.employee.name }}</td>
-                        <td>{{ ticket.date | date('Y-m-d') }}</td>
-                        <td>{{ ticket.machine.name }}</td>
-                        <td>{% if ticket.material is defined and ticket.material is not null %} {{ ticket.material.name }}{% endif %}</td>
-                        <td>{% if ticket.numTravels is defined %}{{ ticket.numTravels }}{% endif %}</td>
-                        <td>{% if ticket.tons is defined %}{{ ticket.tons }}{% endif %}</td>
-                        <td>{% if ticket.portages is defined %}{{ ticket.portages }}{% endif %}</td>
-                        <td>{% if ticket.hours is defined %}{{ ticket.hours }}{% endif %}</td>
-                        <td>{% if ticket.hammerHours is defined %}{{ ticket.hammerHours }}{% endif %}</td>
-                        <td>{% if ticket.spoonHours is defined %}{{ ticket.spoonHours }}{% endif %}</td>
-                        <td>{% if ticket.provider is defined %}{{ ticket.provider }}{% endif %}</td>
-                        <td>{% if ticket.liters is not null %}{{ ticket.liters }}{% endif %}</td>
-                        <td>{% if ticket.comments is not null %}{{ ticket.comments }}{% endif %}</td>
-                        <td>{{ ticket.providerSigned }}</td>
-                        <td>{% if ticket.document is not null %}<a target="_blank" href="{{ path('admin_view_document', {'document_id': ticket.document.id}) }}">Ver</a>{% else %}No{% endif %}</td>
-                    </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+    {% include 'components/tickets_table.html.twig' with {'tickets': tickets } %}
 
 
 {% endblock %}
