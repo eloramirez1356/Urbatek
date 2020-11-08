@@ -11,6 +11,16 @@ $(function() {
         $("#"+table_id).table2csv()
     });
 
+
+    $(document).ready(function(){
+        $("#searchTickets").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#tickets_table tr.js-row").filter(function() {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) >  -1)
+            });
+        });
+    });
+
     // Datetime picker initialization.
     // See http://eonasdan.github.io/bootstrap-datetimepicker/
     $('[data-toggle="datetimepicker"]').datetimepicker({

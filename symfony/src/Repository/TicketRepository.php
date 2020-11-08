@@ -25,5 +25,14 @@ class TicketRepository extends ServiceEntityRepository
         return $this->findBy(['employee' => $employee]);
     }
 
+    public function findOfActiveSites()
+    {
+        $qb = $this->createQueryBuilder('t')
+            ->join('t.site', 's')
+            ->where('s.is_active = 1');
+
+        return $qb->getQuery()->getResult();
+    }
+
 
 }

@@ -155,7 +155,7 @@ class AdminController extends AbstractController
     {
         $ticket_repo = $this->getDoctrine()->getRepository(Ticket::class);
 
-        $all_tickets= $ticket_repo->findAll();
+        $all_tickets= $ticket_repo->findOfActiveSites();
 
 
         return $this->render('admin/blog/add_ticket.html.twig', [
@@ -180,8 +180,8 @@ class AdminController extends AbstractController
         $site_tickets = $ticket_repo->findOfSite($site);
 
         return $this->render('admin/blog/add_ticket.html.twig', [
-            'tickets' => [$site->getName() => $site_tickets],
-            'sites' => [$site]
+            'tickets' => $site_tickets,
+            'site' => $site->getName()
         ]);
     }
 
