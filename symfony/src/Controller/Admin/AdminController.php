@@ -181,7 +181,7 @@ class AdminController extends AbstractController
 
         return $this->render('admin/blog/add_ticket.html.twig', [
             'tickets' => $site_tickets,
-            'site' => $site->getName()
+            'site' => $site
         ]);
     }
 

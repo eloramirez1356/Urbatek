@@ -14,7 +14,7 @@
     </style>
 
 
-    <h2>Albaranes {% if site is defined %} de {{ site }}{% endif %}</h2>
+    <h2>Albaranes {% if site is defined %} de <a href="{{ path('admin_edit_site', {'site_id': site.id}) }}">{{ site.name }}</a>{% endif %}</h2>
     <br>
     <a class="export_table" js_site="tickets_table" style="cursor: pointer">Exportar a CSV</a>
     <input class="form-control" id="searchTickets" type="text" placeholder="Buscar..">
