@@ -23,7 +23,6 @@
             <thead>
                 <tr>
                     <th>id</th>
-                    <th>Tipo</th>
                     <th>Obra</th>
                     <th>Empleado</th>
                     <th>Fecha</th>
@@ -47,7 +46,6 @@
             {% for ticket in  tickets %}
                     <tr class="js-row">
                         <td>{{ ticket.id }}</td>
-                        <td>{{ ticket.type }}</td>
                         <td><a href="{{ path('admin_site_tickets', {'site_id': ticket.site.id}) }}">{{ ticket.site.name }}</a></td>
                         <td>{{ ticket.employee.name }}</td>
                         <td>{{ ticket.date | date('Y-m-d') }}</td>
