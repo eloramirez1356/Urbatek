@@ -29,7 +29,8 @@ class TicketRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('t')
             ->join('t.site', 's')
-            ->where('s.is_active = 1');
+            ->where('s.is_active = 1')
+        ->orderBy('t.id');
 
         return $qb->getQuery()->getResult();
     }
