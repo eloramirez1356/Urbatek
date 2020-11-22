@@ -13,9 +13,11 @@
         {{ form_end(form) }}
 
         {% if app.user.isAdmin %}
-        <canvas id="signature-pad" class="signature-pad" width=400 height=200 style="border:1px solid #000000;"></canvas>
-        <button id="save-png">Save as PNG</button>
-        <button id="clear">Clear</button>
+            <div class="col-sm-6">
+                <canvas id="signature-pad" class="signature-pad" width=400 height=200 style="border:1px solid #000000;"></canvas>
+                <button id="save-png">Save as PNG</button>
+                <button id="clear">Clear</button>
+            </div>
         <br>
             {% else %}
                 <canvas id="signature-pad" class="signature-pad" width=400 height=200 style="border:1px solid #000000; visibility: hidden"></canvas>
