@@ -20,10 +20,30 @@
             background-color: #18bc9c;
             border-color: #18bc9c;
         }
+        .filters {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
     </style>
 
     <h2>Albaranes {% if site is defined %} de <a href="{{ path('admin_edit_site', {'site_id': site.id}) }}">{{ site.name }}</a>{% endif %}</h2>
     
+    <div class="filters">
+        <form method="get" class="form-inline">
+            <div class="form-group mx-sm-3 mb-2">
+                <label for="year" class="mr-2">Año:</label>
+                <select name="year" id="year" class="form-control">
+                    {% for year in years %}
+                        <option value="{{ year }}" {% if year == selectedYear %}selected{% endif %}>{{ year }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary mb-2">Filtrar</button>
+        </form>
+    </div>
+
     <div class="table-responsive">
         <a class="export_table" js_site="tickets_table" style="cursor: pointer">Exportar a CSV</a>
         <input class="form-control" id="searchTickets" type="text" placeholder="Buscar.." aria-label="Buscar tickets">
@@ -35,17 +55,43 @@
             <nav aria-label="Navegación de páginas">
                 <ul class="pagination justify-content-center">
                     <li class="page-item {% if currentPage == 1 %}disabled{% endif %}">
-                        <a class="page-link" href="{{ path('admin_view_tickets', {'page': currentPage - 1}) }}" aria-label="Anterior">
+                        <a class="page-link" href="{{ path('admin_view_tickets', {'page': currentPage - 1, 'year': selectedYear}) }}" aria-label="Anterior">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
-                    {% for i in 1..totalPages %}
+
+                    {% set startPage = max(1, currentPage - 2) %}
+                    {% set endPage = min(totalPages, startPage + 4) %}
+                    {% if startPage > 1 %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ path('admin_view_tickets', {'page': 1, 'year': selectedYear}) }}">1</a>
+                        </li>
+                        {% if startPage > 2 %}
+                            <li class="page-item disabled">
+                                <span class="page-link">...</span>
+                            </li>
+                        {% endif %}
+                    {% endif %}
+
+                    {% for i in startPage..endPage %}
                         <li class="page-item {% if i == currentPage %}active{% endif %}">
-                            <a class="page-link" href="{{ path('admin_view_tickets', {'page': i}) }}">{{ i }}</a>
+                            <a class="page-link" href="{{ path('admin_view_tickets', {'page': i, 'year': selectedYear}) }}">{{ i }}</a>
                         </li>
                     {% endfor %}
+
+                    {% if endPage < totalPages %}
+                        {% if endPage < totalPages - 1 %}
+                            <li class="page-item disabled">
+                                <span class="page-link">...</span>
+                            </li>
+                        {% endif %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ path('admin_view_tickets', {'page': totalPages, 'year': selectedYear}) }}">{{ totalPages }}</a>
+                        </li>
+                    {% endif %}
+
                     <li class="page-item {% if currentPage == totalPages %}disabled{% endif %}">
-                        <a class="page-link" href="{{ path('admin_view_tickets', {'page': currentPage + 1}) }}" aria-label="Siguiente">
+                        <a class="page-link" href="{{ path('admin_view_tickets', {'page': currentPage + 1, 'year': selectedYear}) }}" aria-label="Siguiente">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>

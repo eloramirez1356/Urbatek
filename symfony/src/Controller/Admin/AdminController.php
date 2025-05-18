@@ -156,14 +156,17 @@ class AdminController extends AbstractController
     {
         $ticket_repo = $this->getDoctrine()->getRepository(Ticket::class);
 
-        // Get pagination parameters
+        // Get filter parameters
+        $year = $request->query->get('year', (new \DateTime())->format('Y'));
         $page = $request->query->getInt('page', 1);
         $limit = 10; // Items per page
 
-        // Create query builder
+        // Create query builder with filters
         $qb = $ticket_repo->createQueryBuilder('t')
             ->join('t.site', 's')
             ->where('s.is_active = 1')
+            ->andWhere('SUBSTRING(t.date, 1, 4) = :year')
+            ->setParameter('year', $year)
             ->orderBy('t.id', 'DESC');
 
         // Get total count for pagination
@@ -176,10 +179,19 @@ class AdminController extends AbstractController
 
         $tickets = $qb->getQuery()->getResult();
 
+        // Get available years for filter
+        $years = $ticket_repo->createQueryBuilder('t')
+            ->select('DISTINCT SUBSTRING(t.date, 1, 4) as year')
+            ->orderBy('year', 'DESC')
+            ->getQuery()
+            ->getResult();
+
         return $this->render('admin/blog/add_ticket.html.twig', [
             'tickets' => $tickets,
             'currentPage' => $page,
-            'totalPages' => $totalPages
+            'totalPages' => $totalPages,
+            'years' => array_column($years, 'year'),
+            'selectedYear' => $year
         ]);
     }
 
