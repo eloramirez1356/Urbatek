@@ -166,8 +166,8 @@ class AdminController extends AbstractController
         $qb = $ticket_repo->createQueryBuilder('t')
             ->join('t.site', 's')
             ->where('s.is_active = 1')
-            ->andWhere('YEAR(t.date) = :year')
-            ->andWhere('MONTH(t.date) = :month')
+            ->andWhere('FUNCTION(YEAR, t.date) = :year')
+            ->andWhere('FUNCTION(MONTH, t.date) = :month')
             ->setParameter('year', $year)
             ->setParameter('month', $month)
             ->orderBy('t.id', 'DESC');
@@ -184,7 +184,7 @@ class AdminController extends AbstractController
 
         // Get available years and months for filter
         $years = $ticket_repo->createQueryBuilder('t')
-            ->select('DISTINCT YEAR(t.date) as year')
+            ->select('DISTINCT FUNCTION(YEAR, t.date) as year')
             ->orderBy('year', 'DESC')
             ->getQuery()
             ->getResult();
