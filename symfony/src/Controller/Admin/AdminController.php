@@ -155,9 +155,14 @@ class AdminController extends AbstractController
     public function editTicketAction(Request $request): Response
     {
         $ticket_repo = $this->getDoctrine()->getRepository(Ticket::class);
+        $site_repo = $this->getDoctrine()->getRepository(Site::class);
+        $employee_repo = $this->getDoctrine()->getRepository(Employee::class);
 
         // Get filter parameters
         $year = $request->query->get('year', (new \DateTime())->format('Y'));
+        $month = $request->query->get('month', (new \DateTime())->format('m'));
+        $siteId = $request->query->get('site');
+        $employeeId = $request->query->get('employee');
         $page = $request->query->getInt('page', 1);
         $limit = 10; // Items per page
 
@@ -166,8 +171,21 @@ class AdminController extends AbstractController
             ->join('t.site', 's')
             ->where('s.is_active = 1')
             ->andWhere('SUBSTRING(t.date, 1, 4) = :year')
+            ->andWhere('SUBSTRING(t.date, 6, 2) = :month')
             ->setParameter('year', $year)
-            ->orderBy('t.id', 'DESC');
+            ->setParameter('month', $month);
+
+        if ($siteId) {
+            $qb->andWhere('t.site = :site')
+               ->setParameter('site', $siteId);
+        }
+
+        if ($employeeId) {
+            $qb->andWhere('t.employee = :employee')
+               ->setParameter('employee', $employeeId);
+        }
+
+        $qb->orderBy('t.id', 'DESC');
 
         // Get total count for pagination
         $totalItems = count($qb->getQuery()->getResult());
@@ -186,12 +204,37 @@ class AdminController extends AbstractController
             ->getQuery()
             ->getResult();
 
+        $months = [
+            ['value' => '01', 'label' => 'Enero'],
+            ['value' => '02', 'label' => 'Febrero'],
+            ['value' => '03', 'label' => 'Marzo'],
+            ['value' => '04', 'label' => 'Abril'],
+            ['value' => '05', 'label' => 'Mayo'],
+            ['value' => '06', 'label' => 'Junio'],
+            ['value' => '07', 'label' => 'Julio'],
+            ['value' => '08', 'label' => 'Agosto'],
+            ['value' => '09', 'label' => 'Septiembre'],
+            ['value' => '10', 'label' => 'Octubre'],
+            ['value' => '11', 'label' => 'Noviembre'],
+            ['value' => '12', 'label' => 'Diciembre']
+        ];
+
+        // Get active sites and employees for filters
+        $sites = $site_repo->findBy(['is_active' => true], ['name' => 'ASC']);
+        $employees = $employee_repo->findAll();
+
         return $this->render('admin/blog/add_ticket.html.twig', [
             'tickets' => $tickets,
             'currentPage' => $page,
             'totalPages' => $totalPages,
             'years' => array_column($years, 'year'),
-            'selectedYear' => $year
+            'months' => $months,
+            'sites' => $sites,
+            'employees' => $employees,
+            'selectedYear' => $year,
+            'selectedMonth' => $month,
+            'selectedSite' => $siteId,
+            'selectedEmployee' => $employeeId
         ]);
     }
 

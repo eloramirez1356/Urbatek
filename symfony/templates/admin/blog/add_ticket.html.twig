@@ -14,11 +14,19 @@
             margin-top: 20px;
         }
         .pagination .page-link {
-            color: #18bc9c;
+            color: #18bc9c !important;
+            background-color: white !important;
+            border-color: #18bc9c !important;
         }
         .pagination .page-item.active .page-link {
-            background-color: #18bc9c;
-            border-color: #18bc9c;
+            background-color: #18bc9c !important;
+            border-color: #18bc9c !important;
+            color: white !important;
+        }
+        .pagination .page-item.disabled .page-link {
+            color: #6c757d !important;
+            background-color: white !important;
+            border-color: #18bc9c !important;
         }
         .filters {
             margin-bottom: 20px;
@@ -26,21 +34,57 @@
             background-color: #f8f9fa;
             border-radius: 5px;
         }
+        .filter-row {
+            margin-bottom: 10px;
+        }
     </style>
 
     <h2>Albaranes {% if site is defined %} de <a href="{{ path('admin_edit_site', {'site_id': site.id}) }}">{{ site.name }}</a>{% endif %}</h2>
     
     <div class="filters">
         <form method="get" class="form-inline">
-            <div class="form-group mx-sm-3 mb-2">
-                <label for="year" class="mr-2">Año:</label>
-                <select name="year" id="year" class="form-control">
-                    {% for year in years %}
-                        <option value="{{ year }}" {% if year == selectedYear %}selected{% endif %}>{{ year }}</option>
-                    {% endfor %}
-                </select>
+            <div class="filter-row">
+                <div class="form-group mx-sm-3 mb-2">
+                    <label for="year" class="mr-2">Año:</label>
+                    <select name="year" id="year" class="form-control">
+                        {% for year in years %}
+                            <option value="{{ year }}" {% if year == selectedYear %}selected{% endif %}>{{ year }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group mx-sm-3 mb-2">
+                    <label for="month" class="mr-2">Mes:</label>
+                    <select name="month" id="month" class="form-control">
+                        {% for month in months %}
+                            <option value="{{ month.value }}" {% if month.value == selectedMonth %}selected{% endif %}>{{ month.label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
-            <button type="submit" class="btn btn-primary mb-2">Filtrar</button>
+            <div class="filter-row">
+                <div class="form-group mx-sm-3 mb-2">
+                    <label for="site" class="mr-2">Obra:</label>
+                    <select name="site" id="site" class="form-control">
+                        <option value="">Todas las obras</option>
+                        {% for site in sites %}
+                            <option value="{{ site.id }}" {% if site.id == selectedSite %}selected{% endif %}>{{ site.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group mx-sm-3 mb-2">
+                    <label for="employee" class="mr-2">Empleado:</label>
+                    <select name="employee" id="employee" class="form-control">
+                        <option value="">Todos los empleados</option>
+                        {% for employee in employees %}
+                            <option value="{{ employee.id }}" {% if employee.id == selectedEmployee %}selected{% endif %}>{{ employee.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="filter-row">
+                <button type="submit" class="btn btn-primary mb-2">Filtrar</button>
+                <a href="{{ path('admin_view_tickets') }}" class="btn btn-secondary mb-2 ml-2">Limpiar filtros</a>
+            </div>
         </form>
     </div>
 
@@ -55,7 +99,7 @@
             <nav aria-label="Navegación de páginas">
                 <ul class="pagination justify-content-center">
                     <li class="page-item {% if currentPage == 1 %}disabled{% endif %}">
-                        <a class="page-link" href="{{ path('admin_view_tickets', {'page': currentPage - 1, 'year': selectedYear}) }}" aria-label="Anterior">
+                        <a class="page-link" href="{{ path('admin_view_tickets', {'page': currentPage - 1, 'year': selectedYear, 'month': selectedMonth, 'site': selectedSite, 'employee': selectedEmployee}) }}" aria-label="Anterior">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
@@ -64,7 +108,7 @@
                     {% set endPage = min(totalPages, startPage + 4) %}
                     {% if startPage > 1 %}
                         <li class="page-item">
-                            <a class="page-link" href="{{ path('admin_view_tickets', {'page': 1, 'year': selectedYear}) }}">1</a>
+                            <a class="page-link" href="{{ path('admin_view_tickets', {'page': 1, 'year': selectedYear, 'month': selectedMonth, 'site': selectedSite, 'employee': selectedEmployee}) }}">1</a>
                         </li>
                         {% if startPage > 2 %}
                             <li class="page-item disabled">
@@ -75,7 +119,7 @@
 
                     {% for i in startPage..endPage %}
                         <li class="page-item {% if i == currentPage %}active{% endif %}">
-                            <a class="page-link" href="{{ path('admin_view_tickets', {'page': i, 'year': selectedYear}) }}">{{ i }}</a>
+                            <a class="page-link" href="{{ path('admin_view_tickets', {'page': i, 'year': selectedYear, 'month': selectedMonth, 'site': selectedSite, 'employee': selectedEmployee}) }}">{{ i }}</a>
                         </li>
                     {% endfor %}
 
@@ -86,12 +130,12 @@
                             </li>
                         {% endif %}
                         <li class="page-item">
-                            <a class="page-link" href="{{ path('admin_view_tickets', {'page': totalPages, 'year': selectedYear}) }}">{{ totalPages }}</a>
+                            <a class="page-link" href="{{ path('admin_view_tickets', {'page': totalPages, 'year': selectedYear, 'month': selectedMonth, 'site': selectedSite, 'employee': selectedEmployee}) }}">{{ totalPages }}</a>
                         </li>
                     {% endif %}
 
                     <li class="page-item {% if currentPage == totalPages %}disabled{% endif %}">
-                        <a class="page-link" href="{{ path('admin_view_tickets', {'page': currentPage + 1, 'year': selectedYear}) }}" aria-label="Siguiente">
+                        <a class="page-link" href="{{ path('admin_view_tickets', {'page': currentPage + 1, 'year': selectedYear, 'month': selectedMonth, 'site': selectedSite, 'employee': selectedEmployee}) }}" aria-label="Siguiente">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>
