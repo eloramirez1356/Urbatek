@@ -159,8 +159,8 @@ class AdminController extends AbstractController
         $employee_repo = $this->getDoctrine()->getRepository(Employee::class);
 
         // Get filter parameters
-        $year = $request->query->get('year', (new \DateTime())->format('Y'));
-        $month = $request->query->get('month', (new \DateTime())->format('m'));
+        $year = $request->query->get('year');
+        $month = $request->query->get('month');
         $siteId = $request->query->get('site');
         $employeeId = $request->query->get('employee');
         $page = $request->query->getInt('page', 1);
@@ -169,11 +169,17 @@ class AdminController extends AbstractController
         // Create query builder with filters
         $qb = $ticket_repo->createQueryBuilder('t')
             ->join('t.site', 's')
-            ->where('s.is_active = 1')
-            ->andWhere('SUBSTRING(t.date, 1, 4) = :year')
-            ->andWhere('SUBSTRING(t.date, 6, 2) = :month')
-            ->setParameter('year', $year)
-            ->setParameter('month', $month);
+            ->where('s.is_active = 1');
+
+        if ($year) {
+            $qb->andWhere('SUBSTRING(t.date, 1, 4) = :year')
+               ->setParameter('year', $year);
+        }
+
+        if ($month) {
+            $qb->andWhere('SUBSTRING(t.date, 6, 2) = :month')
+               ->setParameter('month', $month);
+        }
 
         if ($siteId) {
             $qb->andWhere('t.site = :site')
@@ -205,6 +211,7 @@ class AdminController extends AbstractController
             ->getResult();
 
         $months = [
+            ['value' => '', 'label' => 'Todos los meses'],
             ['value' => '01', 'label' => 'Enero'],
             ['value' => '02', 'label' => 'Febrero'],
             ['value' => '03', 'label' => 'Marzo'],

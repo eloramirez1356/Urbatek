@@ -47,6 +47,7 @@
                 <div class="form-group mx-sm-3 mb-2">
                     <label for="year" class="mr-2">Año:</label>
                     <select name="year" id="year" class="form-control">
+                        <option value="">Todos los años</option>
                         {% for year in years %}
                             <option value="{{ year }}" {% if year == selectedYear %}selected{% endif %}>{{ year }}</option>
                         {% endfor %}
