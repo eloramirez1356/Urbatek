@@ -156,20 +156,14 @@ class AdminController extends AbstractController
     {
         $ticket_repo = $this->getDoctrine()->getRepository(Ticket::class);
 
-        // Get filter parameters
-        $year = $request->query->get('year', (new \DateTime())->format('Y'));
-        $month = $request->query->get('month', (new \DateTime())->format('m'));
+        // Get pagination parameters
         $page = $request->query->getInt('page', 1);
         $limit = 10; // Items per page
 
-        // Create query builder with filters
+        // Create query builder
         $qb = $ticket_repo->createQueryBuilder('t')
             ->join('t.site', 's')
             ->where('s.is_active = 1')
-            ->andWhere('FUNCTION(YEAR, t.date) = :year')
-            ->andWhere('FUNCTION(MONTH, t.date) = :month')
-            ->setParameter('year', $year)
-            ->setParameter('month', $month)
             ->orderBy('t.id', 'DESC');
 
         // Get total count for pagination
@@ -182,36 +176,10 @@ class AdminController extends AbstractController
 
         $tickets = $qb->getQuery()->getResult();
 
-        // Get available years and months for filter
-        $years = $ticket_repo->createQueryBuilder('t')
-            ->select('DISTINCT FUNCTION(YEAR, t.date) as year')
-            ->orderBy('year', 'DESC')
-            ->getQuery()
-            ->getResult();
-
-        $months = [
-            ['value' => '01', 'label' => 'Enero'],
-            ['value' => '02', 'label' => 'Febrero'],
-            ['value' => '03', 'label' => 'Marzo'],
-            ['value' => '04', 'label' => 'Abril'],
-            ['value' => '05', 'label' => 'Mayo'],
-            ['value' => '06', 'label' => 'Junio'],
-            ['value' => '07', 'label' => 'Julio'],
-            ['value' => '08', 'label' => 'Agosto'],
-            ['value' => '09', 'label' => 'Septiembre'],
-            ['value' => '10', 'label' => 'Octubre'],
-            ['value' => '11', 'label' => 'Noviembre'],
-            ['value' => '12', 'label' => 'Diciembre']
-        ];
-
         return $this->render('admin/blog/add_ticket.html.twig', [
             'tickets' => $tickets,
             'currentPage' => $page,
-            'totalPages' => $totalPages,
-            'years' => array_column($years, 'year'),
-            'months' => $months,
-            'selectedYear' => $year,
-            'selectedMonth' => $month
+            'totalPages' => $totalPages
         ]);
     }
 

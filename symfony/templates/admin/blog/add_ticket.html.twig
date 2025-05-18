@@ -10,12 +10,6 @@
             z-index: 10;
             background-color: #18bc9c;
         }
-        .filters {
-            margin-bottom: 20px;
-            padding: 15px;
-            background-color: #f8f9fa;
-            border-radius: 5px;
-        }
         .pagination {
             margin-top: 20px;
         }
@@ -30,28 +24,6 @@
 
     <h2>Albaranes {% if site is defined %} de <a href="{{ path('admin_edit_site', {'site_id': site.id}) }}">{{ site.name }}</a>{% endif %}</h2>
     
-    <div class="filters">
-        <form method="get" class="form-inline">
-            <div class="form-group mx-sm-3 mb-2">
-                <label for="year" class="mr-2">Año:</label>
-                <select name="year" id="year" class="form-control">
-                    {% for year in years %}
-                        <option value="{{ year }}" {% if year == selectedYear %}selected{% endif %}>{{ year }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="form-group mx-sm-3 mb-2">
-                <label for="month" class="mr-2">Mes:</label>
-                <select name="month" id="month" class="form-control">
-                    {% for month in months %}
-                        <option value="{{ month.value }}" {% if month.value == selectedMonth %}selected{% endif %}>{{ month.label }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <button type="submit" class="btn btn-primary mb-2">Filtrar</button>
-        </form>
-    </div>
-
     <div class="table-responsive">
         <a class="export_table" js_site="tickets_table" style="cursor: pointer">Exportar a CSV</a>
         <input class="form-control" id="searchTickets" type="text" placeholder="Buscar.." aria-label="Buscar tickets">
@@ -63,17 +35,17 @@
             <nav aria-label="Navegación de páginas">
                 <ul class="pagination justify-content-center">
                     <li class="page-item {% if currentPage == 1 %}disabled{% endif %}">
-                        <a class="page-link" href="{{ path('admin_view_tickets', {'page': currentPage - 1, 'year': selectedYear, 'month': selectedMonth}) }}" aria-label="Anterior">
+                        <a class="page-link" href="{{ path('admin_view_tickets', {'page': currentPage - 1}) }}" aria-label="Anterior">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
                     {% for i in 1..totalPages %}
                         <li class="page-item {% if i == currentPage %}active{% endif %}">
-                            <a class="page-link" href="{{ path('admin_view_tickets', {'page': i, 'year': selectedYear, 'month': selectedMonth}) }}">{{ i }}</a>
+                            <a class="page-link" href="{{ path('admin_view_tickets', {'page': i}) }}">{{ i }}</a>
                         </li>
                     {% endfor %}
                     <li class="page-item {% if currentPage == totalPages %}disabled{% endif %}">
-                        <a class="page-link" href="{{ path('admin_view_tickets', {'page': currentPage + 1, 'year': selectedYear, 'month': selectedMonth}) }}" aria-label="Siguiente">
+                        <a class="page-link" href="{{ path('admin_view_tickets', {'page': currentPage + 1}) }}" aria-label="Siguiente">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>
