@@ -71,6 +71,7 @@ class AdminController extends AbstractController
             $machine->setName($form->getData()['name']);
             $machine->setBrand($form->getData()['brand']);
             $machine->setRegister($form->getData()['register']);
+	    $machine->setType($form->getData()['type']);
             $this->get('doctrine')->getEntityManager()->persist($machine);
             $this->get('doctrine')->getEntityManager()->flush();
         }
@@ -155,13 +156,63 @@ class AdminController extends AbstractController
     {
         $ticket_repo = $this->getDoctrine()->getRepository(Ticket::class);
 
-        $all_tickets= $ticket_repo->findOfActiveSites();
+        // Get filter parameters
+        $year = $request->query->get('year', (new \DateTime())->format('Y'));
+        $month = $request->query->get('month', (new \DateTime())->format('m'));
+        $page = $request->query->getInt('page', 1);
+        $limit = 10; // Items per page
 
+        // Create query builder with filters
+        $qb = $ticket_repo->createQueryBuilder('t')
+            ->join('t.site', 's')
+            ->where('s.is_active = 1')
+            ->andWhere('YEAR(t.date) = :year')
+            ->andWhere('MONTH(t.date) = :month')
+            ->setParameter('year', $year)
+            ->setParameter('month', $month)
+            ->orderBy('t.id', 'DESC');
+
+        // Get total count for pagination
+        $totalItems = count($qb->getQuery()->getResult());
+        $totalPages = ceil($totalItems / $limit);
+
+        // Add pagination
+        $qb->setFirstResult(($page - 1) * $limit)
+           ->setMaxResults($limit);
+
+        $tickets = $qb->getQuery()->getResult();
+
+        // Get available years and months for filter
+        $years = $ticket_repo->createQueryBuilder('t')
+            ->select('DISTINCT YEAR(t.date) as year')
+            ->orderBy('year', 'DESC')
+            ->getQuery()
+            ->getResult();
+
+        $months = [
+            ['value' => '01', 'label' => 'Enero'],
+            ['value' => '02', 'label' => 'Febrero'],
+            ['value' => '03', 'label' => 'Marzo'],
+            ['value' => '04', 'label' => 'Abril'],
+            ['value' => '05', 'label' => 'Mayo'],
+            ['value' => '06', 'label' => 'Junio'],
+            ['value' => '07', 'label' => 'Julio'],
+            ['value' => '08', 'label' => 'Agosto'],
+            ['value' => '09', 'label' => 'Septiembre'],
+            ['value' => '10', 'label' => 'Octubre'],
+            ['value' => '11', 'label' => 'Noviembre'],
+            ['value' => '12', 'label' => 'Diciembre']
+        ];
 
         return $this->render('admin/blog/add_ticket.html.twig', [
-            'tickets' => $all_tickets,
+            'tickets' => $tickets,
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+            'years' => array_column($years, 'year'),
+            'months' => $months,
+            'selectedYear' => $year,
+            'selectedMonth' => $month
         ]);
-
     }
 
     /**

@@ -219,7 +219,14 @@ class TicketController extends AbstractController
 
         $ticket_repo = $this->getDoctrine()->getRepository(Ticket::class);
 
-        $tickets = $ticket_repo->findOfEmployee($user->getEmployee());
+	$raw_tickets = $ticket_repo->findOfEmployee($user->getEmployee());
+        
+        $tickets = [];
+        foreach ($raw_tickets as $raw_ticket) {
+            if ($raw_ticket->getDate()->format('Y') == (new \DateTime())->format('Y')) {
+                $tickets[] = $raw_ticket; 
+            }
+        }
 
         return $this->render('ticket/my_tickets.html.twig', [
             'tickets' => $tickets,

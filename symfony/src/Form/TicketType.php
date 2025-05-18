@@ -63,13 +63,25 @@ class TicketType extends AbstractType
 
         if ($type == Ticket::TYPE_TRUCK_WITHDRAWAL) {
             $builder->add('provider', ChoiceType::class, [
-                'choices' => [
-                    'RECICAM' => 'RECICAM',
-                    'SALMEDINA' => 'SALMEDINA',
-                    'AMAEXCO' => 'AMAEXCO',
-                    'ARIDOS 2002' => 'ARIDOS 2002',
-                    'COLMENAR' => 'COLMENAR',
-                    'Otro' => 'Otro',
+		'choices' => [
+                    'ALDEHUELA AMAEXCO' => 'ALDEHUELA AMAEXCO',
+                    'TRUSAN' => 'TRUSAN',
+                    'RECICAM' => 'RECICAM', 
+                    'SALMEDINA VALDEMINGOMEZ' => 'SALMEDINA VALDEMINGOMEZ', 
+                    'LAREDO CEMEX' => 'LAREDO CEMEX',
+                    'LAREDO SODIRA M506' => 'LAREDO SODIRA M506',
+                    'LAREDO EIFFAGE' => 'LAREDO EIFFAGE',
+                    'LAREDO SALITRAL' => 'LAREDO SALITRAL',
+                    'ALAMEDA DE LA SAGRA ONEGESCOR ' => 'ALAMEDA DE LA SAGRA ONEGESCOR ',
+                    'LOS CANTILLOS FGM' => 'LOS CANTILLOS FGM',
+                    'ARIDOS LA CABEZA (EL ALAMO)' => 'ARIDOS LA CABEZA (EL ALAMO)',
+                    'GADARAI' => 'GADARAI',
+                    'TRAMSA' => 'TRAMSA',
+                    'SODIRA LA POLA' => 'SODIRA LA POLA',
+                    'CCR LAS MULAS' => 'CCR LAS MULAS',
+                    'TEC REC' => 'TEC REC',
+                    'ARIDENCA (MSC ARIDOS 2002)' => 'ARIDENCA (MSC ARIDOS 2002)',
+                    'OTRO' => 'OTRO',
                 ],
                 'label' => 'Destino'
             ]);
@@ -83,13 +95,19 @@ class TicketType extends AbstractType
         if ($type == Ticket::TYPE_TRUCK_SUPPLY) {
             $builder->add('provider', ChoiceType::class, [
                 'choices' => [
-                    'Tramsa' => 'Tramsa',
-                    'Sodira' => 'Sodira',
-                    'Tec Rec' => 'Tec Rec',
-                    'Msc aridos' => 'Msc aridos',
-                    'Hanson' => 'Hanson',
-                    'Mahorsa' => 'Mahorsa',
-                    'Otro' => 'other'
+		    'Tec Rec' => 'Tec Rec',
+                    'Sodira La pola' => 'Sodira La pola',
+                    'Sodira El puente' => 'Sodira El puente',
+                    'Sodira Gravera Roman M506' => 'Sodira Gravera Roman M506',
+                    'Eiffage' => 'Eiffage',
+                    'Recicam' => 'Recicam',
+                    'Salmedina' => 'Salmedina',
+                    'Alameda de la Sagra Onegescor' => 'Alameda de la Sagra Onegescor',
+                    'Msc aridos'  => 'Msc aridos',
+                    'Hanson'  => 'Hanson',
+                    'Tramsa'  => 'Tramsa',
+                    'Mahorsa'  => 'Mahorsa',
+                    'Otro' => 'Otro',
                 ],
                 'label' => 'Origen'
             ]);

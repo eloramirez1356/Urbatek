@@ -22,7 +22,12 @@ class TicketRepository extends ServiceEntityRepository
 
     public function findOfEmployee(Employee $employee)
     {
-        return $this->findBy(['employee' => $employee]);
+	$qb = $this->createQueryBuilder('t')
+            ->where('t.employee = :employee')
+            ->setParameter('employee', $employee)
+            ->orderBy('t.id', 'DESC');
+
+        return $qb->getQuery()->getResult();
     }
 
     public function findOfActiveSites()

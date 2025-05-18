@@ -34,7 +34,7 @@ class CreateTicketRequest
     /** @var string */
     protected $document;
 
-    /** @var int */
+    /** @var float */
     protected $tons;
 
     /** @var int */

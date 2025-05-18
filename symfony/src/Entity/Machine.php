@@ -77,4 +77,9 @@ class Machine
     {
         return $this->type === self::TYPE_MACHINE;
     }
+
+    public function setType(string $type): void
+    {
+        $this->type = $type;
+    }
 }

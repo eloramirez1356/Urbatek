@@ -2,6 +2,8 @@
 
 namespace App\Form;
 
+use App\Entity\Machine;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -31,6 +33,14 @@ class MachineType extends AbstractType
 
             ->add('register', TextType::class, [
                 'label' => 'Matrícula',
+            ])
+
+	    ->add('type', ChoiceType::class, [
+                'label' => 'Tipo de máquina',
+                'choices' => [
+                    Machine::TYPE_MACHINE => Machine::TYPE_MACHINE,
+                    Machine::TYPE_TRUCK => Machine::TYPE_TRUCK,
+                ]
             ])
 
             ->add('submit', SubmitType::class, [

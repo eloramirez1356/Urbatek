@@ -25,7 +25,7 @@ class TruckMaterialTicket extends Ticket
         $hours,
         $comments,
         Material $material = null,
-        int $tons = null,
+        float $tons = null,
         $provider = null,
         $liters,
         $provider_signed
