@@ -165,7 +165,7 @@ class AdminController extends AbstractController
         $siteId = $request->query->get('site');
         $employeeId = $request->query->get('employee');
         $page = $request->query->getInt('page', 1);
-        $limit = 50; // Items per page
+        $limit = 500; // Items per page
 
         // Create query builder with filters
         $qb = $ticket_repo->createQueryBuilder('t')
