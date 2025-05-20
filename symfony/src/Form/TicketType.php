@@ -199,14 +199,28 @@ class TicketType extends AbstractType
             'label' => 'Guardar'
         ]);
 
-        // Add form event listener
-        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
-            $data = $event->getData();
+        // Add form event listeners
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
             $form = $event->getForm();
+            $data = $event->getData();
 
-            // Check if site is "Otra"
+            if ($data && $data->getSite() && $data->getSite()->getId() === 11) {
+                $form->add('comments', TextType::class, [
+                    'required' => true,
+                    'label' => 'Comentarios'
+                ]);
+            }
+        });
+
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
+            $form = $event->getForm();
+            $data = $event->getData();
+
             if (isset($data['site']) && $data['site'] === '11') {
-                $form->get('comments')->setRequired(true);
+                $form->add('comments', TextType::class, [
+                    'required' => true,
+                    'label' => 'Comentarios'
+                ]);
             }
         });
     }
