@@ -391,7 +391,7 @@ class AdminController extends AbstractController
      *
      * @Route("/tickets/export", methods={"GET"}, name="admin_export_tickets")
      */
-    public function exportTicketsAction(Request $request): JsonResponse
+    public function exportTicketsAction(Request $request): Response
     {
         $ticket_repo = $this->getDoctrine()->getRepository(Ticket::class);
 
@@ -430,30 +430,46 @@ class AdminController extends AbstractController
 
         $tickets = $qb->getQuery()->getResult();
 
-        // Convert tickets to array format for CSV
-        $ticketsArray = [];
+        // Create CSV content
+        $csvContent = "ID,Obra,Empleado,Fecha,Máquina,Material,Nº Viajes,Toneladas,Portes,Horas,Horas Martillo,Horas Cazo,Proveedor,Litros,Comentarios,Firmado\n";
+        
         foreach ($tickets as $ticket) {
-            $ticketsArray[] = [
-                'ID' => $ticket->getId(),
-                'Obra' => $ticket->getSite()->getName(),
-                'Empleado' => $ticket->getEmployee()->getName(),
-                'Fecha' => $ticket->getDate()->format('Y-m-d'),
-                'Máquina' => $ticket->getMachine()->getName(),
-                'Material' => $ticket->getMaterial() ? $ticket->getMaterial()->getName() : '',
-                'Nº Viajes' => $ticket->getNumTravels(),
-                'Toneladas' => $ticket->getTons(),
-                'Portes' => $ticket->getPortages(),
-                'Horas' => $ticket->getHours(),
-                'Horas Martillo' => $ticket->getHammerHours(),
-                'Horas Cazo' => $ticket->getSpoonHours(),
-                'Proveedor' => $ticket->getProvider(),
-                'Litros' => $ticket->getLiters(),
-                'Comentarios' => $ticket->getComments(),
-                'Firmado' => $ticket->getProviderSigned() ? 'Sí' : 'No'
+            $row = [
+                $ticket->getId(),
+                $ticket->getSite()->getName(),
+                $ticket->getEmployee()->getName(),
+                $ticket->getDate()->format('Y-m-d'),
+                $ticket->getMachine()->getName(),
+                $ticket->getMaterial() ? $ticket->getMaterial()->getName() : '',
+                $ticket->getNumTravels(),
+                $ticket->getTons(),
+                $ticket->getPortages(),
+                $ticket->getHours(),
+                $ticket->getHammerHours(),
+                $ticket->getSpoonHours(),
+                $ticket->getProvider(),
+                $ticket->getLiters(),
+                $ticket->getComments(),
+                $ticket->getProviderSigned() ? 'Sí' : 'No'
             ];
+
+            // Escape fields that contain commas or quotes
+            $row = array_map(function($field) {
+                if (is_string($field) && (strpos($field, ',') !== false || strpos($field, '"') !== false)) {
+                    return '"' . str_replace('"', '""', $field) . '"';
+                }
+                return $field;
+            }, $row);
+
+            $csvContent .= implode(',', $row) . "\n";
         }
 
-        return new JsonResponse($ticketsArray);
+        // Create response
+        $response = new Response($csvContent);
+        $response->headers->set('Content-Type', 'text/csv; charset=utf-8');
+        $response->headers->set('Content-Disposition', 'attachment; filename="tickets.csv"');
+
+        return $response;
     }
 
     protected function getCleanMimeType($filename)

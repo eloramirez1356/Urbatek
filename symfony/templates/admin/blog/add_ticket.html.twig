@@ -90,7 +90,10 @@
     </div>
 
     <div class="table-responsive">
-        <a class="export_table" js_site="tickets_table" style="cursor: pointer">Exportar a CSV</a>
+        <div class="mb-3">
+            <a class="export_table" js_site="tickets_table" style="cursor: pointer">Exportar a CSV</a>
+            <a href="{{ path('admin_export_tickets', {'year': selectedYear, 'month': selectedMonth, 'site': selectedSite, 'employee': selectedEmployee}) }}" class="btn btn-success ml-2">Descargar todos</a>
+        </div>
         <input class="form-control" id="searchTickets" type="text" placeholder="Buscar.." aria-label="Buscar tickets">
         <br>
         <div class="alert alert-info">
