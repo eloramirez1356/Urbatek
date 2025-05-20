@@ -18,6 +18,8 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -196,6 +198,17 @@ class TicketType extends AbstractType
         $builder->add('submit', SubmitType::class, [
             'label' => 'Guardar'
         ]);
+
+        // Add form event listener
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
+            $data = $event->getData();
+            $form = $event->getForm();
+
+            // Check if site is "Otra"
+            if (isset($data['site']) && $data['site'] === '11') {
+                $form->get('comments')->setRequired(true);
+            }
+        });
     }
 
     /**

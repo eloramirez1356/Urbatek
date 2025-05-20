@@ -7,6 +7,32 @@ $(document).ready(function () {
     $provider_signed = $('#ticket_provider_signed');
     $('#ticket_file').attr('required', false);
 
+    // Validación del campo comentarios cuando se selecciona "Otra" como obra
+    $('#ticket_site').on('change', function() {
+        var $comments = $('#ticket_comments');
+        if ($(this).val() === '11') {
+            $comments.attr('required', true);
+            if (!$comments.val()) {
+                $comments.addClass('is-invalid');
+            } else {
+                $comments.removeClass('is-invalid');
+            }
+        } else {
+            $comments.attr('required', false);
+            $comments.removeClass('is-invalid');
+        }
+    });
+
+    // Validación del campo comentarios al escribir
+    $('#ticket_comments').on('input', function() {
+        if ($('#ticket_site').val() === '11') {
+            if (!$(this).val()) {
+                $(this).addClass('is-invalid');
+            } else {
+                $(this).removeClass('is-invalid');
+            }
+        }
+    });
 
     var canvas = document.getElementById('signature-pad');
 
