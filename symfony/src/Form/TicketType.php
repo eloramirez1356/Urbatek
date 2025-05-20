@@ -21,6 +21,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * Defines the form used to edit an user.
@@ -173,7 +174,12 @@ class TicketType extends AbstractType
 
         $builder->add('comments', TextType::class, [
             'required' => false,
-            'label' => 'Comentarios'
+            'label' => 'Comentarios',
+            'constraints' => [
+                new NotBlank([
+                    'groups' => ['site_other']
+                ])
+            ]
         ]);
 
         $builder->add('file', FileType::class, [
@@ -205,10 +211,7 @@ class TicketType extends AbstractType
             $data = $event->getData();
 
             if ($data && $data->getSite() && $data->getSite()->getId() === 11) {
-                $form->add('comments', TextType::class, [
-                    'required' => true,
-                    'label' => 'Comentarios'
-                ]);
+                $form->get('comments')->getConfig()->getOption('constraints')[0]->groups = ['Default', 'site_other'];
             }
         });
 
@@ -217,10 +220,7 @@ class TicketType extends AbstractType
             $data = $event->getData();
 
             if (isset($data['site']) && $data['site'] === '11') {
-                $form->add('comments', TextType::class, [
-                    'required' => true,
-                    'label' => 'Comentarios'
-                ]);
+                $form->get('comments')->getConfig()->getOption('constraints')[0]->groups = ['Default', 'site_other'];
             }
         });
     }

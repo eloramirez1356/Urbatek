@@ -34,6 +34,15 @@ $(document).ready(function () {
         }
     });
 
+    // Validación del formulario antes de enviar
+    $('form').on('submit', function(e) {
+        if ($('#ticket_site').val() === '11' && !$('#ticket_comments').val()) {
+            e.preventDefault();
+            $('#ticket_comments').addClass('is-invalid');
+            return false;
+        }
+    });
+
     var canvas = document.getElementById('signature-pad');
 
     // Adjust canvas coordinate space taking into account pixel ratio,

@@ -36,7 +36,6 @@ class TicketController extends AbstractController
         $user = $this->getUser();
         if (!$user) {
             return $this->redirectToRoute('app_login');
-
         }
 
         $form = null;
@@ -45,15 +44,28 @@ class TicketController extends AbstractController
             $form = $this->createForm(TicketType::class, null, $options);
             $form->handleRequest($request);
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                try {
-                    $data = $form->getData();
-                    $data['file_name'] = $data['file'] ? $data['file']->getClientOriginalName() : null ;
-                    $this->submitTicket($user, $type, $data);
-                    $this->addFlash('success', 'Albarán subido correctamente');
-
-                } catch (\Exception $e) {
-                    $this->addFlash('warning', $e->getMessage());
+            if ($form->isSubmitted()) {
+                $data = $form->getData();
+                $validationGroups = ['Default'];
+                
+                if ($data['site'] === '11') {
+                    $validationGroups[] = 'site_other';
+                }
+                
+                $errors = $this->get('validator')->validate($data, null, $validationGroups);
+                
+                if (count($errors) === 0) {
+                    try {
+                        $data['file_name'] = $data['file'] ? $data['file']->getClientOriginalName() : null;
+                        $this->submitTicket($user, $type, $data);
+                        $this->addFlash('success', 'Albarán subido correctamente');
+                    } catch (\Exception $e) {
+                        $this->addFlash('warning', $e->getMessage());
+                    }
+                } else {
+                    foreach ($errors as $error) {
+                        $this->addFlash('warning', $error->getMessage());
+                    }
                 }
             }
         }
