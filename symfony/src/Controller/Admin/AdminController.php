@@ -17,6 +17,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -164,7 +165,7 @@ class AdminController extends AbstractController
         $siteId = $request->query->get('site');
         $employeeId = $request->query->get('employee');
         $page = $request->query->getInt('page', 1);
-        $limit = 10; // Items per page
+        $limit = 50; // Items per page
 
         // Create query builder with filters
         $qb = $ticket_repo->createQueryBuilder('t')
@@ -382,6 +383,76 @@ class AdminController extends AbstractController
         return $this->render('admin/blog/daily_report.html.twig', [
             'reports'=> $reports
         ]);
+    }
+
+    /**
+     * Get filtered tickets for export
+     *
+     * @Route("/tickets/export", methods={"GET"}, name="admin_export_tickets")
+     */
+    public function exportTicketsAction(Request $request): JsonResponse
+    {
+        $ticket_repo = $this->getDoctrine()->getRepository(Ticket::class);
+
+        // Get filter parameters
+        $year = $request->query->get('year');
+        $month = $request->query->get('month');
+        $siteId = $request->query->get('site');
+        $employeeId = $request->query->get('employee');
+
+        // Create query builder with filters
+        $qb = $ticket_repo->createQueryBuilder('t')
+            ->join('t.site', 's')
+            ->where('s.is_active = 1');
+
+        if ($year) {
+            $qb->andWhere('SUBSTRING(t.date, 1, 4) = :year')
+               ->setParameter('year', $year);
+        }
+
+        if ($month) {
+            $qb->andWhere('SUBSTRING(t.date, 6, 2) = :month')
+               ->setParameter('month', $month);
+        }
+
+        if ($siteId) {
+            $qb->andWhere('t.site = :site')
+               ->setParameter('site', $siteId);
+        }
+
+        if ($employeeId) {
+            $qb->andWhere('t.employee = :employee')
+               ->setParameter('employee', $employeeId);
+        }
+
+        $qb->orderBy('t.id', 'DESC');
+
+        $tickets = $qb->getQuery()->getResult();
+
+        // Convert tickets to array format for CSV
+        $ticketsArray = [];
+        foreach ($tickets as $ticket) {
+            $ticketsArray[] = [
+                'ID' => $ticket->getId(),
+                'Obra' => $ticket->getSite()->getName(),
+                'Empleado' => $ticket->getEmployee()->getName(),
+                'Fecha' => $ticket->getDate()->format('Y-m-d'),
+                'Máquina' => $ticket->getMachine()->getName(),
+                'Material' => $ticket->getMaterial() ? $ticket->getMaterial()->getName() : '',
+                'Nº Viajes' => $ticket->getNumTravels(),
+                'Toneladas' => $ticket->getTons(),
+                'Portes' => $ticket->getPortages(),
+                'Horas' => $ticket->getHours(),
+                'Horas Martillo' => $ticket->getHammerHours(),
+                'Horas Cazo' => $ticket->getSpoonHours(),
+                'Proveedor' => $ticket->getProvider(),
+                'Litros' => $ticket->getLiters(),
+                'Comentarios' => $ticket->getComments(),
+                'Firmado' => $ticket->getProviderSigned() ? 'Sí' : 'No'
+            ];
+        }
+
+        return new JsonResponse($ticketsArray);
     }
 
     protected function getCleanMimeType($filename)
