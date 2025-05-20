@@ -2,7 +2,8 @@
 
 {% block body_id 'admin_post_index' %}
 
-{% block main %}
+{% block stylesheets %}
+    {{ parent() }}
     <style>
         thead {
             position: sticky;
@@ -38,7 +39,120 @@
             margin-bottom: 10px;
         }
     </style>
+{% endblock %}
 
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Función global para exportar a CSV
+        function exportToCSV() {
+            // Obtener los filtros actuales
+            var filters = {
+                year: $('#year').val(),
+                month: $('#month').val(),
+                site: $('#site').val(),
+                employee: $('#employee').val()
+            };
+
+            // Mostrar indicador de carga
+            $('#exportButton').prop('disabled', true).text('Exportando...');
+
+            // Obtener todos los tickets filtrados
+            $.get('/admin/tickets/export', filters)
+                .done(function(data) {
+                    if (data.length === 0) {
+                        alert('No hay datos para exportar');
+                        return;
+                    }
+
+                    // Crear el contenido del CSV
+                    var csvContent = "data:text/csv;charset=utf-8,";
+                    
+                    // Añadir encabezados
+                    var headers = Object.keys(data[0]);
+                    csvContent += headers.join(",") + "\r\n";
+                    
+                    // Añadir datos
+                    data.forEach(function(ticket) {
+                        var row = headers.map(function(header) {
+                            var value = ticket[header];
+                            // Escapar comas y comillas
+                            if (typeof value === 'string' && (value.includes(',') || value.includes('"'))) {
+                                value = '"' + value.replace(/"/g, '""') + '"';
+                            }
+                            return value;
+                        });
+                        csvContent += row.join(",") + "\r\n";
+                    });
+
+                    // Crear y descargar el archivo
+                    var encodedUri = encodeURI(csvContent);
+                    var link = document.createElement("a");
+                    link.setAttribute("href", encodedUri);
+                    link.setAttribute("download", "tickets.csv");
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                })
+                .fail(function() {
+                    alert('Error al exportar los datos');
+                })
+                .always(function() {
+                    // Restaurar el botón
+                    $('#exportButton').prop('disabled', false).text('Exportar a CSV');
+                });
+        }
+
+        $(document).ready(function () {
+            $('.js-type-select').on('click', function () {
+                $('.ticket-tab').hide();
+                $('#'+$(this).data('target')).show();
+            });
+
+            $provider_signed = $('#ticket_provider_signed');
+            $('#ticket_file').attr('required', false);
+
+            // Validación del campo comentarios cuando se selecciona "Otra" como obra
+            $('#ticket_site').on('change', function() {
+                var $comments = $('#ticket_comments');
+                if ($(this).val() === '11') {
+                    $comments.attr('required', true);
+                    if (!$comments.val()) {
+                        $comments.addClass('is-invalid');
+                    } else {
+                        $comments.removeClass('is-invalid');
+                    }
+                } else {
+                    $comments.attr('required', false);
+                    $comments.removeClass('is-invalid');
+                }
+            });
+
+            // Validación del campo comentarios al escribir
+            $('#ticket_comments').on('input', function() {
+                if ($('#ticket_site').val() === '11') {
+                    if (!$(this).val()) {
+                        $(this).addClass('is-invalid');
+                    } else {
+                        $(this).removeClass('is-invalid');
+                    }
+                }
+            });
+
+            // Validación del formulario antes de enviar
+            $('form').on('submit', function(e) {
+                if ($('#ticket_site').val() === '11' && !$('#ticket_comments').val()) {
+                    e.preventDefault();
+                    $('#ticket_comments').addClass('is-invalid');
+                    return false;
+                }
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block main %}
     <h2>Albaranes {% if site is defined %} de <a href="{{ path('admin_edit_site', {'site_id': site.id}) }}">{{ site.name }}</a>{% endif %}</h2>
     
     <div class="filters">
@@ -144,111 +258,4 @@
             </nav>
         {% endif %}
     </div>
-
-    <script>
-        $(document).ready(function () {
-            $('.js-type-select').on('click', function () {
-                $('.ticket-tab').hide();
-                $('#'+$(this).data('target')).show();
-            });
-
-            $provider_signed = $('#ticket_provider_signed');
-            $('#ticket_file').attr('required', false);
-
-            // Validación del campo comentarios cuando se selecciona "Otra" como obra
-            $('#ticket_site').on('change', function() {
-                var $comments = $('#ticket_comments');
-                if ($(this).val() === '11') {
-                    $comments.attr('required', true);
-                    if (!$comments.val()) {
-                        $comments.addClass('is-invalid');
-                    } else {
-                        $comments.removeClass('is-invalid');
-                    }
-                } else {
-                    $comments.attr('required', false);
-                    $comments.removeClass('is-invalid');
-                }
-            });
-
-            // Validación del campo comentarios al escribir
-            $('#ticket_comments').on('input', function() {
-                if ($('#ticket_site').val() === '11') {
-                    if (!$(this).val()) {
-                        $(this).addClass('is-invalid');
-                    } else {
-                        $(this).removeClass('is-invalid');
-                    }
-                }
-            });
-
-            // Validación del formulario antes de enviar
-            $('form').on('submit', function(e) {
-                if ($('#ticket_site').val() === '11' && !$('#ticket_comments').val()) {
-                    e.preventDefault();
-                    $('#ticket_comments').addClass('is-invalid');
-                    return false;
-                }
-            });
-
-            // Función para exportar a CSV
-            window.exportToCSV = function() {
-                // Obtener los filtros actuales
-                var filters = {
-                    year: $('#year').val(),
-                    month: $('#month').val(),
-                    site: $('#site').val(),
-                    employee: $('#employee').val()
-                };
-
-                // Mostrar indicador de carga
-                $('#exportButton').prop('disabled', true).text('Exportando...');
-
-                // Obtener todos los tickets filtrados
-                $.get('/admin/tickets/export', filters)
-                    .done(function(data) {
-                        if (data.length === 0) {
-                            alert('No hay datos para exportar');
-                            return;
-                        }
-
-                        // Crear el contenido del CSV
-                        var csvContent = "data:text/csv;charset=utf-8,";
-                        
-                        // Añadir encabezados
-                        var headers = Object.keys(data[0]);
-                        csvContent += headers.join(",") + "\r\n";
-                        
-                        // Añadir datos
-                        data.forEach(function(ticket) {
-                            var row = headers.map(function(header) {
-                                var value = ticket[header];
-                                // Escapar comas y comillas
-                                if (typeof value === 'string' && (value.includes(',') || value.includes('"'))) {
-                                    value = '"' + value.replace(/"/g, '""') + '"';
-                                }
-                                return value;
-                            });
-                            csvContent += row.join(",") + "\r\n";
-                        });
-
-                        // Crear y descargar el archivo
-                        var encodedUri = encodeURI(csvContent);
-                        var link = document.createElement("a");
-                        link.setAttribute("href", encodedUri);
-                        link.setAttribute("download", "tickets.csv");
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                    })
-                    .fail(function() {
-                        alert('Error al exportar los datos');
-                    })
-                    .always(function() {
-                        // Restaurar el botón
-                        $('#exportButton').prop('disabled', false).text('Exportar a CSV');
-                    });
-            };
-        });
-    </script>
 {% endblock %}
