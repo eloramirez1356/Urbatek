@@ -21,6 +21,53 @@
 {% block javascripts %}
     {{ parent() }}
     {{ encore_entry_script_tags('ticket') }}
+    <script>
+        $(document).ready(function () {
+            $('.js-type-select').on('click', function () {
+                $('.ticket-tab').hide();
+                $('#'+$(this).data('target')).show();
+            });
+
+            $provider_signed = $('#ticket_provider_signed');
+            $('#ticket_file').attr('required', false);
+
+            // Validación del campo comentarios cuando se selecciona "Otra" como obra
+            $('#ticket_site').on('change', function() {
+                var $comments = $('#ticket_comments');
+                if ($(this).val() === '11') {
+                    $comments.attr('required', true);
+                    if (!$comments.val()) {
+                        $comments.addClass('is-invalid');
+                    } else {
+                        $comments.removeClass('is-invalid');
+                    }
+                } else {
+                    $comments.attr('required', false);
+                    $comments.removeClass('is-invalid');
+                }
+            });
+
+            // Validación del campo comentarios al escribir
+            $('#ticket_comments').on('input', function() {
+                if ($('#ticket_site').val() === '11') {
+                    if (!$(this).val()) {
+                        $(this).addClass('is-invalid');
+                    } else {
+                        $(this).removeClass('is-invalid');
+                    }
+                }
+            });
+
+            // Validación del formulario antes de enviar
+            $('form').on('submit', function(e) {
+                if ($('#ticket_site').val() === '11' && !$('#ticket_comments').val()) {
+                    e.preventDefault();
+                    $('#ticket_comments').addClass('is-invalid');
+                    return false;
+                }
+            });
+        });
+    </script>
 {% endblock %}
 
 {% block body_id 'useradd_ticket' %}

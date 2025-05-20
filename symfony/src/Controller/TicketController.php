@@ -20,9 +20,17 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class TicketController extends AbstractController
 {
+    private $validator;
+
+    public function __construct(ValidatorInterface $validator)
+    {
+        $this->validator = $validator;
+    }
+
     /**
      * @Route("/ticket/{type}", defaults={"page": "1", "_format"="html", "type": null }, methods={"GET", "POST"}, name="add_ticket")
      *
@@ -52,7 +60,7 @@ class TicketController extends AbstractController
                     $validationGroups[] = 'site_other';
                 }
                 
-                $errors = $this->get('validator')->validate($data, null, $validationGroups);
+                $errors = $this->validator->validate($data, null, $validationGroups);
                 
                 if (count($errors) === 0) {
                     try {
