@@ -440,17 +440,17 @@ class AdminController extends AbstractController
                 $ticket->getEmployee()->getName(),
                 $ticket->getDate()->format('Y-m-d'),
                 $ticket->getMachine()->getName(),
-                $ticket->getMaterial() ? $ticket->getMaterial()->getName() : '',
+                method_exists($ticket, 'getMaterial') ? ($ticket->getMaterial() ? $ticket->getMaterial()->getName() : '') : '',
                 method_exists($ticket, 'getNumTravels') ? $ticket->getNumTravels() : '',
                 method_exists($ticket, 'getTons') ? $ticket->getTons() : '',
                 method_exists($ticket, 'getPortages') ? $ticket->getPortages() : '',
-                $ticket->getHours(),
+                method_exists($ticket, 'getHours') ? $ticket->getHours() : '',
                 method_exists($ticket, 'getHammerHours') ? $ticket->getHammerHours() : '',
                 method_exists($ticket, 'getSpoonHours') ? $ticket->getSpoonHours() : '',
                 method_exists($ticket, 'getProvider') ? $ticket->getProvider() : '',
-                $ticket->getLiters(),
-                $ticket->getComments(),
-                $ticket->isProviderSigned() ? 'Sí' : 'No'
+                method_exists($ticket, 'getLiters') ? $ticket->getLiters() : '',
+                method_exists($ticket, 'getComments') ? $ticket->getComments() : '',
+                method_exists($ticket, 'isProviderSigned') ? ($ticket->isProviderSigned() ? 'Sí' : 'No') : 'No'
             ];
 
             // Escape fields that contain commas or quotes
