@@ -441,16 +441,16 @@ class AdminController extends AbstractController
                 $ticket->getDate()->format('Y-m-d'),
                 $ticket->getMachine()->getName(),
                 $ticket->getMaterial() ? $ticket->getMaterial()->getName() : '',
-                $ticket->getNumTravels(),
-                $ticket->getTons(),
-                $ticket->getPortages(),
+                method_exists($ticket, 'getNumTravels') ? $ticket->getNumTravels() : '',
+                method_exists($ticket, 'getTons') ? $ticket->getTons() : '',
+                method_exists($ticket, 'getPortages') ? $ticket->getPortages() : '',
                 $ticket->getHours(),
-                $ticket->getHammerHours(),
-                $ticket->getSpoonHours(),
-                $ticket->getProvider(),
+                method_exists($ticket, 'getHammerHours') ? $ticket->getHammerHours() : '',
+                method_exists($ticket, 'getSpoonHours') ? $ticket->getSpoonHours() : '',
+                method_exists($ticket, 'getProvider') ? $ticket->getProvider() : '',
                 $ticket->getLiters(),
                 $ticket->getComments(),
-                $ticket->getProviderSigned() ? 'Sí' : 'No'
+                $ticket->isProviderSigned() ? 'Sí' : 'No'
             ];
 
             // Escape fields that contain commas or quotes
