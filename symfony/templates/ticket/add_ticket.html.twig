@@ -20,6 +20,7 @@
 
 {% block javascripts %}
     {{ parent() }}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     {{ encore_entry_script_tags('ticket') }}
     <script>
         $(document).ready(function () {
