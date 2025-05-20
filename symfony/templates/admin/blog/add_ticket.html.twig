@@ -93,6 +93,9 @@
         <a class="export_table" js_site="tickets_table" style="cursor: pointer">Exportar a CSV</a>
         <input class="form-control" id="searchTickets" type="text" placeholder="Buscar.." aria-label="Buscar tickets">
         <br>
+        <div class="alert alert-info">
+            Total de resultados: {{ totalItems }} tickets
+        </div>
 
         {% include 'components/tickets_table.html.twig' with {'tickets': tickets } %}
 

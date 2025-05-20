@@ -235,6 +235,7 @@ class AdminController extends AbstractController
             'tickets' => $tickets,
             'currentPage' => $page,
             'totalPages' => $totalPages,
+            'totalItems' => $totalItems,
             'years' => array_column($years, 'year'),
             'months' => $months,
             'sites' => $sites,
