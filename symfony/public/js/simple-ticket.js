@@ -10,16 +10,28 @@ document.getElementById('machine').addEventListener('change', function() {
     // Ocultar todos los campos específicos
     document.querySelectorAll('.truck-fields, .machine-fields').forEach(field => {
         field.style.display = 'none';
+        // Deshabilitar campos ocultos
+        field.querySelectorAll('input, select').forEach(input => {
+            input.required = false;
+        });
     });
     
     // Mostrar campos según el tipo de máquina
     if (machineType === 'truck') {
         document.querySelectorAll('.truck-fields').forEach(field => {
             field.style.display = 'block';
+            // Habilitar campos requeridos para camiones
+            field.querySelectorAll('input[required]').forEach(input => {
+                input.required = true;
+            });
         });
     } else if (machineType === 'machine') {
         document.querySelectorAll('.machine-fields').forEach(field => {
             field.style.display = 'block';
+            // Habilitar campos requeridos para máquinas
+            field.querySelectorAll('input[required]').forEach(input => {
+                input.required = true;
+            });
         });
     }
 });
@@ -47,6 +59,10 @@ function addWork() {
     // Ocultar campos específicos inicialmente
     template.querySelectorAll('.truck-fields, .machine-fields').forEach(field => {
         field.style.display = 'none';
+        // Deshabilitar campos ocultos
+        field.querySelectorAll('input, select').forEach(input => {
+            input.required = false;
+        });
     });
     
     container.appendChild(template);
@@ -116,20 +132,53 @@ document.getElementById('simpleTicketForm').addEventListener('submit', function(
         return;
     }
     
+    // Obtener tipo de máquina seleccionada
+    const machineSelect = document.getElementById('machine');
+    const selectedOption = machineSelect.options[machineSelect.selectedIndex];
+    const machineType = selectedOption.getAttribute('data-type');
+    
     // Validar que al menos una obra tenga datos
     let hasValidWork = false;
-    document.querySelectorAll('.work-entry').forEach(work => {
+    let errors = [];
+    
+    document.querySelectorAll('.work-entry').forEach((work, index) => {
         const site = work.querySelector('select[name*="[site]"]').value;
         const hours = work.querySelector('input[name*="[hours]"]').value;
         
         if (site && hours) {
             hasValidWork = true;
+            
+            // Validar campos específicos según tipo de máquina
+            if (machineType === 'truck') {
+                const numTravels = work.querySelector('input[name*="[num_travels]"]').value;
+                const tons = work.querySelector('input[name*="[tons]"]').value;
+                const portages = work.querySelector('input[name*="[portages]"]').value;
+                const provider = work.querySelector('input[name*="[provider]"]').value;
+                const liters = work.querySelector('input[name*="[liters]"]').value;
+                
+                if (!numTravels || !tons || !portages || !provider || !liters) {
+                    errors.push(`Obra #${index + 1}: Complete todos los campos obligatorios para camión`);
+                }
+            } else if (machineType === 'machine') {
+                const hammerHours = work.querySelector('input[name*="[hammer_hours]"]').value;
+                const spoonHours = work.querySelector('input[name*="[spoon_hours]"]').value;
+                
+                if (!hammerHours || !spoonHours) {
+                    errors.push(`Obra #${index + 1}: Complete todos los campos obligatorios para máquina`);
+                }
+            }
         }
     });
     
     if (!hasValidWork) {
         e.preventDefault();
         alert('Debe completar al menos una obra con sitio y horas/viajes.');
+        return;
+    }
+    
+    if (errors.length > 0) {
+        e.preventDefault();
+        alert('Errores de validación:\n' + errors.join('\n'));
         return;
     }
 });

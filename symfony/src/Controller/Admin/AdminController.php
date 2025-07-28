@@ -721,24 +721,34 @@ class AdminController extends AbstractController
                     
                     // Create ticket based on machine type
                     if ($machine->isTruck()) {
-                        $ticket = new \App\Entity\TruckPortTicket();
-                        $ticket->setNumTravels($work['hours']);
-                        $ticket->setTons($work['tons'] ?? 0);
-                        $ticket->setPortages($work['portages'] ?? 0);
+                        $ticket = new \App\Entity\TruckPortTicket(
+                            new \DateTime($data['date']),
+                            $site,
+                            $employee,
+                            $machine,
+                            intval($work['portages'] ?? 0),
+                            intval($work['hours']),
+                            $work['comments'] ?? '',
+                            intval($work['liters'] ?? 0),
+                            false // provider_signed
+                        );
+                        $ticket->setNumTravels(intval($work['num_travels'] ?? $work['hours']));
+                        $ticket->setTons(floatval($work['tons'] ?? 0));
                         $ticket->setProvider($work['provider'] ?? '');
-                        $ticket->setLiters($work['liters'] ?? 0);
                     } else {
-                        $ticket = new \App\Entity\MachineTicket();
-                        $ticket->setHours($work['hours']);
-                        $ticket->setHammerHours($work['hammer_hours'] ?? 0);
-                        $ticket->setSpoonHours($work['spoon_hours'] ?? 0);
+                        $ticket = new \App\Entity\MachineTicket(
+                            new \DateTime($data['date']),
+                            $site,
+                            $employee,
+                            $machine,
+                            intval($work['hours']),
+                            intval($work['hammer_hours'] ?? 0),
+                            $work['comments'] ?? '',
+                            intval($work['liters'] ?? 0),
+                            floatval($work['spoon_hours'] ?? 0),
+                            false // provider_signed
+                        );
                     }
-                    
-                    $ticket->setEmployee($employee);
-                    $ticket->setMachine($machine);
-                    $ticket->setSite($site);
-                    $ticket->setDate(new \DateTime($data['date']));
-                    $ticket->setComments($work['comments'] ?? '');
                     
                     $em = $this->getDoctrine()->getManager();
                     $em->persist($ticket);

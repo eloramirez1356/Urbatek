@@ -82,20 +82,33 @@
                         <div class="truck-fields" style="display: none;">
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label>Toneladas</label>
-                                    <input type="number" name="simple_ticket[works][0][tons]" step="0.1" min="0">
+                                    <label>Número de Viajes *</label>
+                                    <input type="number" name="simple_ticket[works][0][num_travels]" min="0" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Portes</label>
-                                    <input type="number" name="simple_ticket[works][0][portages]" min="0">
+                                    <label>Toneladas *</label>
+                                    <input type="number" name="simple_ticket[works][0][tons]" step="0.1" min="0" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Proveedor</label>
-                                    <input type="text" name="simple_ticket[works][0][provider]">
+                                    <label>Portes *</label>
+                                    <input type="number" name="simple_ticket[works][0][portages]" min="0" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Litros</label>
-                                    <input type="number" name="simple_ticket[works][0][liters]" min="0">
+                                    <label>Proveedor *</label>
+                                    <input type="text" name="simple_ticket[works][0][provider]" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Litros *</label>
+                                    <input type="number" name="simple_ticket[works][0][liters]" min="0" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Material</label>
+                                    <select name="simple_ticket[works][0][material]">
+                                        <option value="">Sin material</option>
+                                        <!-- Aquí se pueden agregar materiales si es necesario -->
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -104,12 +117,25 @@
                         <div class="machine-fields" style="display: none;">
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label>Horas Martillo</label>
-                                    <input type="number" name="simple_ticket[works][0][hammer_hours]" step="0.5" min="0">
+                                    <label>Horas Martillo *</label>
+                                    <input type="number" name="simple_ticket[works][0][hammer_hours]" step="0.5" min="0" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Horas Cazo</label>
-                                    <input type="number" name="simple_ticket[works][0][spoon_hours]" step="0.5" min="0">
+                                    <label>Horas Cazo *</label>
+                                    <input type="number" name="simple_ticket[works][0][spoon_hours]" step="0.5" min="0" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Material</label>
+                                    <select name="simple_ticket[works][0][material]">
+                                        <option value="">Sin material</option>
+                                        <!-- Aquí se pueden agregar materiales si es necesario -->
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Litros</label>
+                                    <input type="number" name="simple_ticket[works][0][liters]" min="0">
                                 </div>
                             </div>
                         </div>
