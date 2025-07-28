@@ -19,15 +19,21 @@ function closeAssignMachines() {
 
 function loadMachines(employeeId) {
     fetch(`/admin/employees/${employeeId}/machines`)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
             allMachines = data.available || [];
             assignedMachines = data.assigned || [];
             renderMachines();
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert('Error al cargar las máquinas');
+            console.error('Error loading machines:', error);
+            console.error('Employee ID:', employeeId);
+            alert(`Error al cargar las máquinas: ${error.message}`);
         });
 }
 
