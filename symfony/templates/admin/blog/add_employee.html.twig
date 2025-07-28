@@ -2,6 +2,11 @@
 
 {% block body_id 'admin_post_index' %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/admin-employees.css') }}">
+{% endblock %}
+
 {% block main %}
     <h1>Empleados</h1>
     
@@ -16,67 +21,6 @@
             {{ message }}
         </div>
     {% endfor %}
-    
-    <style>
-        table {
-            border-collapse: collapse;
-            border-spacing: 0;
-            width: 100%;
-            border: 1px solid #ddd;
-        }
-
-        th, td {
-            text-align: left;
-            padding: 16px;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f2f2f2
-        }
-        
-        .form-container {
-            background: #f9f9f9;
-            padding: 20px;
-            border-radius: 5px;
-            margin: 20px 0;
-        }
-        
-        .form-row {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-        
-        .form-group {
-            flex: 1;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        
-        .form-group input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        
-        .btn-primary {
-            background-color: #007bff;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
-    </style>
 
     <table style="width:100%">
         <tr>
@@ -85,7 +29,8 @@
             <th>Usuario</th>
             <th>Email</th>
             <th>Obras activas</th>
-            <th>Maquinas</th>
+            <th>Máquinas asignadas</th>
+            <th>Acciones</th>
         </tr>
 
         {% for employee in employees %}
@@ -103,8 +48,20 @@
                 </td>
                 <td>
                     {% for machine in employee.machines %}
-                        {{ machine.name }} ({{ machine.brand }})
+                        <span class="machine-badge">
+                            {{ machine.name }} ({{ machine.brand }})
+                            {% if machine.isTruck() %}
+                                <span class="badge badge-info">Camión</span>
+                            {% else %}
+                                <span class="badge badge-success">Máquina</span>
+                            {% endif %}
+                        </span>
                     {% endfor %}
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-primary" onclick="openAssignMachines({{ employee.id }}, '{{ employee.name }} {{ employee.surname }}')">
+                        Asignar máquinas
+                    </button>
                 </td>
             </tr>
         {% endfor %}
@@ -152,5 +109,178 @@
             </div>
         {{ form_end(employee_form) }}
     </div>
+
+    <!-- Modal para asignar máquinas -->
+    <div id="assignMachinesModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAssignMachines()">&times;</span>
+            <h2>Asignar máquinas a <span id="employeeName"></span></h2>
+            
+            <div style="margin-bottom: 20px;">
+                <label for="machineFilter">Filtrar por tipo:</label>
+                <select id="machineFilter" onchange="filterMachines()">
+                    <option value="">Todos</option>
+                    <option value="machine">Solo máquinas</option>
+                    <option value="truck">Solo camiones</option>
+                </select>
+            </div>
+            
+            <div style="display: flex; gap: 20px;">
+                <div style="flex: 1;">
+                    <h3>Máquinas disponibles</h3>
+                    <div id="availableMachines" class="machine-list">
+                        <!-- Se llenará dinámicamente -->
+                    </div>
+                </div>
+                <div style="flex: 1;">
+                    <h3>Máquinas asignadas</h3>
+                    <div id="assignedMachines" class="machine-list">
+                        <!-- Se llenará dinámicamente -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentEmployeeId = null;
+        let allMachines = [];
+        let assignedMachines = [];
+        
+        function openAssignMachines(employeeId, employeeName) {
+            currentEmployeeId = employeeId;
+            document.getElementById('employeeName').textContent = employeeName;
+            document.getElementById('assignMachinesModal').style.display = 'block';
+            
+            // Cargar máquinas
+            loadMachines(employeeId);
+        }
+        
+        function closeAssignMachines() {
+            document.getElementById('assignMachinesModal').style.display = 'none';
+        }
+        
+        function loadMachines(employeeId) {
+            fetch(`/admin/employees/${employeeId}/machines`)
+                .then(response => response.json())
+                .then(data => {
+                    allMachines = data.available || [];
+                    assignedMachines = data.assigned || [];
+                    renderMachines();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error al cargar las máquinas');
+                });
+        }
+        
+        function renderMachines() {
+            const filter = document.getElementById('machineFilter').value;
+            const availableContainer = document.getElementById('availableMachines');
+            const assignedContainer = document.getElementById('assignedMachines');
+            
+            // Filtrar máquinas disponibles
+            let availableToShow = allMachines;
+            if (filter) {
+                availableToShow = allMachines.filter(machine => {
+                    if (filter === 'machine') return machine.type === 'machine';
+                    if (filter === 'truck') return machine.type === 'truck';
+                    return true;
+                });
+            }
+            
+            // Renderizar máquinas disponibles
+            availableContainer.innerHTML = availableToShow.map(machine => `
+                <div class="machine-item">
+                    <div>
+                        <strong>${machine.name}</strong> (${machine.brand})
+                        <span class="badge ${machine.type === 'truck' ? 'badge-info' : 'badge-success'}">
+                            ${machine.type === 'truck' ? 'Camión' : 'Máquina'}
+                        </span>
+                    </div>
+                    <button class="btn-assign" onclick="assignMachine(${machine.id})">
+                        Asignar
+                    </button>
+                </div>
+            `).join('');
+            
+            // Renderizar máquinas asignadas
+            assignedContainer.innerHTML = assignedMachines.map(machine => `
+                <div class="machine-item">
+                    <div>
+                        <strong>${machine.name}</strong> (${machine.brand})
+                        <span class="badge ${machine.type === 'truck' ? 'badge-info' : 'badge-success'}">
+                            ${machine.type === 'truck' ? 'Camión' : 'Máquina'}
+                        </span>
+                    </div>
+                    <button class="btn-unassign" onclick="unassignMachine(${machine.id})">
+                        Desasignar
+                    </button>
+                </div>
+            `).join('');
+        }
+        
+        function filterMachines() {
+            renderMachines();
+        }
+        
+        function assignMachine(machineId) {
+            if (!currentEmployeeId) return;
+            
+            fetch(`/admin/employees/${currentEmployeeId}/machines/${machineId}/assign`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    loadMachines(currentEmployeeId);
+                    // Recargar la página para actualizar la tabla
+                    setTimeout(() => location.reload(), 500);
+                } else {
+                    alert('Error al asignar la máquina');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al asignar la máquina');
+            });
+        }
+        
+        function unassignMachine(machineId) {
+            if (!currentEmployeeId) return;
+            
+            fetch(`/admin/employees/${currentEmployeeId}/machines/${machineId}/unassign`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    loadMachines(currentEmployeeId);
+                    // Recargar la página para actualizar la tabla
+                    setTimeout(() => location.reload(), 500);
+                } else {
+                    alert('Error al desasignar la máquina');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al desasignar la máquina');
+            });
+        }
+        
+        // Cerrar modal al hacer clic fuera de él
+        window.onclick = function(event) {
+            const modal = document.getElementById('assignMachinesModal');
+            if (event.target === modal) {
+                closeAssignMachines();
+            }
+        }
+    </script>
 
 {% endblock %}

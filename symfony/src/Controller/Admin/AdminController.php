@@ -193,6 +193,116 @@ class AdminController extends AbstractController
     }
 
     /**
+     * Get available and assigned machines for an employee
+     *
+     * @Route("/employees/{employee_id}/machines", methods={"GET"}, name="admin_employee_machines")
+     */
+    public function getEmployeeMachinesAction($employee_id): JsonResponse
+    {
+        $employee_repo = $this->getDoctrine()->getRepository(Employee::class);
+        $machine_repo = $this->getDoctrine()->getRepository(Machine::class);
+        
+        $employee = $employee_repo->find($employee_id);
+        if (!$employee) {
+            return new JsonResponse(['error' => 'Empleado no encontrado'], 404);
+        }
+        
+        // Get all machines
+        $allMachines = $machine_repo->findAll();
+        $assignedMachines = $employee->getMachines();
+        
+        // Convert to arrays
+        $availableMachines = [];
+        $assignedMachinesArray = [];
+        
+        foreach ($allMachines as $machine) {
+            $machineData = [
+                'id' => $machine->getId(),
+                'name' => $machine->getName(),
+                'brand' => $machine->getBrand(),
+                'register' => $machine->getRegister(),
+                'type' => $machine->isTruck() ? 'truck' : 'machine'
+            ];
+            
+            if (in_array($machine, $assignedMachines)) {
+                $assignedMachinesArray[] = $machineData;
+            } else {
+                $availableMachines[] = $machineData;
+            }
+        }
+        
+        return new JsonResponse([
+            'available' => $availableMachines,
+            'assigned' => $assignedMachinesArray
+        ]);
+    }
+
+    /**
+     * Assign machine to employee
+     *
+     * @Route("/employees/{employee_id}/machines/{machine_id}/assign", methods={"POST"}, name="admin_assign_machine")
+     */
+    public function assignMachineAction($employee_id, $machine_id): JsonResponse
+    {
+        $employee_repo = $this->getDoctrine()->getRepository(Employee::class);
+        $machine_repo = $this->getDoctrine()->getRepository(Machine::class);
+        
+        $employee = $employee_repo->find($employee_id);
+        $machine = $machine_repo->find($machine_id);
+        
+        if (!$employee || !$machine) {
+            return new JsonResponse(['success' => false, 'error' => 'Empleado o máquina no encontrado'], 404);
+        }
+        
+        // Check if already assigned
+        $machines = $employee->getMachines();
+        if (in_array($machine, $machines)) {
+            return new JsonResponse(['success' => false, 'error' => 'La máquina ya está asignada'], 400);
+        }
+        
+        // Add machine to employee
+        $machines[] = $machine;
+        $employee->setMachines($machines);
+        
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($employee);
+        $em->flush();
+        
+        return new JsonResponse(['success' => true]);
+    }
+
+    /**
+     * Unassign machine from employee
+     *
+     * @Route("/employees/{employee_id}/machines/{machine_id}/unassign", methods={"POST"}, name="admin_unassign_machine")
+     */
+    public function unassignMachineAction($employee_id, $machine_id): JsonResponse
+    {
+        $employee_repo = $this->getDoctrine()->getRepository(Employee::class);
+        $machine_repo = $this->getDoctrine()->getRepository(Machine::class);
+        
+        $employee = $employee_repo->find($employee_id);
+        $machine = $machine_repo->find($machine_id);
+        
+        if (!$employee || !$machine) {
+            return new JsonResponse(['success' => false, 'error' => 'Empleado o máquina no encontrado'], 404);
+        }
+        
+        // Remove machine from employee
+        $machines = $employee->getMachines();
+        $machines = array_filter($machines, function($m) use ($machine) {
+            return $m->getId() !== $machine->getId();
+        });
+        $employee->setMachines($machines);
+        
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($employee);
+        $em->flush();
+        
+        return new JsonResponse(['success' => true]);
+    }
+
+    /**
      * Add a ticket
      *
      * @Route("/tickets", methods={"GET"}, name="admin_view_tickets")

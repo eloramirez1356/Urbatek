@@ -63,6 +63,11 @@ class Employee
         return $this->machines;
     }
 
+    public function setMachines(array $machines): void
+    {
+        $this->machines = $machines;
+    }
+
     /**
      * @return Site[]
      */
