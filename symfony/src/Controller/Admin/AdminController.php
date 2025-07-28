@@ -682,6 +682,91 @@ class AdminController extends AbstractController
         return $response;
     }
 
+    /**
+     * Simple ticket form for quick entry
+     *
+     * @Route("/simple-ticket", methods={"GET", "POST"}, name="admin_simple_ticket")
+     */
+    public function simpleTicketAction(Request $request): Response
+    {
+        $site_repo = $this->getDoctrine()->getRepository(Site::class);
+        $machine_repo = $this->getDoctrine()->getRepository(Machine::class);
+        $employee_repo = $this->getDoctrine()->getRepository(Employee::class);
+
+        if ($request->isMethod('POST')) {
+            $data = $request->request->get('simple_ticket');
+            
+            if ($data) {
+                $employee = $employee_repo->find($data['employee']);
+                $machine = $machine_repo->find($data['machine']);
+                
+                if (!$employee || !$machine) {
+                    $this->addFlash('error', 'Empleado o máquina no encontrado.');
+                    return $this->redirectToRoute('admin_simple_ticket');
+                }
+                
+                // Process multiple works
+                $works = $data['works'] ?? [];
+                $successCount = 0;
+                
+                foreach ($works as $work) {
+                    if (empty($work['site']) || empty($work['hours'])) {
+                        continue; // Skip empty entries
+                    }
+                    
+                    $site = $site_repo->find($work['site']);
+                    if (!$site) {
+                        continue;
+                    }
+                    
+                    // Create ticket based on machine type
+                    if ($machine->isTruck()) {
+                        $ticket = new \App\Entity\TruckPortTicket();
+                        $ticket->setNumTravels($work['hours']);
+                        $ticket->setTons($work['tons'] ?? 0);
+                        $ticket->setPortages($work['portages'] ?? 0);
+                        $ticket->setProvider($work['provider'] ?? '');
+                        $ticket->setLiters($work['liters'] ?? 0);
+                    } else {
+                        $ticket = new \App\Entity\MachineTicket();
+                        $ticket->setHours($work['hours']);
+                        $ticket->setHammerHours($work['hammer_hours'] ?? 0);
+                        $ticket->setSpoonHours($work['spoon_hours'] ?? 0);
+                    }
+                    
+                    $ticket->setEmployee($employee);
+                    $ticket->setMachine($machine);
+                    $ticket->setSite($site);
+                    $ticket->setDate(new \DateTime($data['date']));
+                    $ticket->setComments($work['comments'] ?? '');
+                    
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($ticket);
+                    $successCount++;
+                }
+                
+                if ($successCount > 0) {
+                    $em->flush();
+                    $this->addFlash('success', "Se crearon {$successCount} tickets correctamente.");
+                } else {
+                    $this->addFlash('error', 'No se pudo crear ningún ticket.');
+                }
+                
+                return $this->redirectToRoute('admin_simple_ticket');
+            }
+        }
+
+        $sites = $site_repo->findBy(['is_active' => true]);
+        $machines = $machine_repo->findAll();
+        $employees = $employee_repo->findAll();
+
+        return $this->render('admin/blog/simple_ticket.html.twig', [
+            'sites' => $sites,
+            'machines' => $machines,
+            'employees' => $employees
+        ]);
+    }
+
     protected function getCleanMimeType($filename)
     {
         $name = explode('.', $filename);

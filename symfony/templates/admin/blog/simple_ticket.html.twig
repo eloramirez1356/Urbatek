@@ -1,0 +1,141 @@
+{% extends 'admin/layout.html.twig' %}
+
+{% block body_id 'admin_simple_ticket' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/simple-ticket.css') }}">
+{% endblock %}
+
+{% block main %}
+    <h1>Ticket Simplificado</h1>
+    
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+    
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <div class="simple-ticket-container">
+        <form method="POST" id="simpleTicketForm">
+            <div class="form-section">
+                <h3>Información General</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="employee">Empleado *</label>
+                        <select name="simple_ticket[employee]" id="employee" required>
+                            <option value="">Seleccionar empleado</option>
+                            {% for employee in employees %}
+                                <option value="{{ employee.id }}">{{ employee.name }} {{ employee.surname }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="machine">Máquina/Camión *</label>
+                        <select name="simple_ticket[machine]" id="machine" required>
+                            <option value="">Seleccionar máquina</option>
+                            {% for machine in machines %}
+                                <option value="{{ machine.id }}" data-type="{{ machine.isTruck() ? 'truck' : 'machine' }}">
+                                    {{ machine.name }} ({{ machine.brand }}) - {{ machine.isTruck() ? 'Camión' : 'Máquina' }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Fecha *</label>
+                        <input type="date" name="simple_ticket[date]" id="date" required value="{{ "now"|date("Y-m-d") }}">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Obras y Trabajos</h3>
+                <div id="worksContainer">
+                    <div class="work-entry" data-index="0">
+                        <div class="work-header">
+                            <h4>Obra #1</h4>
+                            <button type="button" class="btn-remove-work" onclick="removeWork(this)">Eliminar</button>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Obra *</label>
+                                <select name="simple_ticket[works][0][site]" required>
+                                    <option value="">Seleccionar obra</option>
+                                    {% for site in sites %}
+                                        <option value="{{ site.id }}">{{ site.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Horas/Viajes *</label>
+                                <input type="number" name="simple_ticket[works][0][hours]" step="0.5" min="0" required>
+                            </div>
+                        </div>
+                        
+                        <!-- Campos específicos para camiones -->
+                        <div class="truck-fields" style="display: none;">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Toneladas</label>
+                                    <input type="number" name="simple_ticket[works][0][tons]" step="0.1" min="0">
+                                </div>
+                                <div class="form-group">
+                                    <label>Portes</label>
+                                    <input type="number" name="simple_ticket[works][0][portages]" min="0">
+                                </div>
+                                <div class="form-group">
+                                    <label>Proveedor</label>
+                                    <input type="text" name="simple_ticket[works][0][provider]">
+                                </div>
+                                <div class="form-group">
+                                    <label>Litros</label>
+                                    <input type="number" name="simple_ticket[works][0][liters]" min="0">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Campos específicos para máquinas -->
+                        <div class="machine-fields" style="display: none;">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Horas Martillo</label>
+                                    <input type="number" name="simple_ticket[works][0][hammer_hours]" step="0.5" min="0">
+                                </div>
+                                <div class="form-group">
+                                    <label>Horas Cazo</label>
+                                    <input type="number" name="simple_ticket[works][0][spoon_hours]" step="0.5" min="0">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group full-width">
+                                <label>Comentarios</label>
+                                <textarea name="simple_ticket[works][0][comments]" rows="2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="button" class="btn-add-work" onclick="addWork()">
+                    <i class="fa fa-plus"></i> Agregar Otra Obra
+                </button>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-submit">Crear Tickets</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/simple-ticket.js') }}"></script>
+{% endblock %} 
