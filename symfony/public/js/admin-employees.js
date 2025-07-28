@@ -18,7 +18,7 @@ function closeAssignMachines() {
 }
 
 function loadMachines(employeeId) {
-    fetch(`/admin/employees/${employeeId}/machines`)
+    fetch(`/es/admin/employees/${employeeId}/machines`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -90,7 +90,7 @@ function filterMachines() {
 function assignMachine(machineId) {
     if (!currentEmployeeId) return;
     
-    fetch(`/admin/employees/${currentEmployeeId}/machines/${machineId}/assign`, {
+    fetch(`/es/admin/employees/${currentEmployeeId}/machines/${machineId}/assign`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -115,7 +115,7 @@ function assignMachine(machineId) {
 function unassignMachine(machineId) {
     if (!currentEmployeeId) return;
     
-    fetch(`/admin/employees/${currentEmployeeId}/machines/${machineId}/unassign`, {
+    fetch(`/es/admin/employees/${currentEmployeeId}/machines/${machineId}/unassign`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
