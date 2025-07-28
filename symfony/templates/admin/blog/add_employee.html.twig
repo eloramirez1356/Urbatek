@@ -4,6 +4,19 @@
 
 {% block main %}
     <h1>Empleados</h1>
+    
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+    
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">
+            {{ message }}
+        </div>
+    {% endfor %}
+    
     <style>
         table {
             border-collapse: collapse;
@@ -20,12 +33,57 @@
         tr:nth-child(even) {
             background-color: #f2f2f2
         }
+        
+        .form-container {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .form-group {
+            flex: 1;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
     </style>
 
     <table style="width:100%">
-
         <tr>
             <th>Nombre</th>
+            <th>Apellidos</th>
+            <th>Usuario</th>
+            <th>Email</th>
             <th>Obras activas</th>
             <th>Maquinas</th>
         </tr>
@@ -33,28 +91,65 @@
         {% for employee in employees %}
             <tr>
                 <td>{{ employee.name }}</td>
+                <td>{{ employee.surname }}</td>
+                <td>{{ employee.user ? employee.user.username : 'Sin usuario' }}</td>
+                <td>{{ employee.user ? employee.user.email : 'Sin email' }}</td>
                 <td>
                     {% for site in employee.sites %}
                         {% if site.isactive %}
-
-                        {{ site.name }},
+                            {{ site.name }},
                         {% endif %}
                     {% endfor %}
                 </td>
-
-               <td>
-                   {% for machine in employee.machines %}
-                       {{ machine.name }} ({{ machine.brand }})
-
-                   {% endfor %}
-               </td>
+                <td>
+                    {% for machine in employee.machines %}
+                        {{ machine.name }} ({{ machine.brand }})
+                    {% endfor %}
+                </td>
             </tr>
         {% endfor %}
     </table>
+    
     <br>
     <h2>Añadir empleado</h2>
-    <div class="col-sm-3  col-md-offset-21">
+    <div class="form-container">
         {{ form_start(employee_form) }}
+            <div class="form-row">
+                <div class="form-group">
+                    {{ form_label(employee_form.name) }}
+                    {{ form_widget(employee_form.name) }}
+                    {{ form_errors(employee_form.name) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(employee_form.surname) }}
+                    {{ form_widget(employee_form.surname) }}
+                    {{ form_errors(employee_form.surname) }}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    {{ form_label(employee_form.username) }}
+                    {{ form_widget(employee_form.username) }}
+                    {{ form_errors(employee_form.username) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(employee_form.email) }}
+                    {{ form_widget(employee_form.email) }}
+                    {{ form_errors(employee_form.email) }}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    {{ form_label(employee_form.password) }}
+                    {{ form_widget(employee_form.password) }}
+                    {{ form_errors(employee_form.password) }}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    {{ form_widget(employee_form.submit) }}
+                </div>
+            </div>
         {{ form_end(employee_form) }}
     </div>
 

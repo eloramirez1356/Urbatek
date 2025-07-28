@@ -4,6 +4,7 @@ namespace App\Form;
 
 use Doctrine\DBAL\Types\FloatType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -25,15 +26,28 @@ class EmployeeType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, [
-                'label' => 'Nombre'
+                'label' => 'Nombre',
+                'required' => true
             ])
-
-            ->add('surname', NumberType::class, [
+            ->add('surname', TextType::class, [
                 'label' => 'Apellidos',
+                'required' => true
             ])
-
-            ->add('email', TextType::class)
-            ->add('password', TextType::class)
+            ->add('username', TextType::class, [
+                'label' => 'Usuario',
+                'required' => true,
+                'mapped' => false
+            ])
+            ->add('email', EmailType::class, [
+                'label' => 'Email',
+                'required' => true,
+                'mapped' => false
+            ])
+            ->add('password', PasswordType::class, [
+                'label' => 'Contraseña',
+                'required' => true,
+                'mapped' => false
+            ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Guardar'
             ])

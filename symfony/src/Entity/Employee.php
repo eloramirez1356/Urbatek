@@ -87,6 +87,16 @@ class Employee
         return $this->surname;
     }
 
+    public function setSurname(string $surname): void
+    {
+        $this->surname = $surname;
+    }
+
+    public function setUser(User $user): void
+    {
+        $this->user = $user;
+    }
+
     public function getFullName()
     {
         return $this->name . ' ' . $this->surname;

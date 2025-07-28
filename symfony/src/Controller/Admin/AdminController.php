@@ -9,6 +9,7 @@ use App\Entity\Machine;
 use App\Entity\Material;
 use App\Entity\Site;
 use App\Entity\Ticket;
+use App\Entity\User;
 use App\Form\EmployeeType;
 use App\Form\MachineType;
 use App\Form\MaterialType;
@@ -119,15 +120,60 @@ class AdminController extends AbstractController
     /**
      * View employees
      *
-     * @Route("/employees", methods={"GET"}, name="admin_add_employee")
+     * @Route("/employees", methods={"GET", "POST"}, name="admin_add_employee")
      *
      */
     public function viewEmployeesAction(Request $request): Response
     {
         $form = $this->createForm(EmployeeType::class);
         $employee_repo = $this->getDoctrine()->getRepository(Employee::class);
+        $user_repo = $this->getDoctrine()->getRepository(User::class);
 
-        $all_employees= $employee_repo->findAll();
+        if ($request->isMethod('POST')) {
+            $form->handleRequest($request);
+            
+            if ($form->isSubmitted() && $form->isValid()) {
+                $data = $form->getData();
+                $formData = $request->request->get('employee');
+                
+                // Check if username already exists
+                $existingUser = $user_repo->findOneBy(['username' => $formData['username']]);
+                if ($existingUser) {
+                    $this->addFlash('error', 'El nombre de usuario ya existe.');
+                    return $this->render('admin/blog/add_employee.html.twig', [
+                        'employee_form' => $form->createView(),
+                        'employees' => $employee_repo->findAll()
+                    ]);
+                }
+                
+                // Create Employee
+                $employee = new Employee();
+                $employee->setName($data['name']);
+                $employee->setSurname($data['surname']);
+                
+                // Create User
+                $user = new User();
+                $user->setUsername($formData['username']);
+                $user->setEmail($formData['email']);
+                $user->setPassword(password_hash($formData['password'], PASSWORD_DEFAULT));
+                $user->setRoles(['ROLE_USER']);
+                
+                // Link Employee and User
+                $employee->setUser($user);
+                $user->setEmployee($employee);
+                
+                // Persist both entities
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($employee);
+                $em->persist($user);
+                $em->flush();
+                
+                $this->addFlash('success', 'Empleado y usuario creados correctamente.');
+                return $this->redirectToRoute('admin_add_employee');
+            }
+        }
+
+        $all_employees = $employee_repo->findAll();
 
         return $this->render('admin/blog/add_employee.html.twig', [
             'employee_form' => $form->createView(),
@@ -434,23 +480,70 @@ class AdminController extends AbstractController
         $csvContent = "ID,Obra,Empleado,Fecha,Máquina,Material,Nº Viajes,Toneladas,Portes,Horas,Horas Martillo,Horas Cazo,Proveedor,Litros,Comentarios,Firmado\n";
         
         foreach ($tickets as $ticket) {
+            $material = '';
+            $numTravels = '';
+            $tons = '';
+            $portages = '';
+            $hours = '';
+            $hammerHours = '';
+            $spoonHours = '';
+            $provider = '';
+            $liters = '';
+            $comments = '';
+            $signed = 'No';
+
+            // Get common fields
+            $id = $ticket->getId();
+            $site = $ticket->getSite()->getName();
+            $employee = $ticket->getEmployee()->getName();
+            $date = $ticket->getDate()->format('Y-m-d');
+            $machine = $ticket->getMachine()->getName();
+
+            // Get specific fields based on ticket type
+            if ($ticket instanceof \App\Entity\Ticket) {
+                $material = $ticket->getMaterial() ? $ticket->getMaterial()->getName() : '';
+                $numTravels = $ticket->getNumTravels();
+                $tons = $ticket->getTons();
+                $portages = $ticket->getPortages();
+                $hours = $ticket->getHours();
+                $hammerHours = $ticket->getHammerHours();
+                $spoonHours = $ticket->getSpoonHours();
+                $provider = $ticket->getProvider();
+                $liters = $ticket->getLiters();
+                $comments = $ticket->getComments();
+                $signed = $ticket->isProviderSigned() ? 'Sí' : 'No';
+            } elseif ($ticket instanceof \App\Entity\MachineTicket) {
+                $hours = $ticket->getHours();
+                $hammerHours = $ticket->getHammerHours();
+                $spoonHours = $ticket->getSpoonHours();
+                $comments = $ticket->getComments();
+            } elseif ($ticket instanceof \App\Entity\TruckPortTicket) {
+                $numTravels = $ticket->getNumTravels();
+                $tons = $ticket->getTons();
+                $portages = $ticket->getPortages();
+                $provider = $ticket->getProvider();
+                $liters = $ticket->getLiters();
+                $comments = $ticket->getComments();
+                $signed = $ticket->isProviderSigned() ? 'Sí' : 'No';
+            }
+
             $row = [
-                $ticket->getId(),
-                $ticket->getSite()->getName(),
-                $ticket->getEmployee()->getName(),
-                $ticket->getDate()->format('Y-m-d'),
-                $ticket->getMachine()->getName(),
-                method_exists($ticket, 'getMaterial') ? ($ticket->getMaterial() ? $ticket->getMaterial()->getName() : '') : '',
-                method_exists($ticket, 'getNumTravels') ? $ticket->getNumTravels() : '',
-                method_exists($ticket, 'getTons') ? $ticket->getTons() : '',
-                method_exists($ticket, 'getPortages') ? $ticket->getPortages() : '',
-                method_exists($ticket, 'getHours') ? $ticket->getHours() : '',
-                method_exists($ticket, 'getHammerHours') ? $ticket->getHammerHours() : '',
-                method_exists($ticket, 'getSpoonHours') ? $ticket->getSpoonHours() : '',
-                method_exists($ticket, 'getProvider') ? $ticket->getProvider() : '',
-                method_exists($ticket, 'getLiters') ? $ticket->getLiters() : '',
-                method_exists($ticket, 'getComments') ? $ticket->getComments() : '',
-                method_exists($ticket, 'isProviderSigned') ? ($ticket->isProviderSigned() ? 'Sí' : 'No') : 'No'
+                $id,
+                $site,
+                $employee,
+                $date,
+                $machine,
+                $material,
+                $numTravels,
+                $tons,
+                $portages,
+                $hours,
+                $hammerHours,
+                $spoonHours,
+                $provider,
+                $liters,
+                $comments,
+                $signed
             ];
 
             // Escape fields that contain commas or quotes

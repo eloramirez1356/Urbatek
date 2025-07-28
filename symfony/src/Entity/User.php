@@ -152,6 +152,11 @@ class User implements UserInterface
         return $this->employee;
     }
 
+    public function setEmployee(Employee $employee): void
+    {
+        $this->employee = $employee;
+    }
+
     public function isAdmin()
     {
         foreach ($this->roles as $role) {
