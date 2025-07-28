@@ -211,6 +211,9 @@ class AdminController extends AbstractController
             // Get all machines
             $allMachines = $machine_repo->findAll();
             $assignedMachines = $employee->getMachines() ?: [];
+            if (is_object($assignedMachines)) {
+                $assignedMachines = $assignedMachines->toArray();
+            }
             
             // Convert to arrays
             $availableMachines = [];
@@ -260,6 +263,9 @@ class AdminController extends AbstractController
         
         // Check if already assigned
         $machines = $employee->getMachines() ?: [];
+        if (is_object($machines)) {
+            $machines = $machines->toArray();
+        }
         if (in_array($machine, $machines)) {
             return new JsonResponse(['success' => false, 'error' => 'La máquina ya está asignada'], 400);
         }
@@ -294,6 +300,9 @@ class AdminController extends AbstractController
         
         // Remove machine from employee
         $machines = $employee->getMachines() ?: [];
+        if (is_object($machines)) {
+            $machines = $machines->toArray();
+        }
         $machines = array_filter($machines, function($m) use ($machine) {
             return $m->getId() !== $machine->getId();
         });

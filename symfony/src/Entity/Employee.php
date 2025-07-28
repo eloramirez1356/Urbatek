@@ -60,12 +60,19 @@ class Employee
      */
     public function getMachines()
     {
-        return $this->machines;
+        if (is_object($this->machines) && method_exists($this->machines, 'toArray')) {
+            return $this->machines->toArray();
+        }
+        return $this->machines ?: [];
     }
 
-    public function setMachines(array $machines): void
+    public function setMachines($machines): void
     {
-        $this->machines = $machines;
+        if (is_object($machines) && method_exists($machines, 'toArray')) {
+            $this->machines = $machines->toArray();
+        } else {
+            $this->machines = $machines;
+        }
     }
 
     /**
