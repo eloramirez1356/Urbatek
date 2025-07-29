@@ -349,15 +349,6 @@ document.getElementById('simpleTicketForm').addEventListener('submit', function(
             material = materialField.value;
         }
         
-        // Debug adicional para ver qué campos se encuentran
-        console.log(`Obra #${index + 1}:`, { 
-            site, 
-            material, 
-            machineType,
-            materialFieldFound: !!materialField,
-            materialFieldName: materialField ? materialField.name : 'no encontrado'
-        });
-        
         if (site && material) {
             hasValidWork = true;
             
@@ -393,6 +384,15 @@ document.getElementById('simpleTicketForm').addEventListener('submit', function(
                 if (!hours || !hammerHours || !spoonHours) {
                     errors.push(`Obra #${index + 1}: Complete todos los campos obligatorios para máquina`);
                 }
+            }
+        } else {
+            // Mensaje específico para campos faltantes
+            if (!site && !material) {
+                errors.push(`Obra #${index + 1}: Complete sitio y material`);
+            } else if (!site) {
+                errors.push(`Obra #${index + 1}: Complete el sitio`);
+            } else if (!material) {
+                errors.push(`Obra #${index + 1}: Complete el material`);
             }
         }
     });
