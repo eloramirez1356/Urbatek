@@ -804,7 +804,9 @@ class AdminController extends AbstractController
         return $this->render('admin/blog/simple_ticket.html.twig', [
             'machines' => $machines,
             'employees' => $employees,
-            'materials' => $materials
+            'materials' => $materials,
+            'originDestinationOptions' => \App\Entity\Ticket::ORIGIN_DESTINATION_OPTIONS,
+            'destinationOptions' => \App\Entity\Ticket::DESTINATION_OPTIONS
         ]);
     }
 

@@ -106,8 +106,13 @@
                                         <input type="number" name="simple_ticket[works][0][tons]" step="0.1" min="0" required>
                                     </div>
                                     <div class="form-group">
-                                        <label>Proveedor *</label>
-                                        <input type="text" name="simple_ticket[works][0][provider]" required>
+                                        <label>Origen *</label>
+                                        <select name="simple_ticket[works][0][provider]" required>
+                                            <option value="">Seleccionar origen</option>
+                                            {% for key, value in originDestinationOptions %}
+                                                <option value="{{ value }}">{{ value }}</option>
+                                            {% endfor %}
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -117,7 +122,12 @@
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label>Destino *</label>
-                                        <input type="text" name="simple_ticket[works][0][provider]" required>
+                                        <select name="simple_ticket[works][0][provider]" required>
+                                            <option value="">Seleccionar destino</option>
+                                            {% for key, value in destinationOptions %}
+                                                <option value="{{ value }}">{{ value }}</option>
+                                            {% endfor %}
+                                        </select>
                                     </div>
                                 </div>
                             </div>

@@ -321,13 +321,13 @@ document.getElementById('simpleTicketForm').addEventListener('submit', function(
                     // Validar campos según tipo de operación
                     if (operationType === 'supply') {
                         const tons = work.querySelector('input[name*="[tons]"]').value;
-                        const provider = work.querySelector('input[name*="[provider]"]').value;
+                        const provider = work.querySelector('select[name*="[provider]"]').value;
                         
                         if (!tons || !provider) {
                             errors.push(`Obra #${index + 1}: Complete todos los campos obligatorios para suministro`);
                         }
                     } else if (operationType === 'removal') {
-                        const provider = work.querySelector('input[name*="[provider]"]').value;
+                        const provider = work.querySelector('select[name*="[provider]"]').value;
                         
                         if (!provider) {
                             errors.push(`Obra #${index + 1}: Complete todos los campos obligatorios para retirada`);

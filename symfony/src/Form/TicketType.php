@@ -66,26 +66,7 @@ class TicketType extends AbstractType
 
         if ($type == Ticket::TYPE_TRUCK_WITHDRAWAL) {
             $builder->add('provider', ChoiceType::class, [
-		'choices' => [
-                    'ALDEHUELA AMAEXCO' => 'ALDEHUELA AMAEXCO',
-                    'TRUSAN' => 'TRUSAN',
-                    'RECICAM' => 'RECICAM', 
-                    'SALMEDINA VALDEMINGOMEZ' => 'SALMEDINA VALDEMINGOMEZ', 
-                    'LAREDO CEMEX' => 'LAREDO CEMEX',
-                    'LAREDO SODIRA M506' => 'LAREDO SODIRA M506',
-                    'LAREDO EIFFAGE' => 'LAREDO EIFFAGE',
-                    'LAREDO SALITRAL' => 'LAREDO SALITRAL',
-                    'ALAMEDA DE LA SAGRA ONEGESCOR ' => 'ALAMEDA DE LA SAGRA ONEGESCOR ',
-                    'LOS CANTILLOS FGM' => 'LOS CANTILLOS FGM',
-                    'ARIDOS LA CABEZA (EL ALAMO)' => 'ARIDOS LA CABEZA (EL ALAMO)',
-                    'GADARAI' => 'GADARAI',
-                    'TRAMSA' => 'TRAMSA',
-                    'SODIRA LA POLA' => 'SODIRA LA POLA',
-                    'CCR LAS MULAS' => 'CCR LAS MULAS',
-                    'TEC REC' => 'TEC REC',
-                    'ARIDENCA (MSC ARIDOS 2002)' => 'ARIDENCA (MSC ARIDOS 2002)',
-                    'OTRO' => 'OTRO',
-                ],
+                'choices' => Ticket::DESTINATION_OPTIONS,
                 'label' => 'Destino'
             ]);
 
@@ -97,21 +78,7 @@ class TicketType extends AbstractType
 
         if ($type == Ticket::TYPE_TRUCK_SUPPLY) {
             $builder->add('provider', ChoiceType::class, [
-                'choices' => [
-		    'Tec Rec' => 'Tec Rec',
-                    'Sodira La pola' => 'Sodira La pola',
-                    'Sodira El puente' => 'Sodira El puente',
-                    'Sodira Gravera Roman M506' => 'Sodira Gravera Roman M506',
-                    'Eiffage' => 'Eiffage',
-                    'Recicam' => 'Recicam',
-                    'Salmedina' => 'Salmedina',
-                    'Alameda de la Sagra Onegescor' => 'Alameda de la Sagra Onegescor',
-                    'Msc aridos'  => 'Msc aridos',
-                    'Hanson'  => 'Hanson',
-                    'Tramsa'  => 'Tramsa',
-                    'Mahorsa'  => 'Mahorsa',
-                    'Otro' => 'Otro',
-                ],
+                'choices' => Ticket::ORIGIN_DESTINATION_OPTIONS,
                 'label' => 'Origen'
             ]);
 
