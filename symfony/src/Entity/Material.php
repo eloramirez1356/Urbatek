@@ -19,6 +19,11 @@ class Material
     /** @var string */
     private $type;
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
     public function __construct($name, $price, $type)
     {
         $this->name = $name;

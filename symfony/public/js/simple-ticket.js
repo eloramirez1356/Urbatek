@@ -354,27 +354,6 @@ document.getElementById('simpleTicketForm').addEventListener('submit', function(
             material = materialField.value;
         }
         
-        console.log(`Obra #${index + 1}:`, { 
-            site, 
-            material, 
-            materialSelected: material !== "",
-            machineType
-        });
-        
-        // Debug específico para el campo de material
-        if (materialField) {
-            console.log(`Obra #${index + 1} - Campo material:`, {
-                name: materialField.name,
-                value: materialField.value,
-                selectedIndex: materialField.selectedIndex,
-                options: Array.from(materialField.options).map(opt => ({value: opt.value, text: opt.text, selected: opt.selected}))
-            });
-        }
-        
-        // Debug adicional: mostrar todos los selects en la obra
-        const allSelects = work.querySelectorAll('select');
-        console.log(`Obra #${index + 1} - Todos los selects:`, Array.from(allSelects).map(s => ({name: s.name, value: s.value})));
-        
         if (site && material) {
             hasValidWork = true;
             
