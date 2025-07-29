@@ -335,17 +335,7 @@ document.getElementById('simpleTicketForm').addEventListener('submit', function(
     
     document.querySelectorAll('.work-entry').forEach((work, index) => {
         const site = work.querySelector('select[name*="[site]"]').value;
-        
-        // Buscar material en los campos específicos (truck-fields o machine-fields)
-        let material = '';
-        const truckMaterial = work.querySelector('.truck-fields select[name*="[material]"]');
-        const machineMaterial = work.querySelector('.machine-fields select[name*="[material]"]');
-        
-        if (truckMaterial) {
-            material = truckMaterial.value;
-        } else if (machineMaterial) {
-            material = machineMaterial.value;
-        }
+        const material = work.querySelector('select[name*="[material]"]').value;
         
         console.log(`Obra #${index + 1}:`, { site, material, machineType });
         
