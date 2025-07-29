@@ -692,6 +692,7 @@ class AdminController extends AbstractController
         $site_repo = $this->getDoctrine()->getRepository(Site::class);
         $machine_repo = $this->getDoctrine()->getRepository(Machine::class);
         $employee_repo = $this->getDoctrine()->getRepository(Employee::class);
+        $material_repo = $this->getDoctrine()->getRepository(Material::class);
 
         if ($request->isMethod('POST')) {
             $data = $request->request->get('simple_ticket');
@@ -705,54 +706,84 @@ class AdminController extends AbstractController
                     return $this->redirectToRoute('admin_simple_ticket');
                 }
                 
-                // Process multiple works
+                // Process multiple works for trucks, single for machines
                 $works = $data['works'] ?? [];
                 $successCount = 0;
                 
-                foreach ($works as $work) {
-                    if (empty($work['site']) || empty($work['hours'])) {
-                        continue; // Skip empty entries
-                    }
-                    
-                    $site = $site_repo->find($work['site']);
-                    if (!$site) {
-                        continue;
-                    }
-                    
-                    // Create ticket based on machine type
-                    if ($machine->isTruck()) {
-                        $ticket = new \App\Entity\TruckPortTicket(
+                if ($machine->isTruck()) {
+                    // Multiple tickets for trucks
+                    foreach ($works as $work) {
+                        if (empty($work['site']) || empty($work['material'])) {
+                            continue; // Skip empty entries
+                        }
+                        
+                        $site = $site_repo->find($work['site']);
+                        $material = $material_repo->find($work['material']);
+                        if (!$site || !$material) {
+                            continue;
+                        }
+                        
+                        $ticket = new \App\Entity\TruckMaterialTicket(
                             new \DateTime($data['date']),
                             $site,
                             $employee,
                             $machine,
-                            intval($work['portages'] ?? 0),
-                            intval($work['hours']),
+                            intval($work['num_travels'] ?? 0),
+                            intval($work['hours'] ?? 0),
                             $work['comments'] ?? '',
+                            $material,
+                            floatval($work['tons'] ?? 0),
+                            $work['provider'] ?? '',
                             intval($work['liters'] ?? 0),
                             false // provider_signed
                         );
-                        $ticket->setNumTravels(intval($work['num_travels'] ?? $work['hours']));
-                        $ticket->setTons(floatval($work['tons'] ?? 0));
-                        $ticket->setProvider($work['provider'] ?? '');
-                    } else {
-                        $ticket = new \App\Entity\MachineTicket(
-                            new \DateTime($data['date']),
-                            $site,
-                            $employee,
-                            $machine,
-                            intval($work['hours']),
-                            intval($work['hammer_hours'] ?? 0),
-                            $work['comments'] ?? '',
-                            intval($work['liters'] ?? 0),
-                            floatval($work['spoon_hours'] ?? 0),
-                            false // provider_signed
-                        );
+                        
+                        // Set additional fields based on operation type
+                        if ($work['operation_type'] === 'supply') {
+                            // Suministro: tons and provider are required
+                            $ticket->setTons(floatval($work['tons'] ?? 0));
+                            $ticket->setProvider($work['provider'] ?? '');
+                        } else {
+                            // Retirada: provider (destino) is required
+                            $ticket->setProvider($work['provider'] ?? '');
+                        }
+                        
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($ticket);
+                        $successCount++;
                     }
-                    
-                    $em = $this->getDoctrine()->getManager();
-                    $em->persist($ticket);
-                    $successCount++;
+                } else {
+                    // Single ticket for machines
+                    $work = $works[0] ?? [];
+                    if (!empty($work['site']) && !empty($work['hours'])) {
+                        $site = $site_repo->find($work['site']);
+                        if ($site) {
+                            $ticket = new \App\Entity\MachineTicket(
+                                new \DateTime($data['date']),
+                                $site,
+                                $employee,
+                                $machine,
+                                intval($work['hours']),
+                                intval($work['hammer_hours'] ?? 0),
+                                $work['comments'] ?? '',
+                                intval($work['liters'] ?? 0),
+                                floatval($work['spoon_hours'] ?? 0),
+                                false // provider_signed
+                            );
+                            
+                            // Set material if selected
+                            if (!empty($work['material'])) {
+                                $material = $material_repo->find($work['material']);
+                                if ($material) {
+                                    $ticket->setMaterial($material);
+                                }
+                            }
+                            
+                            $em = $this->getDoctrine()->getManager();
+                            $em->persist($ticket);
+                            $successCount = 1;
+                        }
+                    }
                 }
                 
                 if ($successCount > 0) {
@@ -766,15 +797,46 @@ class AdminController extends AbstractController
             }
         }
 
-        $sites = $site_repo->findBy(['is_active' => true]);
         $machines = $machine_repo->findAll();
         $employees = $employee_repo->findAll();
+        $materials = $material_repo->findAll();
 
         return $this->render('admin/blog/simple_ticket.html.twig', [
-            'sites' => $sites,
             'machines' => $machines,
-            'employees' => $employees
+            'employees' => $employees,
+            'materials' => $materials
         ]);
+    }
+
+    /**
+     * Get employee sites
+     *
+     * @Route("/employee/{employee_id}/sites", methods={"GET"}, name="admin_employee_sites")
+     */
+    public function getEmployeeSitesAction($employee_id): JsonResponse
+    {
+        $employee_repo = $this->getDoctrine()->getRepository(Employee::class);
+        $site_repo = $this->getDoctrine()->getRepository(Site::class);
+        
+        $employee = $employee_repo->find($employee_id);
+        if (!$employee) {
+            return new JsonResponse(['error' => 'Empleado no encontrado'], 404);
+        }
+        
+        // Get active sites assigned to employee
+        $sites = $employee->getSites() ?: [];
+        $activeSites = [];
+        
+        foreach ($sites as $site) {
+            if ($site->isActive()) {
+                $activeSites[] = [
+                    'id' => $site->getId(),
+                    'name' => $site->getName()
+                ];
+            }
+        }
+        
+        return new JsonResponse($activeSites);
     }
 
     protected function getCleanMimeType($filename)

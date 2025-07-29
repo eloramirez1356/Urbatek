@@ -67,14 +67,17 @@
                                 <label>Obra *</label>
                                 <select name="simple_ticket[works][0][site]" required>
                                     <option value="">Seleccionar obra</option>
-                                    {% for site in sites %}
-                                        <option value="{{ site.id }}">{{ site.name }}</option>
-                                    {% endfor %}
+                                    <!-- Se llenará dinámicamente según el empleado -->
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Horas/Viajes *</label>
-                                <input type="number" name="simple_ticket[works][0][hours]" step="0.5" min="0" required>
+                                <label>Material *</label>
+                                <select name="simple_ticket[works][0][material]" required>
+                                    <option value="">Seleccionar material</option>
+                                    {% for material in materials %}
+                                        <option value="{{ material.id }}">{{ material.name }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                         </div>
                         
@@ -82,33 +85,63 @@
                         <div class="truck-fields" style="display: none;">
                             <div class="form-row">
                                 <div class="form-group">
+                                    <label>Tipo de Operación *</label>
+                                    <select name="simple_ticket[works][0][operation_type]" id="operationType" required onchange="toggleOperationFields()">
+                                        <option value="">Seleccionar tipo</option>
+                                        <option value="supply">Suministro</option>
+                                        <option value="removal">Retirada</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
                                     <label>Número de Viajes *</label>
                                     <input type="number" name="simple_ticket[works][0][num_travels]" min="0" required>
                                 </div>
-                                <div class="form-group">
-                                    <label>Toneladas *</label>
-                                    <input type="number" name="simple_ticket[works][0][tons]" step="0.1" min="0" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Portes *</label>
-                                    <input type="number" name="simple_ticket[works][0][portages]" min="0" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Proveedor *</label>
-                                    <input type="text" name="simple_ticket[works][0][provider]" required>
+                            </div>
+                            
+                            <!-- Campos para Suministro -->
+                            <div class="supply-fields" style="display: none;">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Toneladas *</label>
+                                        <input type="number" name="simple_ticket[works][0][tons]" step="0.1" min="0" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Proveedor *</label>
+                                        <input type="text" name="simple_ticket[works][0][provider]" required>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label>Litros *</label>
-                                    <input type="number" name="simple_ticket[works][0][liters]" min="0" required>
+                            
+                            <!-- Campos para Retirada -->
+                            <div class="removal-fields" style="display: none;">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Destino *</label>
+                                        <input type="text" name="simple_ticket[works][0][provider]" required>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label>Material</label>
-                                    <select name="simple_ticket[works][0][material]">
-                                        <option value="">Sin material</option>
-                                        <!-- Aquí se pueden agregar materiales si es necesario -->
-                                    </select>
+                            </div>
+                            
+                            <!-- Campos opcionales para ambos tipos -->
+                            <div class="optional-fields">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Horas Antonio Aguado</label>
+                                        <input type="number" name="simple_ticket[works][0][hours]" step="0.5" min="0">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Firmado Cliente</label>
+                                        <select name="simple_ticket[works][0][provider_signed]">
+                                            <option value="0">No</option>
+                                            <option value="1">Sí</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group full-width">
+                                        <label>Comentarios</label>
+                                        <textarea name="simple_ticket[works][0][comments]" rows="2"></textarea>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -117,33 +150,40 @@
                         <div class="machine-fields" style="display: none;">
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label>Horas Martillo *</label>
-                                    <input type="number" name="simple_ticket[works][0][hammer_hours]" step="0.5" min="0" required>
+                                    <label>Horas *</label>
+                                    <input type="number" name="simple_ticket[works][0][hours]" step="0.5" min="0" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Horas Cazo *</label>
-                                    <input type="number" name="simple_ticket[works][0][spoon_hours]" step="0.5" min="0" required>
+                                    <label>Horas Martillo *</label>
+                                    <input type="number" name="simple_ticket[works][0][hammer_hours]" step="0.5" min="0" required>
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group">
+                                    <label>Horas Cazo *</label>
+                                    <input type="number" name="simple_ticket[works][0][spoon_hours]" step="0.5" min="0" required>
+                                </div>
+                                <div class="form-group">
                                     <label>Material</label>
                                     <select name="simple_ticket[works][0][material]">
                                         <option value="">Sin material</option>
-                                        <!-- Aquí se pueden agregar materiales si es necesario -->
+                                        {% for material in materials %}
+                                            <option value="{{ material.id }}">{{ material.name }}</option>
+                                        {% endfor %}
                                     </select>
                                 </div>
+                            </div>
+                            <div class="form-row">
                                 <div class="form-group">
                                     <label>Litros</label>
                                     <input type="number" name="simple_ticket[works][0][liters]" min="0">
                                 </div>
                             </div>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group full-width">
-                                <label>Comentarios</label>
-                                <textarea name="simple_ticket[works][0][comments]" rows="2"></textarea>
+                            <div class="form-row">
+                                <div class="form-group full-width">
+                                    <label>Comentarios</label>
+                                    <textarea name="simple_ticket[works][0][comments]" rows="2"></textarea>
+                                </div>
                             </div>
                         </div>
                     </div>
