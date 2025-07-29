@@ -64,6 +64,23 @@
     border-radius: 4px;
     font-size: 14px;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    box-sizing: border-box;
+    height: 38px; /* Altura consistente para inputs y selects */
+}
+
+.form-group textarea {
+    height: auto; /* Los textarea mantienen altura automática */
+    min-height: 60px;
+    resize: vertical;
+}
+
+.form-group select {
+    appearance: none; /* Eliminar apariencia nativa del select */
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
+    padding-right: 35px; /* Espacio para la flecha */
 }
 
 .form-group input:focus,
