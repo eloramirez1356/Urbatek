@@ -7,11 +7,13 @@ document.getElementById('employee').addEventListener('change', function() {
     const employeeId = this.value;
     if (employeeId) {
         loadEmployeeSites(employeeId);
+        loadEmployeeMachines(employeeId);
     } else {
-        // Limpiar obras si no hay empleado seleccionado
+        // Limpiar obras y máquinas si no hay empleado seleccionado
         document.querySelectorAll('select[name*="[site]"]').forEach(select => {
             select.innerHTML = '<option value="">Seleccionar obra</option>';
         });
+        document.getElementById('machine').innerHTML = '<option value="">Seleccionar máquina</option>';
     }
 });
 
@@ -120,6 +122,34 @@ function loadEmployeeSites(employeeId) {
         .catch(error => {
             console.error('Error loading employee sites:', error);
             alert('Error al cargar las obras del empleado');
+        });
+}
+
+// Cargar máquinas del empleado
+function loadEmployeeMachines(employeeId) {
+    fetch(`/es/admin/employees/${employeeId}/machines`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            const machineSelect = document.getElementById('machine');
+            machineSelect.innerHTML = '<option value="">Seleccionar máquina</option>';
+            
+            // Usar solo las máquinas asignadas (data.assigned)
+            data.assigned.forEach(machine => {
+                const option = document.createElement('option');
+                option.value = machine.id;
+                option.textContent = machine.name;
+                option.setAttribute('data-type', machine.type); // Almacenar el tipo de máquina
+                machineSelect.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Error loading employee machines:', error);
+            alert('Error al cargar las máquinas del empleado');
         });
 }
 

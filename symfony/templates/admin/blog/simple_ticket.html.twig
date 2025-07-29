@@ -36,23 +36,19 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label for="machine">Máquina/Camión *</label>
-                        <select name="simple_ticket[machine]" id="machine" required>
-                            <option value="">Seleccionar máquina</option>
-                            {% for machine in machines %}
-                                <option value="{{ machine.id }}" data-type="{{ machine.isTruck() ? 'truck' : 'machine' }}">
-                                    {{ machine.name }} ({{ machine.brand }}) - {{ machine.isTruck() ? 'Camión' : 'Máquina' }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="date">Fecha *</label>
-                        <input type="date" name="simple_ticket[date]" id="date" required value="{{ "now"|date("Y-m-d") }}">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Máquina *</label>
+                            <select name="simple_ticket[machine]" id="machine" required>
+                                <option value="">Seleccionar máquina</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha *</label>
+                            <input type="date" name="simple_ticket[date]" id="date" required>
+                        </div>
                     </div>
                 </div>
-            </div>
 
             <div class="form-section">
                 <h3>Obras y Trabajos</h3>

@@ -797,12 +797,10 @@ class AdminController extends AbstractController
             }
         }
 
-        $machines = $machine_repo->findAll();
         $employees = $employee_repo->findAll();
         $materials = $material_repo->findAll();
 
         return $this->render('admin/blog/simple_ticket.html.twig', [
-            'machines' => $machines,
             'employees' => $employees,
             'materials' => $materials,
             'originDestinationOptions' => \App\Entity\Ticket::ORIGIN_DESTINATION_OPTIONS,
@@ -840,6 +838,8 @@ class AdminController extends AbstractController
         
         return new JsonResponse($activeSites);
     }
+
+
 
     protected function getCleanMimeType($filename)
     {
