@@ -335,9 +335,28 @@ document.getElementById('simpleTicketForm').addEventListener('submit', function(
     
     document.querySelectorAll('.work-entry').forEach((work, index) => {
         const site = work.querySelector('select[name*="[site]"]').value;
-        const material = work.querySelector('select[name*="[material]"]').value;
         
-        console.log(`Obra #${index + 1}:`, { site, material, machineType });
+        // Probar diferentes selectores para el material
+        let material = '';
+        let materialField = work.querySelector('select[name*="[material]"]');
+        
+        if (!materialField) {
+            // Intentar con selector más específico
+            materialField = work.querySelector('select[name="simple_ticket[works][' + index + '][material]"]');
+        }
+        
+        if (materialField) {
+            material = materialField.value;
+        }
+        
+        // Debug adicional para ver qué campos se encuentran
+        console.log(`Obra #${index + 1}:`, { 
+            site, 
+            material, 
+            machineType,
+            materialFieldFound: !!materialField,
+            materialFieldName: materialField ? materialField.name : 'no encontrado'
+        });
         
         if (site && material) {
             hasValidWork = true;
