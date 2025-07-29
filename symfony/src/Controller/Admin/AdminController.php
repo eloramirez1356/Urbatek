@@ -698,99 +698,125 @@ class AdminController extends AbstractController
             $data = $request->request->get('simple_ticket');
             
             if ($data) {
-                $employee = $employee_repo->find($data['employee']);
-                $machine = $machine_repo->find($data['machine']);
-                
-                if (!$employee || !$machine) {
-                    $this->addFlash('error', 'Empleado o máquina no encontrado.');
-                    return $this->redirectToRoute('admin_simple_ticket');
-                }
-                
-                // Process multiple works for trucks, single for machines
-                $works = $data['works'] ?? [];
-                $successCount = 0;
-                
-                if ($machine->isTruck()) {
-                    // Multiple tickets for trucks
-                    foreach ($works as $work) {
-                        if (empty($work['site']) || empty($work['material'])) {
-                            continue; // Skip empty entries
-                        }
-                        
-                        $site = $site_repo->find($work['site']);
-                        $material = $material_repo->find($work['material']);
-                        if (!$site || !$material) {
-                            continue;
-                        }
-                        
-                        $ticket = new \App\Entity\TruckMaterialTicket(
-                            new \DateTime($data['date']),
-                            $site,
-                            $employee,
-                            $machine,
-                            intval($work['num_travels'] ?? 0),
-                            intval($work['hours'] ?? 0),
-                            $work['comments'] ?? '',
-                            $material,
-                            floatval($work['tons'] ?? 0),
-                            $work['provider'] ?? '',
-                            intval($work['liters'] ?? 0),
-                            false // provider_signed
-                        );
-                        
-                        // Set additional fields based on operation type
-                        if ($work['operation_type'] === 'supply') {
-                            // Suministro: tons and provider are required
-                            $ticket->setTons(floatval($work['tons'] ?? 0));
-                            $ticket->setProvider($work['provider'] ?? '');
-                        } else {
-                            // Retirada: provider (destino) is required
-                            $ticket->setProvider($work['provider'] ?? '');
-                        }
-                        
-                        $em = $this->getDoctrine()->getManager();
-                        $em->persist($ticket);
-                        $successCount++;
+                try {
+                    // Debug temporal para ver los datos
+                    error_log('Datos recibidos: ' . print_r($data, true));
+                    
+                    $employee = $employee_repo->find($data['employee']);
+                    $machine = $machine_repo->find($data['machine']);
+                    
+                    if (!$employee || !$machine) {
+                        $this->addFlash('error', 'Empleado o máquina no encontrado.');
+                        return $this->redirectToRoute('admin_simple_ticket');
                     }
-                } else {
-                    // Single ticket for machines
-                    $work = $works[0] ?? [];
-                    if (!empty($work['site']) && !empty($work['hours'])) {
-                        $site = $site_repo->find($work['site']);
-                        if ($site) {
-                            $ticket = new \App\Entity\MachineTicket(
-                                new \DateTime($data['date']),
-                                $site,
-                                $employee,
-                                $machine,
-                                intval($work['hours']),
-                                intval($work['hammer_hours'] ?? 0),
-                                $work['comments'] ?? '',
-                                intval($work['liters'] ?? 0),
-                                floatval($work['spoon_hours'] ?? 0),
-                                false // provider_signed
-                            );
-                            
-                            // Set material if selected
-                            if (!empty($work['material'])) {
-                                $material = $material_repo->find($work['material']);
-                                if ($material) {
-                                    $ticket->setMaterial($material);
-                                }
+                    
+                    // Process multiple works for trucks, single for machines
+                    $works = $data['works'] ?? [];
+                    $successCount = 0;
+                    $errors = [];
+                    
+                    if ($machine->isTruck()) {
+                        // Multiple tickets for trucks
+                        foreach ($works as $index => $work) {
+                            if (empty($work['site']) || empty($work['material'])) {
+                                continue; // Skip empty entries
                             }
                             
-                            $em = $this->getDoctrine()->getManager();
-                            $em->persist($ticket);
-                            $successCount = 1;
+                            $site = $site_repo->find($work['site']);
+                            $material = $material_repo->find($work['material']);
+                            if (!$site || !$material) {
+                                $errors[] = "Obra #" . ($index + 1) . ": Sitio o material no encontrado";
+                                continue;
+                            }
+                            
+                            try {
+                                $ticket = new \App\Entity\TruckMaterialTicket(
+                                    new \DateTime($data['date']),
+                                    $site,
+                                    $employee,
+                                    $machine,
+                                    intval($work['num_travels'] ?? 0),
+                                    intval($work['hours'] ?? 0),
+                                    $work['comments'] ?? '',
+                                    $material,
+                                    floatval($work['tons'] ?? 0),
+                                    $work['provider'] ?? '',
+                                    intval($work['liters'] ?? 0),
+                                    false // provider_signed
+                                );
+                                
+                                // Set additional fields based on operation type
+                                if ($work['operation_type'] === 'supply') {
+                                    // Suministro: tons and provider are required
+                                    $ticket->setTons(floatval($work['tons'] ?? 0));
+                                    $ticket->setProvider($work['provider'] ?? '');
+                                } else {
+                                    // Retirada: provider (destino) is required
+                                    $ticket->setProvider($work['provider'] ?? '');
+                                }
+                                
+                                $em = $this->getDoctrine()->getManager();
+                                $em->persist($ticket);
+                                $successCount++;
+                            } catch (\Exception $e) {
+                                $errors[] = "Obra #" . ($index + 1) . ": Error al crear ticket - " . $e->getMessage();
+                            }
+                        }
+                    } else {
+                        // Single ticket for machines
+                        $work = $works[0] ?? [];
+                        if (!empty($work['site']) && !empty($work['hours'])) {
+                            $site = $site_repo->find($work['site']);
+                            if ($site) {
+                                try {
+                                    $ticket = new \App\Entity\MachineTicket(
+                                        new \DateTime($data['date']),
+                                        $site,
+                                        $employee,
+                                        $machine,
+                                        intval($work['hours']),
+                                        intval($work['hammer_hours'] ?? 0),
+                                        $work['comments'] ?? '',
+                                        intval($work['liters'] ?? 0),
+                                        floatval($work['spoon_hours'] ?? 0),
+                                        false // provider_signed
+                                    );
+                                    
+                                    // Set material if selected
+                                    if (!empty($work['material'])) {
+                                        $material = $material_repo->find($work['material']);
+                                        if ($material) {
+                                            $ticket->setMaterial($material);
+                                        }
+                                    }
+                                    
+                                    $em = $this->getDoctrine()->getManager();
+                                    $em->persist($ticket);
+                                    $successCount = 1;
+                                } catch (\Exception $e) {
+                                    $errors[] = "Error al crear ticket de máquina - " . $e->getMessage();
+                                }
+                            } else {
+                                $errors[] = "Sitio no encontrado";
+                            }
+                        } else {
+                            $errors[] = "Complete sitio y horas para la máquina";
                         }
                     }
-                }
-                
-                if ($successCount > 0) {
-                    $em->flush();
-                    $this->addFlash('success', "Se crearon {$successCount} tickets correctamente.");
-                } else {
-                    $this->addFlash('error', 'No se pudo crear ningún ticket.');
+                    
+                    if ($successCount > 0) {
+                        $em->flush();
+                        $this->addFlash('success', "Se crearon {$successCount} tickets correctamente.");
+                    }
+                    
+                    if (!empty($errors)) {
+                        $this->addFlash('warning', "Se crearon {$successCount} tickets pero hubo errores:\n" . implode("\n", $errors));
+                    } else if ($successCount === 0) {
+                        $this->addFlash('error', 'No se pudo crear ningún ticket. Verifique que todos los campos obligatorios estén completos.');
+                    }
+                    
+                } catch (\Exception $e) {
+                    $this->addFlash('error', 'Error interno: ' . $e->getMessage());
                 }
                 
                 return $this->redirectToRoute('admin_simple_ticket');
